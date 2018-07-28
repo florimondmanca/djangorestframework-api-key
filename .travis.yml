@@ -1,0 +1,22 @@
+language: python
+
+# Cache dependencies between builds
+cache: pip
+
+python:
+  - "3.4"
+  - "3.5"
+  - "3.6"
+  - "3.7"
+
+env:
+  - DJANGO_VERSION=1.11
+  - DJANGO_VERSION=2.0
+
+install:
+  - pip install pipenv
+  - pipenv install
+  - pipenv install django==$DJANGO_VERSION
+
+script:
+  - echo "WIP"

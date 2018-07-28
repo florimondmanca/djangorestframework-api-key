@@ -1,6 +1,6 @@
 # djangorestframework-api-key
 
-🔐 Web API authentication for the [Django REST Framework](http://www.django-rest-framework.org).
+🔐 Web API permissions for the [Django REST Framework](http://www.django-rest-framework.org).
 
 This project is based on (yet not a fork of) the unmaintained [django-rest-framework-api-key](https://github.com/manosim/django-rest-framework-api-key) project.
 
