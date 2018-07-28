@@ -16,6 +16,7 @@ matrix:
     - python: "3.7"
       dist: xenial
       sudo: true
+      # Only Django 2.0 is supported in Python 3.7
       env: DJANGO_VERSION=2.0
 
 install:

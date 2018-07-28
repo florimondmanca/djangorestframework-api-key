@@ -1,8 +1,8 @@
 # djangorestframework-api-key [![travis][travis-image]][travis-url]
 
-🔐 Web API permissions for the [Django REST Framework][rest-framework-url].
+> WORK IN PROGRESS
 
-WORK IN PROGRESS
+🔐 Web API permissions for the [Django REST Framework][rest-framework-url].
 
 This project is based on (yet not a fork of) the unmaintained [django-rest-framework-api-key][django-rest-framework-api-key-url] project.
 
@@ -31,19 +31,9 @@ $ python manage.py migrate
 
 ## Supported versions
 
-Django REST Framework: 3.8+
-
-Python/Django:
-
-- 3.4/1.11
-- 3.4/2.0
-- 3.5/1.11
-- 3.5/2.0
-- 3.6/1.11
-- 3.6/2.0
-- 3.7/2.0
-
-**Note**: Python 3.7/Django 1.11 is not supported.
+- Django REST Framework: 3.8+
+- Python: 3.4, 3.5, 3.6, 3.7
+- Django: 1.11, 2.0 (1.11 not supported on Python 3.7)
 
 ## Usage
 
@@ -51,13 +41,35 @@ Python/Django:
 
 This package provides permission classes to allow external clients to use your API.
 
-The `HasAPIKey` permission class requires **all clients** to provide a valid API key.
-
-Note that this applies regardless of whether the client provides authentication credentials.
+The `HasAPIKey` permission class requires **all clients** to provide a valid API key, regardless of whether they provide authentication details.
 
 If you want to allow clients to provide either an API key or authentication credentials, use the utility `HasAPIKeyOrIsAuthenticated` permission class instead.
 
-Refer to [Setting the permission policy][setting-the-permission-policy-url] for more information on using permission classes.
+As with every permission class, you can either use them globally:
+
+```python
+# settings.py
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework_api_key.HasAPIKey',
+    ]
+}
+```
+
+or on a per-view basis:
+
+```python
+# views.py
+from rest_framework_api_key.permissions import HasAPIKey
+from rest_framework.views import APIView
+
+class UserListView(APIView):
+    permission_classes = (HasAPIKey,)
+    # ...
+```
+
+Refer to [DRF Docs - Setting the permission policy][setting-the-permission-policy-url] for more information on using permission classes.
 
 ## Development
 
@@ -80,9 +92,17 @@ $ python runtests.py
 
 ### Generating migrations
 
+This package includes migrations. To regenerate them in case of changes without setting up a Django project, run:
+
 ```bash
-$ python makemigrations.py
+$ python makemigrations.py rest_framework_api_key
 ```
+
+### CI/CD
+
+Travis CI is in use for automatically testing and deploying the package.
+
+Refer to `.travis.yml` for more information.
 
 <!-- URLs -->
 

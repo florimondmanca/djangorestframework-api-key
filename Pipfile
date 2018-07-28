@@ -7,7 +7,7 @@ name = "pypi"
 djangorestframework = ">=3.8"
 
 [dev-packages]
-django = "*"
+django = ">=1.11"
 
 [requires]
 python_version = "3.7"
