@@ -2,6 +2,8 @@
 
 🔐 Web API permissions for the [Django REST Framework](http://www.django-rest-framework.org).
 
+WORK IN PROGRESS
+
 This project is based on (yet not a fork of) the unmaintained [django-rest-framework-api-key](https://github.com/manosim/django-rest-framework-api-key) project.
 
 ## Install
@@ -26,6 +28,12 @@ Run the included migrations:
 ```
 $ python manage.py migrate
 ```
+
+## Supported versions
+
+- Python: 3.4, 3.5, 3.6, 3.7
+- Django: 1.11, 2.0
+- Django REST Framework: 3.8+
 
 ## Usage
 
