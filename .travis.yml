@@ -32,7 +32,6 @@ deploy:
   distributions: "sdist bdist_wheel"
   username: $PYPI_USERNAME
   password: $PYPI_PASSWORD
-  server: $PYPI_REPOSITORY_URL
   on:
     tags: true
     python: "3.7"  # deploy only once
