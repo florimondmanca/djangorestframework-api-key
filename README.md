@@ -58,7 +58,21 @@ Installing locally requires [Pipenv][pipenv-url] and Python 3.7.
 1. Fork the repo
 2. Clone it on your local
 3. Install dependencies with Pipenv: `$ pipenv install`
+4. Activate using `$ pipenv shell`
 
+### Tests
+
+Run the tests using:
+
+```bash
+$ python runtests.py
+```
+
+### Generating migrations
+
+```bash
+$ python makemigrations.py
+```
 
 <!-- URLs -->
 

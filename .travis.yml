@@ -28,4 +28,4 @@ install:
   - pipenv install django==$DJANGO_VERSION
 
 script:
-  - echo "WIP"
+  - pipenv run python runtests.py
