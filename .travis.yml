@@ -1,19 +1,26 @@
 language: python
 
-# Cache dependencies between builds
 cache: pip
 
-matrix:
-  include:
-    - python: "3.4"
-    - python: "3.5"
-    - python: "3.6"
-    - python: "3.7"
-      dist: xenial
+python:
+  - "3.4"
+  - "3.5"
+  - "3.6"
 
 env:
   - DJANGO_VERSION=1.11
   - DJANGO_VERSION=2.0
+
+matrix:
+  include:
+    - python: "3.7"
+      dist: xenial
+      sudo: true
+      env: DJANGO_VERSION=1.11
+    - python: "3.7"
+      dist: xenial
+      sudo: true
+      env: DJANGO_VERSION=2.0
 
 install:
   - pip install pipenv
