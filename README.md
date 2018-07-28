@@ -31,9 +31,19 @@ $ python manage.py migrate
 
 ## Supported versions
 
-- Python: 3.4, 3.5, 3.6, 3.7
-- Django: 1.11, 2.0
-- Django REST Framework: 3.8+
+Django REST Framework: 3.8+
+
+Python/Django:
+
+- 3.4/1.11
+- 3.4/2.0
+- 3.5/1.11
+- 3.5/2.0
+- 3.6/1.11
+- 3.6/2.0
+- 3.7/2.0
+
+**Note**: Python 3.7/Django 1.11 is not supported.
 
 ## Usage
 

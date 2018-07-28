@@ -16,10 +16,6 @@ matrix:
     - python: "3.7"
       dist: xenial
       sudo: true
-      env: DJANGO_VERSION=1.11
-    - python: "3.7"
-      dist: xenial
-      sudo: true
       env: DJANGO_VERSION=2.0
 
 install:
