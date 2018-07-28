@@ -31,9 +31,9 @@ $ python manage.py migrate
 
 ## Supported versions
 
-- Django REST Framework: 3.8+
 - Python: 3.4, 3.5, 3.6, 3.7
-- Django: 1.11, 2.0 (1.11 not supported on Python 3.7)
+- Django: 1.11 (not on Python 3.7), 2.0
+- Django REST Framework: 3.8+
 
 ## Usage
 
@@ -100,7 +100,10 @@ $ python makemigrations.py rest_framework_api_key
 
 ### CI/CD
 
-Travis CI is in use for automatically testing and deploying the package.
+Travis CI is in use to automatically:
+
+- Test the package on supported versions of Python and Django.
+- Deploy tagged commits to PyPI.
 
 Refer to `.travis.yml` for more information.
 
