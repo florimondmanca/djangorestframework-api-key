@@ -45,7 +45,7 @@ Refer to [Setting the permission policy](http://www.django-rest-framework.org/ap
 
 ### Install
 
-Installing locally requires Python 3.7.
+Installing locally requires [Pipenv](https://github.com/pypa/pipenv) and Python 3.7.
 
 1. Fork the repo
 2. Clone it on your local
