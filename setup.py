@@ -13,6 +13,7 @@ setuptools.setup(
     author_email='florimond.manca@gmail.com',
     description='Web API permissions for the Django REST Framework',
     long_description=long_description,
+    long_description_content_type='text/markdown',
     url='https://github.com/florimondmanca/djangorestframework-api-key',
     packages=setuptools.find_packages(),
     license='MIT',
