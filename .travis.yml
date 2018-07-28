@@ -26,3 +26,9 @@ install:
 
 script:
   - pipenv run python runtests.py
+
+deploy:
+  provider: pypi
+  distributions: "sdist bdist_wheel"
+  on:
+    tags: true
