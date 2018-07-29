@@ -1,10 +1,14 @@
 # djangorestframework-api-key [![travis][travis-image]][travis-url]
 
-> WORK IN PROGRESS
-
 🔐 Web API permissions for the [Django REST Framework][rest-framework-url].
 
 This project is based on (yet not a fork of) the unmaintained [django-rest-framework-api-key][django-rest-framework-api-key-url] project.
+
+## Supported versions
+
+- Python: 3.4, 3.5, 3.6, 3.7
+- Django: 1.11 (not on Python 3.7), 2.0
+- Django REST Framework: 3.8+
 
 ## Install
 
@@ -29,13 +33,9 @@ Run the included migrations:
 $ python manage.py migrate
 ```
 
-## Supported versions
-
-- Python: 3.4, 3.5, 3.6, 3.7
-- Django: 1.11 (not on Python 3.7), 2.0
-- Django REST Framework: 3.8+
-
 ## Usage
+
+Also see [example project][example-project-url].
 
 ### Permission classes
 
@@ -107,7 +107,10 @@ Travis CI is in use to automatically:
 
 Refer to `.travis.yml` for more information.
 
+
 <!-- URLs -->
+
+[example-project-url]: https://github.com/florimondmanca/djangorestframework-api-key-example
 
 [rest-framework-url]: http://www.django-rest-framework.org
 
