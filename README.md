@@ -10,26 +10,44 @@ This project is based on (yet not a fork of) the unmaintained [django-rest-frame
 - Django: 1.11 (not on Python 3.7), 2.0
 - Django REST Framework: 3.8+
 
+## Features
+
+Allow clients that are not supposed to have a user account (e.g. external services) to safely use your API.
+
+Intended to be:
+
+- 🚀 **Simple to use**: create, manage and revoke API keys via the admin site.
+- 🔒 **Safe**: the key is only visible at creation and never shown again.
+
+## Caveats
+
+[API Keys ≠ Security](https://nordicapis.com/why-api-keys-are-not-enough/): depending on your situation, you should probably not rely on API keys only to authenticate/authorize your clients. Doing so shifts the responsability of information security on your clients. This induces risks, especially if detaining an API key gives access to confidential information or write operations.
+
+As a general advice, **allow only those who require resources to access those specific resources**. If your non-user client only needs to access a specific endpoint, add API permissions on that endpoint only.
+
 ## Install
 
 - Install from PyPI:
 
-```
+```bash
 $ pip install djangorestframework-api-key
 ```
 
-- Add to your `INSTALLED_APPS`:
+- Add the app to your `INSTALLED_APPS`:
 
 ```python
+# settings.py
+
 INSTALLED_APPS = [
   # ...,
+  'rest_framework',
   'rest_framework_api_key',
 ]
 ```
 
 Run the included migrations:
 
-```
+```bash
 $ python manage.py migrate
 ```
 
@@ -79,7 +97,7 @@ Installing locally requires [Pipenv][pipenv-url] and Python 3.7.
 
 1. Fork the repo
 2. Clone it on your local
-3. Install dependencies with Pipenv: `$ pipenv install`
+3. Install dependencies with Pipenv: `$ pipenv install --dev`
 4. Activate using `$ pipenv shell`
 
 ### Tests
@@ -92,20 +110,20 @@ $ python runtests.py
 
 ### Generating migrations
 
-This package includes migrations. To regenerate them in case of changes without setting up a Django project, run:
+This package includes migrations. To update them in case of changes without setting up a Django project, run:
 
 ```bash
 $ python makemigrations.py rest_framework_api_key
 ```
 
-### CI/CD
+### CI/CD - Releases
 
 Travis CI is in use to automatically:
 
 - Test the package on supported versions of Python and Django.
-- Deploy tagged commits to PyPI.
+- Release tagged commits to PyPI
 
-Refer to `.travis.yml` for more information.
+See `.travis.yml` for further details.
 
 
 <!-- URLs -->
