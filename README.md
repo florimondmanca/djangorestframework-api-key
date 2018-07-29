@@ -53,9 +53,7 @@ $ python manage.py migrate
 
 ## Usage
 
-Also see [example project][example-project-url].
-
-### Permission classes
+### Set permission classes
 
 This package provides permission classes to allow external clients to use your API.
 
@@ -88,6 +86,25 @@ class UserListView(APIView):
 ```
 
 Refer to [DRF Docs - Setting the permission policy][setting-the-permission-policy-url] for more information on using permission classes.
+
+### Make authorized requests
+
+Once API key permissions are enabled on your API, clients can pass their API key via the `Api-Key` header (this is customizable, see [Settings](#settings)):
+
+```bash
+$ curl -H 'Api-Key: YOUR_API_KEY_HERE' http://localhost:8000/my-resource/
+```
+
+### Settings
+
+`API_KEY_HEADER`:
+
+- Name of the header which clients use to pass their API key.
+- Default value: `HTTP_API_KEY` (which means clients should use the `Api-Key` header — see the [docs on HttpRequest.META](https://docs.djangoproject.com/en/dev/ref/request-response/#django.http.HttpRequest.META)).
+
+### Example project
+
+See the [example project][example-project-url] for example usage in the context of a Django project.
 
 ## Development
 
