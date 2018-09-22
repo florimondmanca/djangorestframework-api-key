@@ -57,9 +57,8 @@ $ python manage.py migrate
 
 This package provides permission classes to allow external clients to use your API.
 
-The `HasAPIKey` permission class requires **all clients** to provide a valid API key, regardless of whether they provide authentication details.
-
-If you want to allow clients to provide either an API key or authentication credentials, use the utility `HasAPIKeyOrIsAuthenticated` permission class instead.
+- `HasAPIKey`: this permission class requires **all clients** to provide a valid API key, regardless of whether they provide authentication details.
+- `HasAPIKeyOrIsAuthenticated`: if you want to allow clients to provide either an API key or authentication credentials, use this permission class instead.
 
 As with every permission class, you can either use them globally:
 
@@ -68,7 +67,7 @@ As with every permission class, you can either use them globally:
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework_api_key.HasAPIKey',
+        'rest_framework_api_key.permissions.HasAPIKey',
     ]
 }
 ```
