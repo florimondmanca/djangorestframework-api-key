@@ -3,8 +3,7 @@
 
 [![license](https://img.shields.io/pypi/l/djangorestframework-api-key.svg)][pypi-url]
 [![pypi](https://img.shields.io/pypi/v/djangorestframework-api-key.svg)][pypi-url]
-[![travis](https://img.shields.io/travis-ci/florimondmanca/djangorestframework-api-key.svg)][travis-url]
-
+[![travis](https://img.shields.io/travis-ci/florimondmanca/djangorestframework-api-key.svg)][travis-url]  
 [![python](https://img.shields.io/pypi/pyversions/djangorestframework-api-key.svg)][pypi-url]
 [![django](https://img.shields.io/pypi/djversions/djangorestframework-api-key.svg?colorB=44b78b)][pypi-url]
 [![drf](https://img.shields.io/badge/drf-3.8+-7f2d2d.svg)][pypi-url]
