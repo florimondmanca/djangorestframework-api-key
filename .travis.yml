@@ -43,4 +43,6 @@ deploy:
   password: $PYPI_PASSWORD
   on:
     tags: true
-    python: "3.7"  # deploy only once
+    # deploy only once
+    python: "3.7"
+    condition: "$DJANGO_VERSION = 2.1"
