@@ -1,27 +1,27 @@
 # djangorestframework-api-key
 
-[![travis][travis-image]][travis-url]
-[![python-version][python-version-image]][python-version-url]
-[![django-version][django-version-image]][django-version-url]
-[![drf-version][drf-version-image]][drf-version-url]
 
-🔐 Web API permissions for the [Django REST Framework][rest-framework-url].
+[![license](https://img.shields.io/pypi/l/djangorestframework-api-key.svg)][pypi-url]
+[![pypi](https://img.shields.io/pypi/v/djangorestframework-api-key.svg)][pypi-url]
+[![travis](https://img.shields.io/travis-ci/florimondmanca/djangorestframework-api-key.svg)][travis-url]
 
-This project is based on (yet not a fork of) the unmaintained [django-rest-framework-api-key][django-rest-framework-api-key-url] project.
+[![python](https://img.shields.io/pypi/pyversions/djangorestframework-api-key.svg)][pypi-url]
+[![django](https://img.shields.io/pypi/djversions/djangorestframework-api-key.svg?colorB=44b78b)][pypi-url]
+[![drf](https://img.shields.io/badge/drf-3.8+-7f2d2d.svg)][pypi-url]
 
-## Supported versions
+🔐 Web API permissions for the [Django REST Framework](http://www.django-rest-framework.org).
 
-- Python: 3.4, 3.5, 3.6, 3.7
-- Django: 1.11 (except on Python 3.7), 2.0, 2.1 (except on Python 3.4)
-- Django REST Framework: 3.8+
+This project is based on (yet not a fork of) the unmaintained [django-rest-framework-api-key](https://github.com/manosim/django-rest-framework-api-key) project.
 
 ## Features
 
-Allow clients that are not supposed to have a user account (e.g. external services) to safely use your API.
+**Allow service clients to safely use your API**.
+
+A service client may be a frontend app, a third-party API or any non-human service which does not have a user account but needs to interact with your API.
 
 Intended to be:
 
-- 🚀 **Simple to use**: create, manage and revoke API keys via the admin site.
+- ✌️ **Simple to use**: create, manage and revoke API keys via the admin site.
 - 🔒 **Safe**: the key is only visible at creation and never shown again.
 
 ## Caveats
@@ -29,6 +29,8 @@ Intended to be:
 [API Keys ≠ Security](https://nordicapis.com/why-api-keys-are-not-enough/): depending on your situation, you should probably not rely on API keys only to authenticate/authorize your clients. Doing so shifts the responsability of information security on your clients. This induces risks, especially if detaining an API key gives access to confidential information or write operations.
 
 As a general advice, **allow only those who require resources to access those specific resources**. If your non-user client only needs to access a specific endpoint, add API permissions on that endpoint only.
+
+Act responsibly.
 
 ## Install
 
@@ -42,7 +44,6 @@ $ pip install djangorestframework-api-key
 
 ```python
 # settings.py
-
 INSTALLED_APPS = [
   # ...,
   'rest_framework',
@@ -58,7 +59,7 @@ $ python manage.py migrate
 
 ## Usage
 
-### Set permission classes
+### Setting permissions
 
 This package provides permission classes to allow external clients to use your API.
 
@@ -89,9 +90,9 @@ class UserListView(APIView):
     # ...
 ```
 
-Refer to [DRF Docs - Setting the permission policy][setting-the-permission-policy-url] for more information on using permission classes.
+Refer to [DRF Docs - Setting the permission policy](http://www.django-rest-framework.org/api-guide/permissions/#setting-the-permission-policy) for more information on using permission classes.
 
-### Make authorized requests
+### Making authorized requests
 
 Once API key permissions are enabled on your API, clients can pass their API key via the `Api-Key` header (this is customizable, see [Settings](#settings)):
 
@@ -99,22 +100,24 @@ Once API key permissions are enabled on your API, clients can pass their API key
 $ curl -H 'Api-Key: YOUR_API_KEY_HERE' http://localhost:8000/my-resource/
 ```
 
-### Settings
+## Settings
 
 `API_KEY_HEADER`:
 
 - Name of the header which clients use to pass their API key.
 - Default value: `HTTP_API_KEY` (which means clients should use the `Api-Key` header — see the [docs on HttpRequest.META](https://docs.djangoproject.com/en/dev/ref/request-response/#django.http.HttpRequest.META)).
 
-### Example project
+## Example project
 
-See the [example project][example-project-url] for example usage in the context of a Django project.
+See the [example project](https://github.com/florimondmanca/djangorestframework-api-key-example) for showcase usage in the context of a Django project.
 
 ## Development
 
+This section is aimed at developers and maintainers.
+
 ### Install
 
-Installing locally requires [Pipenv][pipenv-url] and Python 3.7.
+Installing locally requires [Pipenv](https://github.com/pypa/pipenv) and Python 3.7.
 
 1. Fork the repo
 2. Clone it on your local
@@ -142,35 +145,12 @@ $ python makemigrations.py rest_framework_api_key
 Travis CI is in use to automatically:
 
 - Test the package on supported versions of Python and Django.
-- Release tagged commits to PyPI
+- Release *tagged commits* to PyPI.
 
 See `.travis.yml` for further details.
 
-
 <!-- URLs -->
-
-[example-project-url]: https://github.com/florimondmanca/djangorestframework-api-key-example
-
-[rest-framework-url]: http://www.django-rest-framework.org
-
-[pipenv-url]: https://github.com/pypa/pipenv
-
-[setting-the-permission-policy-url]: http://www.django-rest-framework.org/api-guide/permissions/#setting-the-permission-policy
-
-[django-rest-framework-api-key-url]: https://github.com/manosim/django-rest-framework-api-key
-
-[travis-image]: https://img.shields.io/travis-ci/florimondmanca/djangorestframework-api-key.svg?style=flat-square
 
 [travis-url]: https://travis-ci.org/florimondmanca/djangorestframework-api-key
 
-[python-version-image]: https://img.shields.io/badge/python-3.4,_3.5,_3.6,_3.7-blue.svg?style=flat-square
-
-[python-version-url]: https://www.python.org/
-
-[django-version-image]: https://img.shields.io/badge/django-1.11,_2.0,_2.1-44b78b.svg?style=flat-square
-
-[django-version-url]: https://www.djangoproject.com/
-
-[drf-version-image]: https://img.shields.io/badge/drf-3.8+-7f2d2d.svg?style=flat-square
-
-[drf-version-url]: http://www.django-rest-framework.org
+[pypi-url]: https://pypi.org/project/djangorestframework-api-key/
