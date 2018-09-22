@@ -1,4 +1,9 @@
-# djangorestframework-api-key [![travis][travis-image]][travis-url]
+# djangorestframework-api-key
+
+[![travis][travis-image]][travis-url]
+[![python-version][python-version-image]][python-version-url]
+[![django-version][django-version-image]][django-version-url]
+[![drf-version][drf-version-image]][drf-version-url]
 
 🔐 Web API permissions for the [Django REST Framework][rest-framework-url].
 
@@ -7,7 +12,7 @@ This project is based on (yet not a fork of) the unmaintained [django-rest-frame
 ## Supported versions
 
 - Python: 3.4, 3.5, 3.6, 3.7
-- Django: 1.11 (not on Python 3.7), 2.0
+- Django: 1.11 (except on Python 3.7), 2.0, 2.1 (except on Python 3.4)
 - Django REST Framework: 3.8+
 
 ## Features
@@ -154,6 +159,18 @@ See `.travis.yml` for further details.
 
 [django-rest-framework-api-key-url]: https://github.com/manosim/django-rest-framework-api-key
 
-[travis-image]: https://travis-ci.org/florimondmanca/djangorestframework-api-key.svg?branch=master
+[travis-image]: https://img.shields.io/travis-ci/florimondmanca/djangorestframework-api-key.svg?style=flat-square
 
 [travis-url]: https://travis-ci.org/florimondmanca/djangorestframework-api-key
+
+[python-version-image]: https://img.shields.io/badge/python-3.4,_3.5,_3.6,_3.7-blue.svg?style=flat-square
+
+[python-version-url]: https://www.python.org/
+
+[django-version-image]: https://img.shields.io/badge/django-1.11,_2.0,_2.1-44b78b.svg?style=flat-square
+
+[django-version-url]: https://www.djangoproject.com/
+
+[drf-version-image]: https://img.shields.io/badge/drf-3.8+-7f2d2d.svg?style=flat-square
+
+[drf-version-url]: http://www.django-rest-framework.org
