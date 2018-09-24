@@ -5,11 +5,11 @@ from .models import APIKey
 from .crypto import assign_token
 
 
+_SECRET = '*' * 16
 _SECRET_KEY_MESSAGE = (
     'The secret key for {client_id} is: {secret_key}. '
     'Please note it down: you will not be able to see it again.'
 )
-_SECRET = '*' * 8
 
 
 @admin.register(APIKey)
