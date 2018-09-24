@@ -6,7 +6,7 @@ from .models import APIKey
 
 _SECRET = 16 * '*'
 _API_KEY_MESSAGE = (
-    'The API key for {obj.client_id} is {obj.key}. '
+    'The API key for {obj.client_id} is {obj.token}. '
     'Please note it down: you will not be able to see it again.'
 )
 
@@ -33,7 +33,7 @@ class APIKeyAdmin(admin.ModelAdmin):
 
     def key_message(self, obj: APIKey) -> str:
         """Message displayed instead of the API key."""
-        if obj.key:
+        if obj.token:
             return _SECRET
         return 'The API key will be generated once you click save.'
     key_message.short_description = 'Key'

@@ -16,7 +16,7 @@ class HasAPIKey(permissions.BasePermission):
         api_key = request.META.get(API_KEY_HEADER, '')
         if not api_key:
             return False
-        return APIKey.objects.filter(key=api_key, revoked=False).exists()
+        return APIKey.objects.filter(token=api_key, revoked=False).exists()
 
 
 class HasAPIKeyOrIsAuthenticated(permissions.BasePermission):

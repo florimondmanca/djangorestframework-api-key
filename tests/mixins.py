@@ -15,11 +15,11 @@ class APIKeyTestMixin:
     def setUp(self):
         self.factory = APIRequestFactory()
 
-    def request(self, *, key: str = None, user: User = None) -> Request:
+    def request(self, *, token: str = None, user: User = None) -> Request:
         """Create a test request."""
         kwargs = {}
-        if key is not None:
-            kwargs[API_KEY_HEADER] = key
+        if token is not None:
+            kwargs[API_KEY_HEADER] = token
         request = self.factory.get('/test/', **kwargs)
         if user:
             force_authenticate(request, user=user)

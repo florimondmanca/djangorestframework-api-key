@@ -16,7 +16,7 @@ class APIKey(models.Model):
             'A free-form unique identifier of the client. '
             '50 characters max.'
         ))
-    key = models.CharField(max_length=40, unique=True)
+    token = models.CharField(max_length=40, unique=True)
     revoked = models.BooleanField(blank=True, default=False)
 
     class Meta:  # noqa
@@ -47,7 +47,7 @@ class APIKey(models.Model):
         Prevent from un-revoking API keys.
         """
         if not self.pk:
-            self.key = generate_key()
+            self.token = generate_key()
         self._validated_not_unrevoked()
         super().save(*args, **kwargs)
 
