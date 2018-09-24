@@ -27,11 +27,11 @@ class APIKey(models.Model):
     def __init__(self, *args, **kwargs):
         """Store the initial value of `revoked` to detect changes."""
         super().__init__(*args, **kwargs)
-        self.initial_revoked = self.revoked
+        self._initial_revoked = self.revoked
 
     def _validated_not_unrevoked(self):
         """Validate the key has not been unrevoked."""
-        if self.initial_revoked and not self.revoked:
+        if self._initial_revoked and not self.revoked:
             raise ValidationError(
                 'The API key has been revoked, which cannot be undone.')
 
