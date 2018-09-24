@@ -51,7 +51,7 @@ Then try performing requests to the API:
 $ curl http://localhost:8000/animals
 {"detail":"Authentication credentials were not provided."}
 
-$ curl -H 'Api-Key: YOUR_API_KEY_HERE' http://localhost:8000/animals
+$ curl -H 'Api-Token: YOUR_API_TOKEN' -H 'Api-Secret-Key: YOUR_API_SECRET_KEY' http://localhost:8000/animals
 [{"id":1,"name":"Dog","noise":"Woof!"},{"id":2,"name":"Cat","noise":"Meow!"}]
 ```
 
@@ -63,7 +63,10 @@ Or with [requests](http://docs.python-requests.org) (`pip install requests`):
 >>> resp = requests.get(url)
 >>> resp.status_code
 403
->>> resp = requests.get(url, headers={'Api-Key': 'YOUR_API_KEY_HERE'})
+>>> resp = requests.get(url, headers={
+...     'Api-Token': 'YOUR_API_TOKEN',
+...     'Api-Secret-Key': 'YOUR_API_SECRET_KEY',
+... })
 >>> resp.status_code
 200
 >>> resp.json()
