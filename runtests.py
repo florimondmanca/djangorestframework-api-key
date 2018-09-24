@@ -39,7 +39,7 @@ SETTINGS_DICT = {
 }
 
 
-def run_tests(directory: str, verbosity: int = 1):
+def run_tests(directory, verbosity=1):
     """Run tests located in the given directory."""
     # Configure Django settings
     from django.conf import settings

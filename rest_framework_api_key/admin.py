@@ -31,7 +31,7 @@ class APIKeyAdmin(admin.ModelAdmin):
             return self.readonly_fields + ('client_id', 'revoked',)
         return self.readonly_fields
 
-    def key_message(self, obj: APIKey) -> str:
+    def key_message(self, obj):
         """Message displayed instead of the API key."""
         if obj.token:
             return _SECRET

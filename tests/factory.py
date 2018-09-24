@@ -9,7 +9,7 @@ class APIKeyFactory:
     def __init__(self):
         self.index = 0
 
-    def __call__(self, **kwargs: dict):
+    def __call__(self, **kwargs):
         """Create an APIKey object."""
         kwargs.setdefault('client_id', 'test_{}'.format(self.index))
         self.index += 1
