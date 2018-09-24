@@ -1,7 +1,6 @@
 """Test mixins."""
 
 from django.contrib.auth import get_user_model
-from rest_framework.request import Request
 from rest_framework.test import APIRequestFactory, force_authenticate
 
 from rest_framework_api_key.settings import API_KEY_HEADER
@@ -15,7 +14,7 @@ class APIKeyTestMixin:
     def setUp(self):
         self.factory = APIRequestFactory()
 
-    def request(self, *, key: str = None, user: User = None) -> Request:
+    def request(self, *, key=None, user=None):
         """Create a test request."""
         kwargs = {}
         if key is not None:
