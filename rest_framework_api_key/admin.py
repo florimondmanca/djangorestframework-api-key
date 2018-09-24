@@ -2,47 +2,57 @@
 
 from django.contrib import admin, messages
 from .models import APIKey
+from .crypto import assign_token
 
 
-_SECRET = 16 * '*'
-_API_KEY_MESSAGE = (
-    'The API key for {obj.client_id} is {obj.token}. '
+_SECRET_KEY_MESSAGE = (
+    'The secret key for {client_id} is: {secret_key}. '
     'Please note it down: you will not be able to see it again.'
 )
+_SECRET = '*' * 8
 
 
 @admin.register(APIKey)
 class APIKeyAdmin(admin.ModelAdmin):
     """Admin panel for API keys."""
 
-    list_display = ('client_id', 'created', 'revoked', 'id')
+    list_display = ('client_id', 'created', 'revoked', 'token', 'hashed_token')
     list_filter = ('created', 'revoked',)
-    readonly_fields = ('key_message',)
+    readonly_fields = ('token', 'hashed_token', 'secret_key_message')
     search_fields = ('id', 'client_id',)
     fieldsets = (
         (None, {
-            'fields': ('client_id', 'key_message', 'revoked',),
+            'fields': ('client_id', 'revoked',),
+        }),
+        ('Credentials', {
+            'fields': ('token', 'hashed_token', 'secret_key_message',),
         }),
     )
 
     def get_readonly_fields(self, request, obj=None):
-        """Set revoked as read-only if API key has been revoked."""
+        """Set revoked as read-only if the API key has been revoked."""
         if obj and obj.revoked:
             return self.readonly_fields + ('client_id', 'revoked',)
         return self.readonly_fields
 
-    def key_message(self, obj):
-        """Message displayed instead of the API key."""
-        if obj.token:
+    def secret_key_message(self, obj):
+        """Show a message about the secret key."""
+        if obj.pk:
             return _SECRET
-        return 'The API key will be generated once you click save.'
-    key_message.short_description = 'Key'
+        return 'The secret key will be generated when clicking save.'
+    secret_key_message.short_description = 'Secret key'
 
     def save_model(self, request, obj, form, change):
         """Display the API key on save."""
         if not obj.pk:
+            # If the object is being created, generate its token.
+            secret_key = assign_token(obj)
             obj.save()
-            message = _API_KEY_MESSAGE.format(obj=obj)
+            message = _SECRET_KEY_MESSAGE.format(
+                client_id=obj.client_id,
+                secret_key=secret_key,
+            )
             messages.add_message(request, messages.WARNING, message)
         else:
+            # Save as usual
             obj.save()
