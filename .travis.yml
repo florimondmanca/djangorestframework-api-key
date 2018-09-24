@@ -30,12 +30,16 @@ matrix:
 
 install:
   - pip install pipenv
-  # --skip-lock: do not update Pipfile.lock
-  - pipenv install --skip-lock
-  - pipenv install --skip-lock django==$DJANGO_VERSION
+  - pipenv install
+  - pipenv install django==$DJANGO_VERSION
 
 script:
   - pipenv run python runtests.py
+
+before_deploy:
+  # PyPI deploy fails if there are unstaged changes
+  # Reset any unstaged changes (such as updates to Pipfile or Pipfile.lock)
+  - git checkout -- .
 
 deploy:
   provider: pypi
