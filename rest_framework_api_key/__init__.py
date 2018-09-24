@@ -1,2 +1,2 @@
-__version__ = '0.2.1'
+__version__ = '0.2.2'
 default_app_config = 'rest_framework_api_key.apps.RestFrameworkApiKeyConfig'
