@@ -12,11 +12,14 @@ class APIKeyTest(TestCase):
     def setUp(self):
         self.api_key = create_api_key()
 
-    def test_key_generated_when_created(self):
-        self.assertNotEqual(self.api_key.key, '')
+    def test_token_generated_when_created(self):
+        self.assertNotEqual(self.api_key.token, '')
 
-    def test_key_long_enough(self):
-        self.assertGreater(len(self.api_key.key), 16)
+    def test_hashed_token_generated_when_created(self):
+        self.assertNotEqual(self.api_key.hashed_token, '')
+
+    def test_token_long_enough(self):
+        self.assertGreater(len(self.api_key.token), 16)
 
     def test_cannot_unrevoke(self):
         api_key = create_api_key(revoked=True)

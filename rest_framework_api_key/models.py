@@ -3,11 +3,25 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 
-from .utils import generate_key
+from .crypto import assign_token
+
+
+class APIKeyManager(models.Manager):
+    """Custom model manager for API keys."""
+
+    def create(self, *, secret_key=None, **kwargs):
+        """Create an API key.
+
+        Assigns a token generated from the given secret key (or a new one).
+        """
+        assign_token(kwargs, secret_key=secret_key)
+        return super().create(**kwargs)
 
 
 class APIKey(models.Model):
     """Represents an API key."""
+
+    objects = APIKeyManager()
 
     created = models.DateTimeField(auto_now_add=True)
     client_id = models.CharField(
@@ -16,7 +30,19 @@ class APIKey(models.Model):
             'A free-form unique identifier of the client. '
             '50 characters max.'
         ))
-    key = models.CharField(max_length=40, unique=True)
+    token = models.CharField(
+        max_length=40, unique=True,
+        help_text=(
+            'A public, unique identifier for this API key.'
+        )
+    )
+    hashed_token = models.CharField(
+        max_length=100, null=True,
+        help_text=(
+            'A public hash of the token, generated using the secret key '
+            '(which is given to the client and not kept in database).'
+        )
+    )
     revoked = models.BooleanField(blank=True, default=False)
 
     class Meta:  # noqa
@@ -36,18 +62,12 @@ class APIKey(models.Model):
                 'The API key has been revoked, which cannot be undone.')
 
     def clean(self, *args, **kwargs):
-        """Customize instance cleaning."""
+        """Prevent from un-revoking API keys on clean."""
         super().clean(*args, **kwargs)
         self._validated_not_unrevoked()
 
     def save(self, *args, **kwargs):
-        """Customize instance saving.
-
-        Generate a key on model instance creation.
-        Prevent from un-revoking API keys.
-        """
-        if not self.pk:
-            self.key = generate_key()
+        """Prevent from un-revoking API keys on save."""
         self._validated_not_unrevoked()
         super().save(*args, **kwargs)
 
