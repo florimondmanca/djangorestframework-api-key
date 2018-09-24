@@ -25,8 +25,8 @@ class HasAPIKeyOrIsAuthenticatedTest(APIKeyTestMixin, APITestCase):
 
     def test_if_authenticated_and_valid_key_then_permission_granted(self):
         api_key = create_api_key()
-        self.assertPermissionGranted(view, user=self.user, key=api_key.token)
+        self.assertPermissionGranted(view, user=self.user, token=api_key.token)
 
     def test_if_authenticated_and_revoked_key_then_permission_granted(self):
         api_key = create_api_key(revoked=True)
-        self.assertPermissionGranted(view, user=self.user, key=api_key.token)
+        self.assertPermissionGranted(view, user=self.user, token=api_key.token)
