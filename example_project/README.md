@@ -1,6 +1,6 @@
 # djangorestframework-api-key-example
 
-Example project showcasing the usage of [djangorestframework-api-key](https://github.com/florimondmanca/djangorestframework-api-key).
+Example project showcasing the usage of [djangorestframework-api-key](../).
 
 This is a simple app for managing animals in a zoo. The API is protected using the `HasAPIKey` permission class.
 
@@ -39,19 +39,21 @@ Go to the admin site at http://localhost:8000/admin and:
 
 ![](media/api_key_form.png)
 
+- The generated API secret key is shown to you. You can retrieve the API token on the newly API key's detail page.
+
 ![](media/created_api_key.png)
 
 - Create a few animals:
 
 ![](media/animals.png)
 
-Then try performing requests to the API:
+Then try performing requests to the API (may be sensitive to the trailing slash):
 
 ```bash
-$ curl http://localhost:8000/animals
+$ curl http://localhost:8000/animals/
 {"detail":"Authentication credentials were not provided."}
 
-$ curl -H 'Api-Token: YOUR_API_TOKEN' -H 'Api-Secret-Key: YOUR_API_SECRET_KEY' http://localhost:8000/animals
+$ curl -H 'Api-Token: YOUR_API_TOKEN' -H 'Api-Secret-Key: YOUR_API_SECRET_KEY' http://localhost:8000/animals/
 [{"id":1,"name":"Dog","noise":"Woof!"},{"id":2,"name":"Cat","noise":"Meow!"}]
 ```
 
@@ -59,7 +61,7 @@ Or with [requests](http://docs.python-requests.org) (`pip install requests`):
 
 ```python
 >>> import requests
->>> url = 'http://localhost:8000/animals'
+>>> url = 'http://localhost:8000/animals/'
 >>> resp = requests.get(url)
 >>> resp.status_code
 403
@@ -75,7 +77,7 @@ Or with [requests](http://docs.python-requests.org) (`pip install requests`):
 
 ## See also
 
-The package itself (djangorestframework-api-key):
+The package itself (`djangorestframework-api-key`):
 
-- [GitHub](https://github.com/florimondmanca/djangorestframework-api-key)
+- [GitHub](../)
 - [PyPI](https://pypi.org/project/djangorestframework-api-key/)
