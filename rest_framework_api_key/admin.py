@@ -5,27 +5,27 @@ from .models import APIKey
 from .crypto import assign_token
 
 
+_SECRET = 16 * '*'
 _SECRET_KEY_MESSAGE = (
     'The secret key for {client_id} is: {secret_key}. '
     'Please note it down: you will not be able to see it again.'
 )
-_SECRET = '*' * 8
 
 
 @admin.register(APIKey)
 class APIKeyAdmin(admin.ModelAdmin):
     """Admin panel for API keys."""
 
-    list_display = ('client_id', 'created', 'revoked', 'token', 'hashed_token')
+    list_display = ('client_id', 'created', 'revoked')
     list_filter = ('created', 'revoked',)
-    readonly_fields = ('token', 'hashed_token', 'secret_key_message')
+    readonly_fields = ('token', 'secret_key_message')
     search_fields = ('id', 'client_id',)
     fieldsets = (
         (None, {
             'fields': ('client_id', 'revoked',),
         }),
         ('Credentials', {
-            'fields': ('token', 'hashed_token', 'secret_key_message',),
+            'fields': ('token', 'secret_key_message',),
         }),
     )
 
