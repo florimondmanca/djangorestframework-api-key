@@ -30,9 +30,9 @@ matrix:
 
 install:
   - pip install pipenv
-  # Use --deploy to enforce Pipfile.lock to be up to date
-  - pipenv install --deploy
-  - pipenv install django==$DJANGO_VERSION
+  # --skip-lock: do not update Pipfile.lock
+  - pipenv install --skip-lock
+  - pipenv install --skip-lock django==$DJANGO_VERSION
 
 script:
   - pipenv run python runtests.py
