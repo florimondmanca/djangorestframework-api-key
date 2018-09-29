@@ -62,7 +62,6 @@ As with every permission class, you can either use them globally:
 
 ```python
 # settings.py
-
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework_api_key.permissions.HasAPIKey',
@@ -74,8 +73,8 @@ or on a per-view basis:
 
 ```python
 # views.py
-from rest_framework_api_key.permissions import HasAPIKey
 from rest_framework.views import APIView
+from rest_framework_api_key.permissions import HasAPIKey
 
 class UserListView(APIView):
     permission_classes = (HasAPIKey,)
@@ -83,6 +82,12 @@ class UserListView(APIView):
 ```
 
 Refer to [DRF Docs - Setting the permission policy](http://www.django-rest-framework.org/api-guide/permissions/#setting-the-permission-policy) for more information on using permission classes.
+
+### Creating and managing API keys
+
+`djangorestframework-api-key` provides a Django Admin interface to create, manage and revoke API keys.
+
+See [Example project](#example-project) for details.
 
 ### Making authorized requests
 
@@ -108,7 +113,7 @@ $ curl -H 'Api-Token: YOUR_API_TOKEN_HERE' -H 'Api-Secret-Key: YOUR_API_SECRET_K
 
 ## Example project
 
-See the [example project](https://github.com/florimondmanca/djangorestframework-api-key-example) for example usage in the context of a Django project.
+An [example project](https://github.com/florimondmanca/djangorestframework-api-key-example) shows usage in the context of a Django project.
 
 ## Security
 
