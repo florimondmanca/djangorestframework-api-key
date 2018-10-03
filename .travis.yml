@@ -21,7 +21,7 @@ matrix:
     - python: "3.7"
       dist: xenial
       sudo: true
-      env: DJANGO_VERSION=2.1
+      env: DJANGO_VERSION=2.1.2
     # Django 2.1 not supported in Python 3.4
     - python: "3.4"
       env: DJANGO_VERSION=1.11
