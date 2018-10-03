@@ -7,7 +7,7 @@
 [![django](https://img.shields.io/pypi/djversions/djangorestframework-api-key.svg?colorB=44b78b)][pypi-url]
 [![drf](https://img.shields.io/badge/drf-3.8+-7f2d2d.svg)][pypi-url]
 
-🔐 Web API permissions for the [Django REST Framework](http://www.django-rest-framework.org).
+🔐 API Key permissions for the [Django REST Framework](http://www.django-rest-framework.org).
 
 This project is based on (yet not a fork of) the unmaintained [django-rest-framework-api-key](https://github.com/manosim/django-rest-framework-api-key) project.
 

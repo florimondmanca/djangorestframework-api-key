@@ -11,7 +11,7 @@ setuptools.setup(
     version=__import__('rest_framework_api_key').__version__,
     author='Florimond Manca',
     author_email='florimond.manca@gmail.com',
-    description='Web API permissions for the Django REST Framework',
+    description='API Key permissions for the Django REST Framework',
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/florimondmanca/djangorestframework-api-key',
