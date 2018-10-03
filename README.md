@@ -194,7 +194,7 @@ $ git push --tags
 
 All contributions are welcome! :wave:
 
-Here's a few ways in which you can help:
+Here are a few ways in which you can help:
 
 - Discovered a bug? Please open a [bug report](https://github.com/florimondmanca/djangorestframework-api-key/issues/new?template=bug_report.md).
 - Have a feature you'd like to see implemented? Please open a [Feature Request](https://github.com/florimondmanca/djangorestframework-api-key/issues/new?template=feature_request.md).
