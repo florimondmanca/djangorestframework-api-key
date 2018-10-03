@@ -9,7 +9,7 @@ python:
 env:
   - DJANGO_VERSION=1.11
   - DJANGO_VERSION=2.0
-  - DJANGO_VERSION=2.1
+  - DJANGO_VERSION=2.1.2
 
 matrix:
   include:
@@ -50,4 +50,4 @@ deploy:
     tags: true
     # deploy only once
     python: "3.7"
-    condition: "$DJANGO_VERSION = 2.1"
+    condition: "$DJANGO_VERSION = 2.1.2"
