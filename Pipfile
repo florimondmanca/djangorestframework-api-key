@@ -8,6 +8,7 @@ djangorestframework = ">=3.8"
 
 [dev-packages]
 django = ">=1.11, !=2.1.0, !=2.1.1"
+bumpversion = "*"
 
 [requires]
 python_version = "3.7"

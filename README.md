@@ -165,7 +165,7 @@ This package includes migrations. To update them in case of changes without sett
 $ python makemigrations.py
 ```
 
-### CI/CD - Releases
+### CI/CD
 
 Travis CI is in use to automatically:
 
@@ -174,18 +174,34 @@ Travis CI is in use to automatically:
 
 See `.travis.yml` for further details.
 
-<!-- URLs -->
+### Releasing
 
-[travis-url]: https://travis-ci.org/florimondmanca/djangorestframework-api-key
+When ready to release a new version, use [bumpversion](https://pypi.org/project/bumpversion/) to update the package's version:
 
-[pypi-url]: https://pypi.org/project/djangorestframework-api-key/
+```bash
+$ bumpversion (patch | minor | major)
+```
+
+This will create a new commit and tag that commit with the new version. See [.bumpversion.cfg](.bumpversion.cfg) for more info.
+
+Then, push the tagged commit to remote:
+
+```bash
+$ git push --tags
+```
 
 ## Contributing
 
 All contributions are welcome! :wave:
 
-Here's a few ways in which you can help:
+Here are a few ways in which you can help:
 
 - Discovered a bug? Please open a [bug report](https://github.com/florimondmanca/djangorestframework-api-key/issues/new?template=bug_report.md).
 - Have a feature you'd like to see implemented? Please open a [Feature Request](https://github.com/florimondmanca/djangorestframework-api-key/issues/new?template=feature_request.md).
 - For any other contribution, please open a [discussion](https://github.com/florimondmanca/djangorestframework-api-key/issues/new?template=discussion.md).
+
+<!-- URLs -->
+
+[travis-url]: https://travis-ci.org/florimondmanca/djangorestframework-api-key
+
+[pypi-url]: https://pypi.org/project/djangorestframework-api-key/
