@@ -30,7 +30,7 @@ matrix:
 
 install:
   - pip install pipenv
-  - pipenv install
+  - pipenv install --skip-lock  # don't use nor update Pipfile.lock
   - pipenv install django==$DJANGO_VERSION
 
 script:
