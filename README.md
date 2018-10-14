@@ -13,14 +13,14 @@ This project is based on (yet not a fork of) the unmaintained [django-rest-frame
 
 ## Features
 
-**Allow non-human clients to safely use your API**.
+**`djangorestframework-api-key` allows non-human clients to safely use your API**.
 
 Non-human clients may be frontend apps, third-party backends or any other service which does not have a user account but needs to interact with your API in a safe manner.
 
 Intended to be:
 
 - ✌️ **Simple to use**: create, manage and revoke API keys via the admin site.
-- 🔒 **Safe**: secret keys are generated through cryptographic methods. They are only visible at creation, never shown again and never stored in the database.
+- 🔒 **As secure as possible**: secret keys are generated through cryptographic methods. They are only visible at creation, never shown again and never stored in the database.
 
 There are important security aspects you need to consider before switching to an API key access control scheme. See [Security](#security).
 
@@ -113,26 +113,32 @@ $ curl -H 'Api-Token: YOUR_API_TOKEN_HERE' -H 'Api-Secret-Key: YOUR_API_SECRET_K
 
 ## Example project
 
-An [example project](https://github.com/florimondmanca/djangorestframework-api-key-example) shows usage in the context of a Django project.
+An [example project](https://github.com/florimondmanca/djangorestframework-api-key/tree/master/example_project) shows usage in the context of a Django project.
 
 ## Security
 
-### Generation and validation scheme
+### Generation scheme
 
 An API key is made of two parts:
 
-- The **API token**: a unique generated public string of characters
-- The **API secret key**: a generated, cryptographically secure string of characters that the client must keep private.
+- The **API token**: a unique, generated, public string of characters.
+- The **API secret key**: a unique, generated string of characters that the client must keep private.
 
-For security purposes, `djangorestframework-api-key` does not store the secret key at all on the server. The latter is shown only once to the client upon API key creation.
+For obvious security purposes, `djangorestframework-api-key` does not store the secret key at all on the server. The latter is shown only once to the client upon API key creation.
 
-To verify their identity, clients pass both the token and secret key, which will be used to compute a hash that will be in turn compared to a hash computed when the secret key was generated.
+### Validation scheme
+
+Upon generation, a hash of the token salted by the secret key is computed.
+
+To verify their permissions, clients pass both the token and secret key. These are used to compute a hash that is compared with the one stored in database. Access is only granted if hashes match.
 
 ### Caveats
 
 [API Keys ≠ Security](https://nordicapis.com/why-api-keys-are-not-enough/): depending on your situation, you should probably not rely on API keys only to authenticate/authorize your clients. Doing so **shifts the responsability of Information Security on your clients**. This induces risks, especially if detaining an API key gives access to confidential information or write operations.
 
-As a general advice, **allow only those who require resources to access those specific resources**. If your non-user client only needs to access a specific endpoint, add API permissions on that endpoint only.
+More specifically, although this package uses cryptographically secure API key generation and validation schemes, a malicious attacker will be able to impersonate clients if the latter leak their API key.
+
+As a best practice, you should apply the Principle of Least Privilege: **allow only those who require resources to access those specific resources**. If your non-user client only needs to access a specific endpoint, add API permissions on that endpoint only.
 
 Act responsibly.
 
