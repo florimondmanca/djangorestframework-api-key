@@ -3,8 +3,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework.test import APIRequestFactory, force_authenticate
 
-from rest_framework_api_key.settings import (API_KEY_SECRET_KEY_HEADER,
-                                             API_KEY_TOKEN_HEADER)
+from rest_framework_api_key.settings import(SECRET_KEY_HEADER, TOKEN_HEADER
 
 User = get_user_model()
 
@@ -19,9 +18,9 @@ class APIKeyTestMixin:
         """Create a test request."""
         kwargs = {}
         if token is not None:
-            kwargs[API_KEY_TOKEN_HEADER] = token
+            kwargs[TOKEN_HEADER] = token
         if secret_key is not None:
-            kwargs[API_KEY_SECRET_KEY_HEADER] = secret_key
+            kwargs[SECRET_KEY_HEADER] = secret_key
         request = self.factory.get('/test/', **kwargs)
         if user:
             force_authenticate(request, user=user)

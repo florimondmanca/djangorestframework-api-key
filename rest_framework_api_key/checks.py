@@ -25,7 +25,7 @@ def check_header_settings_for_deprecation(app_configs, **kwargs):
         errors.append(
             _get_deprecated_setting_error(
                 source='API_TOKEN_HEADER',
-                target='API_KEY_TOKEN_HEADER',
+                target='DRF_API_KEY_TOKEN_HEADER',
                 id='E001',
             )
         )
@@ -33,7 +33,7 @@ def check_header_settings_for_deprecation(app_configs, **kwargs):
         errors.append(
             _get_deprecated_setting_error(
                 source='API_SECRET_KEY_HEADER',
-                target='API_KEY_SECRET_KEY_HEADER',
+                target='DRF_API_KEY_SECRET_KEY_HEADER',
                 id='E002',
             )
         )

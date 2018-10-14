@@ -56,8 +56,8 @@ WSGI_APPLICATION = 'example.wsgi.application'
 
 # API Key configuration
 
-API_KEY_TOKEN_HEADER = 'HTTP_API_TOKEN'  # the default
-API_KEY_SECRET_KEY_HEADER = 'HTTP_API_SECRET_KEY'  # the default
+DRF_API_KEY_TOKEN_HEADER = 'HTTP_API_TOKEN'  # the default
+DRF_API_KEY_SECRET_KEY_HEADER = 'HTTP_API_SECRET_KEY'  # the default
 
 # Database
 
