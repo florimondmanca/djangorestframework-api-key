@@ -16,5 +16,3 @@ SECRET_KEY_HEADER = _get_setting('SECRET_KEY_HEADER', 'HTTP_API_SECRET_KEY')
 # The hashing algorithm used to generate the secret key.
 # 'default' means the default configured password hash algorithm is used.
 SECRET_KEY_ALGORITHM = _get_setting('SECRET_KEY_ALGORITHM', 'default')
-
-print(TOKEN_HEADER, SECRET_KEY_HEADER, SECRET_KEY_ALGORITHM)
