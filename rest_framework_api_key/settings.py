@@ -2,11 +2,19 @@
 
 from django.conf import settings
 
-TOKEN_HEADER = getattr(
-    settings, 'DRF_API_KEY_TOKEN_HEADER', 'HTTP_API_TOKEN')
-SECRET_KEY_HEADER = getattr(
-    settings, 'DRF_API_KEY_SECRET_KEY_HEADER', 'HTTP_API_SECRET_KEY')
+_NAMESPACE = 'DRF_API_KEY_'
+
+
+def _get_setting(name, default=None):
+    full_name = _NAMESPACE + name
+    return getattr(settings, full_name, default)
+
+
+TOKEN_HEADER = _get_setting('TOKEN_HEADER', 'HTTP_API_TOKEN')
+SECRET_KEY_HEADER = _get_setting('SECRET_KEY_HEADER', 'HTTP_API_SECRET_KEY')
 
 # The hashing algorithm used to generate the secret key.
 # 'default' means the default configured password hash algorithm is used.
-SECRET_KEY_ALGORITHM = getattr(settings, 'SECRET_KEY_ALGORITHM', 'default')
+SECRET_KEY_ALGORITHM = _get_setting('SECRET_KEY_ALGORITHM', 'default')
+
+print(TOKEN_HEADER, SECRET_KEY_HEADER, SECRET_KEY_ALGORITHM)
