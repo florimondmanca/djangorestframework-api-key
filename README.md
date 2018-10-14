@@ -101,12 +101,12 @@ $ curl -H 'Api-Token: YOUR_API_TOKEN_HERE' -H 'Api-Secret-Key: YOUR_API_SECRET_K
 
 > Note: values of header settings should be set according to the behavior of [HttpRequest.META](https://docs.djangoproject.com/en/dev/ref/request-response/#django.http.HttpRequest.META). For example, `HTTP_API_KEY` maps to the `Api-Key` header.
 
-`API_TOKEN_HEADER`:
+`DRF_API_KEY_TOKEN_HEADER`:
 
 - Name of the header which clients use to pass their API token.
 - Default value: `HTTP_API_TOKEN`.
 
-`API_SECRET_KEY_HEADER`:
+`DRF_API_KEY_SECRET_KEY_HEADER`:
 
 - Name of the header which clients use the pass their API secret key.
 - Default value: `HTTP_API_SECRET_KEY`.

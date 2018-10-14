@@ -3,7 +3,7 @@
 from rest_framework import permissions
 
 from .models import APIKey
-from .settings import API_TOKEN_HEADER, API_SECRET_KEY_HEADER
+from .settings import TOKEN_HEADER, SECRET_KEY_HEADER
 from .crypto import hash_token
 
 
@@ -21,8 +21,8 @@ class HasAPIKey(permissions.BasePermission):
 
     def has_permission(self, request, view):
         """Check whether the API key grants access to a view."""
-        token = request.META.get(API_TOKEN_HEADER, '')
-        secret_key = request.META.get(API_SECRET_KEY_HEADER, '')
+        token = request.META.get(TOKEN_HEADER, '')
+        secret_key = request.META.get(SECRET_KEY_HEADER, '')
 
         # Token and secret key must have been given
         if not token or not secret_key:
