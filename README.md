@@ -43,7 +43,7 @@ INSTALLED_APPS = [
 ]
 ```
 
-Run the included migrations:
+- Run the included migrations:
 
 ```bash
 $ python manage.py migrate
