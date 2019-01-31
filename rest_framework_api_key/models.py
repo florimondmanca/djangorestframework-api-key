@@ -25,30 +25,31 @@ class APIKey(models.Model):
 
     created = models.DateTimeField(auto_now_add=True)
     client_id = models.CharField(
-        max_length=50, unique=True,
+        max_length=50,
+        unique=True,
         help_text=(
-            'A free-form unique identifier of the client. '
-            '50 characters max.'
-        ))
+            "A free-form unique identifier of the client. " "50 characters max."
+        ),
+    )
     token = models.CharField(
-        max_length=40, unique=True,
-        help_text=(
-            'A public, unique identifier for this API key.'
-        )
+        max_length=40,
+        unique=True,
+        help_text=("A public, unique identifier for this API key."),
     )
     hashed_token = models.CharField(
-        max_length=100, null=True,
+        max_length=100,
+        null=True,
         help_text=(
-            'A public hash of the token, generated using the secret key '
-            '(which is given to the client and not kept in database).'
-        )
+            "A public hash of the token, generated using the secret key "
+            "(which is given to the client and not kept in database)."
+        ),
     )
     revoked = models.BooleanField(blank=True, default=False)
 
     class Meta:  # noqa
-        ordering = ('-created',)
-        verbose_name = 'API key'
-        verbose_name_plural = 'API keys'
+        ordering = ("-created",)
+        verbose_name = "API key"
+        verbose_name_plural = "API keys"
 
     def __init__(self, *args, **kwargs):
         """Store the initial value of `revoked` to detect changes."""
@@ -59,7 +60,8 @@ class APIKey(models.Model):
         """Validate the key has not been unrevoked."""
         if self._initial_revoked and not self.revoked:
             raise ValidationError(
-                'The API key has been revoked, which cannot be undone.')
+                "The API key has been revoked, which cannot be undone."
+            )
 
     def clean(self, *args, **kwargs):
         """Prevent from un-revoking API keys on clean."""

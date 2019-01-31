@@ -64,7 +64,7 @@ def assign_token(api_key, secret_key=None):
         else:
             setattr(api_key, field, value)
 
-    _setattr('token', token)
-    _setattr('hashed_token', hashed_token)
+    _setattr("token", token)
+    _setattr("hashed_token", hashed_token)
 
     return secret_key

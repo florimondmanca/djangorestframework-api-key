@@ -10,4 +10,4 @@ class AnimalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Animal
-        fields = ('id', 'name', 'noise')
+        fields = ("id", "name", "noise")

@@ -11,7 +11,7 @@ class APIKeyFactory:
 
     def __call__(self, **kwargs):
         """Create an APIKey object."""
-        kwargs.setdefault('client_id', 'test_{}'.format(self.index))
+        kwargs.setdefault("client_id", "test_{}".format(self.index))
         self.index += 1
         return APIKey.objects.create(**kwargs)
 

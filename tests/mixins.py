@@ -21,7 +21,7 @@ class APIKeyTestMixin:
             kwargs[TOKEN_HEADER] = token
         if secret_key is not None:
             kwargs[SECRET_KEY_HEADER] = secret_key
-        request = self.factory.get('/test/', **kwargs)
+        request = self.factory.get("/test/", **kwargs)
         if user:
             force_authenticate(request, user=user)
         return request

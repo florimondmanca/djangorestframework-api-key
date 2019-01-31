@@ -5,14 +5,8 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('rest_framework_api_key', '0002_auto_20180922_1759'),
-    ]
+    dependencies = [("rest_framework_api_key", "0002_auto_20180922_1759")]
 
     operations = [
-        migrations.RenameField(
-            model_name='apikey',
-            old_name='key',
-            new_name='token',
-        ),
+        migrations.RenameField(model_name="apikey", old_name="key", new_name="token")
     ]

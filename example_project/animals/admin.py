@@ -9,4 +9,4 @@ from .models import Animal
 class AnimalAdmin(admin.ModelAdmin):
     """Admin panel for animals."""
 
-    list_display = ('name', 'noise', 'id')
+    list_display = ("name", "noise", "id")

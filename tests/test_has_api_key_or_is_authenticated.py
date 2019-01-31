@@ -18,7 +18,7 @@ class HasAPIKeyOrIsAuthenticatedTest(APIKeyTestMixin, APITestCase):
 
     def setUp(self):
         super().setUp()
-        self.user = User.objects.create_user(username='foo', password='bar')
+        self.user = User.objects.create_user(username="foo", password="bar")
 
     def test_if_authenticated_and_no_key_then_permission_granted(self):
         self.assertPermissionGranted(view, user=self.user)

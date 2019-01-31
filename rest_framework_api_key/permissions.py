@@ -21,8 +21,8 @@ class HasAPIKey(permissions.BasePermission):
 
     def has_permission(self, request, view):
         """Check whether the API key grants access to a view."""
-        token = request.META.get(TOKEN_HEADER, '')
-        secret_key = request.META.get(SECRET_KEY_HEADER, '')
+        token = request.META.get(TOKEN_HEADER, "")
+        secret_key = request.META.get(SECRET_KEY_HEADER, "")
 
         # Token and secret key must have been given
         if not token or not secret_key:
@@ -45,8 +45,5 @@ class HasAPIKeyOrIsAuthenticated(permissions.BasePermission):
     """Authorize if a valid API key is provided or request is authenticated."""
 
     def has_permission(self, request, view):
-        perms = [
-            HasAPIKey(),
-            permissions.IsAuthenticated(),
-        ]
+        perms = [HasAPIKey(), permissions.IsAuthenticated()]
         return any(perm.has_permission(request, view) for perm in perms)

@@ -5,14 +5,12 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('rest_framework_api_key', '0001_initial'),
-    ]
+    dependencies = [("rest_framework_api_key", "0001_initial")]
 
     operations = [
         migrations.AlterField(
-            model_name='apikey',
-            name='revoked',
+            model_name="apikey",
+            name="revoked",
             field=models.BooleanField(blank=True, default=False),
-        ),
+        )
     ]

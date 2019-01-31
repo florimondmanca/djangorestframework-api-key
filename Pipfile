@@ -9,6 +9,7 @@ djangorestframework = ">=3.8"
 [dev-packages]
 django = ">=1.11, <2.2"
 bumpversion = "*"
+djangorestframework-api-key = {editable = true,path = "."}
 
 [requires]
 python_version = "3.7"
