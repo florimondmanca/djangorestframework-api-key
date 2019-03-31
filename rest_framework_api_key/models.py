@@ -1,20 +1,22 @@
 """API key models."""
 
 from django.core.exceptions import ValidationError
+from django.core.validators import validate_slug
 from django.db import models
 
-from .crypto import assign_token
+from .crypto import create_secret_key
 
 
 class APIKeyManager(models.Manager):
     """Custom model manager for API keys."""
 
-    def create(self, *, secret_key=None, **kwargs):
+    def create(self, **kwargs) -> "APIKey":
         """Create an API key.
 
         Assigns a token generated from the given secret key (or a new one).
         """
-        assign_token(kwargs, secret_key=secret_key)
+        _, encoded = create_secret_key()
+        kwargs["encoded"] = encoded
         return super().create(**kwargs)
 
 
@@ -24,27 +26,20 @@ class APIKey(models.Model):
     objects = APIKeyManager()
 
     created = models.DateTimeField(auto_now_add=True)
-    client_id = models.CharField(
+    name = models.CharField(
         max_length=50,
         unique=True,
         help_text=(
-            "A free-form unique identifier of the client. " "50 characters max."
+            "A unique snake-cased name of the client. " "50 characters max."
         ),
+        validators=[validate_slug],
     )
-    token = models.CharField(
-        max_length=40,
-        unique=True,
-        help_text=("A public, unique identifier for this API key."),
+    encoded = models.CharField(max_length=100, null=True)
+    revoked = models.BooleanField(
+        blank=True,
+        default=False,
+        help_text="If the API key is revoked, clients cannot use it anymore.",
     )
-    hashed_token = models.CharField(
-        max_length=100,
-        null=True,
-        help_text=(
-            "A public hash of the token, generated using the secret key "
-            "(which is given to the client and not kept in database)."
-        ),
-    )
-    revoked = models.BooleanField(blank=True, default=False)
 
     class Meta:  # noqa
         ordering = ("-created",)
@@ -56,23 +51,19 @@ class APIKey(models.Model):
         super().__init__(*args, **kwargs)
         self._initial_revoked = self.revoked
 
-    def _validated_not_unrevoked(self):
-        """Validate the key has not been unrevoked."""
+    def _check_for_unrevoke(self):
         if self._initial_revoked and not self.revoked:
             raise ValidationError(
                 "The API key has been revoked, which cannot be undone."
             )
 
-    def clean(self, *args, **kwargs):
-        """Prevent from un-revoking API keys on clean."""
-        super().clean(*args, **kwargs)
-        self._validated_not_unrevoked()
+    def clean(self):
+        self._check_for_unrevoke()
 
     def save(self, *args, **kwargs):
-        """Prevent from un-revoking API keys on save."""
-        self._validated_not_unrevoked()
+        # Prevent from un-revoking API keys on save.
+        self._check_for_unrevoke()
         super().save(*args, **kwargs)
 
-    def __str__(self):
-        """Represent by the client ID."""
-        return str(self.client_id)
+    def __str__(self) -> str:
+        return str(self.name)
