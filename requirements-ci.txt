@@ -1,0 +1,5 @@
+-e .
+djangorestframework~=3.8
+django==${DJANGO_VERSION}
+pytest
+pytest-django

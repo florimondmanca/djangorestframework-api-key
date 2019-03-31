@@ -29,12 +29,10 @@ matrix:
       env: DJANGO_VERSION=2.0
 
 install:
-  - pip install pipenv
-  - pipenv install --skip-lock # don't use nor update Pipfile.lock
-  - pipenv install django==$DJANGO_VERSION
+  - pip install -r requirements-ci.txt
 
 script:
-  - pipenv run python runtests.py
+  - pytest
 
 before_deploy:
   # PyPI deploy fails if there are unstaged changes
