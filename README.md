@@ -142,6 +142,10 @@ As a best practice, you should apply the Principle of Least Privilege: **allow o
 
 Act responsibly.
 
+## Changelog
+
+See [CHANGELOG.md](https://github.com/florimondmanca/djangorestframework-api-key/blob/master/CHANGELOG.md).
+
 ## Contributing
 
 See [CONTRIBUTING.md](https://github.com/florimondmanca/djangorestframework-api-key/blob/master/CONTRIBUTING.md).
