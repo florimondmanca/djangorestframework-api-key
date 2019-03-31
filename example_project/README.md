@@ -35,22 +35,24 @@ $ python manage.py runserver
 
 - Go to the admin site at http://localhost:8000/admin and create an API key:
 
-![](media/api_key_form.png)
+![](media/admin-section.png)
+
+![](media/admin-form.png)
 
 - The generated secret key is shown to you:
 
-![](media/created_api_key.png)
+![](media/admin-created.png)
 
 - Save it to an environment variable, along with the API key name:
 
 ```bash
-export API_KEY_NAME=my-app
-export API_KEY_SECRET_KEY=abcd
+export API_KEY_NAME=pets-friends-community
+export API_KEY_SECRET_KEY=...  # replace with your own secret key
 ```
 
-- Now, create a few animals:
+- Now, create a few pets:
 
-![](media/animals.png)
+![](media/pets.png)
 
 - Finally, perform some requests to the API! We're using [requests](http://docs.python-requests.org) here:
 
@@ -58,7 +60,7 @@ export API_KEY_SECRET_KEY=abcd
 import os
 import requests
 
-url = 'http://localhost:8000/animals/'
+url = 'http://localhost:8000/pets/'
 resp = requests.get(url)
 assert resp.status_code == 403
 
