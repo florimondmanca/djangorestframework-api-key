@@ -1,21 +1,21 @@
 # djangorestframework-api-key
 
-[![license](https://img.shields.io/pypi/l/djangorestframework-api-key.svg)][pypi-url]
+[![travis](https://img.shields.io/travis/florimondmanca/djangorestframework-api-key.svg)](https://travis-ci.org/florimondmanca/djangorestframework-api-key)
 [![pypi](https://img.shields.io/pypi/v/djangorestframework-api-key.svg)][pypi-url]
-[![travis](https://img.shields.io/travis/florimondmanca/djangorestframework-api-key.svg)][travis-url]  
 [![python](https://img.shields.io/pypi/pyversions/djangorestframework-api-key.svg)][pypi-url]
 [![django](https://img.shields.io/pypi/djversions/djangorestframework-api-key.svg?colorB=44b78b)][pypi-url]
 [![drf](https://img.shields.io/badge/drf-3.8+-7f2d2d.svg)][pypi-url]
+[![license](https://img.shields.io/pypi/l/djangorestframework-api-key.svg)][pypi-url]
 
-🔐 API Key permissions for the [Django REST Framework](http://www.django-rest-framework.org).
+[pypi-url]: https://pypi.org/project/djangorestframework-api-key/
 
-This project is based on (yet not a fork of) the unmaintained [django-rest-framework-api-key](https://github.com/manosim/django-rest-framework-api-key) project.
+🔐 API key permissions for the [Django REST Framework](http://www.django-rest-framework.org).
 
 ## Features
 
-**`djangorestframework-api-key` allows non-human clients to safely use your API**.
+**`djangorestframework-api-key` allows server-side clients to safely use your API**.
 
-Non-human clients may be frontend apps, third-party backends or any other service which does not have a user account but needs to interact with your API in a safe manner.
+Server-side clients are third-party backends and services which does not have a user account but still need to interact with your API in a secure way.
 
 Intended to be:
 
@@ -142,72 +142,10 @@ As a best practice, you should apply the Principle of Least Privilege: **allow o
 
 Act responsibly.
 
-## Development
-
-This section is aimed at developers and maintainers.
-
-### Install
-
-Installing locally requires [Pipenv](https://github.com/pypa/pipenv) and Python 3.7.
-
-1. Fork the repo
-2. Clone it on your local
-3. Install dependencies with Pipenv: `$ pipenv install --dev`
-4. Activate using `$ pipenv shell`
-
-### Tests
-
-Run the tests using:
-
-```bash
-$ python runtests.py
-```
-
-### Generating migrations
-
-This package includes migrations. To update them in case of changes without setting up a Django project, run:
-
-```bash
-$ python makemigrations.py
-```
-
-### CI/CD
-
-Travis CI is in use to automatically:
-
-- Test the package on supported versions of Python and Django.
-- Release *tagged commits* to PyPI.
-
-See `.travis.yml` for further details.
-
-### Releasing
-
-When ready to release a new version, use [bumpversion](https://pypi.org/project/bumpversion/) to update the package's version:
-
-```bash
-$ bumpversion (patch | minor | major)
-```
-
-This will create a new commit and tag that commit with the new version. See [.bumpversion.cfg](.bumpversion.cfg) for more info.
-
-Then, push the tagged commit to remote:
-
-```bash
-$ git push --tags
-```
-
 ## Contributing
 
-All contributions are welcome! :wave:
+See [CONTRIBUTING.md](https://github.com/florimondmanca/djangorestframework-api-key/blob/master/CONTRIBUTING.md).
 
-Here are a few ways in which you can help:
+## License
 
-- Discovered a bug? Please open a [bug report](https://github.com/florimondmanca/djangorestframework-api-key/issues/new?template=bug_report.md).
-- Have a feature you'd like to see implemented? Please open a [Feature Request](https://github.com/florimondmanca/djangorestframework-api-key/issues/new?template=feature_request.md).
-- For any other contribution, please open a [discussion](https://github.com/florimondmanca/djangorestframework-api-key/issues/new?template=discussion.md).
-
-<!-- URLs -->
-
-[travis-url]: https://travis-ci.org/florimondmanca/djangorestframework-api-key
-
-[pypi-url]: https://pypi.org/project/djangorestframework-api-key/
+MIT

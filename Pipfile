@@ -10,6 +10,8 @@ djangorestframework = ">=3.8"
 django = ">=1.11, <2.2"
 bumpversion = "*"
 djangorestframework-api-key = {editable = true,path = "."}
+pytest = "*"
+pytest-django = "*"
 
 [requires]
 python_version = "3.7"
