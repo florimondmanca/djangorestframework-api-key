@@ -22,9 +22,9 @@ class HasAPIKey(permissions.BasePermission):
     """
 
     def has_permission(self, request, view) -> bool:
-        authorization = request.META.get("HTTP_AUTHORIZATION")
-
-        if authorization is None:
+        try:
+            authorization = request.META["Authorization"]
+        except KeyError:
             return False
 
         _, _, key = authorization.partition("Api-Key: ")

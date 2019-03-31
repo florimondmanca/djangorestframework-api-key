@@ -1,30 +1,22 @@
 """Test the APIKey model."""
 
+import pytest
 from django.core.exceptions import ValidationError
-from django.test import TestCase
 
-from .factory import create_api_key
+from rest_framework_api_key.models import APIKey
+
+pytestmark = pytest.mark.django_db
 
 
-class APIKeyTest(TestCase):
-    """Test the APIKey model."""
+def test_encoded_value_generated_when_created():
+    api_key = APIKey.objects.create(name="test")
+    assert api_key.encoded
 
-    def setUp(self):
-        self.api_key = create_api_key()
 
-    def test_token_generated_when_created(self):
-        self.assertNotEqual(self.api_key.token, "")
-
-    def test_hashed_token_generated_when_created(self):
-        self.assertNotEqual(self.api_key.hashed_token, "")
-
-    def test_token_long_enough(self):
-        self.assertGreater(len(self.api_key.token), 16)
-
-    def test_cannot_unrevoke(self):
-        api_key = create_api_key(revoked=True)
-        api_key.revoked = False
-        with self.assertRaises(ValidationError):
-            api_key.save()
-        with self.assertRaises(ValidationError):
-            api_key.clean()
+def test_cannot_unrevoke():
+    api_key = APIKey.objects.create(name="test", revoked=True)
+    api_key.revoked = False
+    with pytest.raises(ValidationError):
+        api_key.save()
+    with pytest.raises(ValidationError):
+        api_key.clean()

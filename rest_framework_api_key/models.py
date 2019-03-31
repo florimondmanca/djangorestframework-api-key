@@ -15,8 +15,9 @@ class APIKeyManager(models.Manager):
 
         Assigns a token generated from the given secret key (or a new one).
         """
-        _, encoded = create_secret_key()
-        kwargs["encoded"] = encoded
+        if "encoded" not in kwargs:
+            _, encoded = create_secret_key()
+            kwargs["encoded"] = encoded
         return super().create(**kwargs)
 
 
