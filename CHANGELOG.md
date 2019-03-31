@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.3.1]
 
+Released: 2018-11-17
+
+### Added
+
 - `APIKey` model.
 - `HasAPIKey` and `HasAPIKeyOrIsAuthenticated` permission classes.
 - Generate, view and revoke API keys from the Django admin.
