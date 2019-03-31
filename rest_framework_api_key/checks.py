@@ -17,7 +17,7 @@ def _get_deprecated_setting_error(source, target, id):
 def check_header_settings_for_deprecation(app_configs, **kwargs):
     """Check header settings.
 
-    API Key header settings have been updated to use the DRF_API_KEY_*
+    API key header settings have been updated to use the DRF_API_KEY_*
     namespace in version 0.3.
     """
     errors = []

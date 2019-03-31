@@ -54,7 +54,7 @@ TEMPLATES = [
 WSGI_APPLICATION = "example.wsgi.application"
 
 
-# API Key configuration
+# API key configuration
 
 DRF_API_KEY_TOKEN_HEADER = "HTTP_API_TOKEN"  # the default
 DRF_API_KEY_SECRET_KEY_HEADER = "HTTP_API_SECRET_KEY"  # the default
