@@ -11,6 +11,12 @@
 
 🔐 API key permissions for the [Django REST Framework](http://www.django-rest-framework.org).
 
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Security details](#security-details)
+- [Example project](#example-project)
+
 ## Features
 
 **`djangorestframework-api-key` allows server-side clients to safely use your API**.
@@ -19,12 +25,12 @@ Server-side clients are third-party backends and services which does not have a 
 
 Intended to be:
 
-- ✌️ **Simple to use**: create, manage and revoke API keys via the admin site.
-- 🔒 **As secure as possible**: secret keys are generated through cryptographic methods. They are only visible at creation, never shown again and never stored in the database.
+- ✌️ **Simple to use**: create, manage and revoke API keys via the admin site, or use built-in helpers to create API keys programmatically.
+- 🔒 **As secure as possible**: API keys treated with the same level of care than user passwords. They are only visible at creation, hashed before being stored in the database, and never shown again.
 
-There are important security aspects you need to consider before switching to an API key access control scheme. See [Security](#security).
+**Note**: there are important security aspects you need to consider before switching to an API key access control scheme. See also [Security caveats](#caveats).
 
-## Install
+## Installation
 
 - Install from PyPI:
 
@@ -36,8 +42,9 @@ $ pip install djangorestframework-api-key
 
 ```python
 # settings.py
+
 INSTALLED_APPS = [
-  # ...,
+  # ...
   'rest_framework',
   'rest_framework_api_key',
 ]
@@ -53,7 +60,7 @@ $ python manage.py migrate
 
 ### Setting permissions
 
-This package provides permission classes to allow external clients to use your API.
+This package provides permission classes to allow external clients to use your API:
 
 - `HasAPIKey`: this permission class requires **all clients** to provide a valid API key, regardless of whether they provide authentication details.
 - `HasAPIKeyOrIsAuthenticated`: if you want to allow clients to provide either an API key or authentication credentials, use this permission class instead.
@@ -77,78 +84,108 @@ from rest_framework.views import APIView
 from rest_framework_api_key.permissions import HasAPIKey
 
 class UserListView(APIView):
-    permission_classes = (HasAPIKey,)
+    permission_classes = [HasAPIKey]
     # ...
 ```
 
-Refer to [DRF Docs - Setting the permission policy](http://www.django-rest-framework.org/api-guide/permissions/#setting-the-permission-policy) for more information on using permission classes.
-
-### Creating and managing API keys
-
-`djangorestframework-api-key` provides a Django Admin interface to create, manage and revoke API keys.
-
-See [Example project](#example-project) for details.
+See [Setting the permission policy (DRF docs)](http://www.django-rest-framework.org/api-guide/permissions/#setting-the-permission-policy) for more information on using permission classes.
 
 ### Making authorized requests
 
-Once API key permissions are enabled on your API, clients can pass their API key via the `Api-Token` and `Api-Secret-Key` headers (this is customizable, see [Settings](#settings)):
+Once API key permissions are enabled on your API, clients can pass their API key via the `Authorization` header. It must be formatted as follows:
 
-```bash
-$ curl -H 'Api-Token: YOUR_API_TOKEN_HERE' -H 'Api-Secret-Key: YOUR_API_SECRET_KEY_HERE' http://localhost:8000/my-resource/
+```
+Authorization: Api-Key: {name}:{secret_key}
 ```
 
-## Settings
+where `{name}` refers to the name of the API key and `{secret_key}` to its secret key (more details in [Generation scheme](#generation-scheme)).
 
-> Note: values of header settings should be set according to the behavior of [HttpRequest.META](https://docs.djangoproject.com/en/dev/ref/request-response/#django.http.HttpRequest.META). For example, `HTTP_API_KEY` maps to the `Api-Key` header.
+For maximum clarity, here's an example (and fake) request using curl:
 
-`DRF_API_KEY_TOKEN_HEADER`:
+```bash
+$ curl -H 'Authorization: Api-Key: myapp:my_secret_key' http://localhost:8000/my-resource/
+```
 
-- Name of the header which clients use to pass their API token.
-- Default value: `HTTP_API_TOKEN`.
+See [Validation scheme](#validation-scheme) to know under which conditions the access is granted.
 
-`DRF_API_KEY_SECRET_KEY_HEADER`:
+### Creating and managing API keys
 
-- Name of the header which clients use the pass their API secret key.
-- Default value: `HTTP_API_SECRET_KEY`.
+#### Admin panel
 
-## Example project
+When it is installed, `djangorestframework-api-key` adds an "API Key Permissions" section to the Django admin site where you can create, view and revoke API keys.
 
-An [example project](https://github.com/florimondmanca/djangorestframework-api-key/tree/master/example_project) shows usage in the context of a Django project.
+See also the [example project](#example-project).
 
-## Security
+#### Programmatic usage (advanced)
+
+API keys can be created, viewed and revoked programmatically by manipulating the `APIKey` model.
+
+> The examples below use the [Django shell](https://docs.djangoproject.com/en/2.1/ref/django-admin/#django-admin-shell).
+
+- You can view and query API keys like any other model:
+
+```python
+>>> from rest_framework_api_key.models import APIKey
+>>> APIKey.objects.filter(revoked=False).count()
+42
+```
+
+- If you wish to create an API key programmatically, you'll most likely want a one-time access to its secret key too. To do so, use the `create_secret_key` helper:
+
+```python
+>>> from rest_framework_api_key.helpers import create_secret_key
+>>> from rest_framework_api_key.models import APIKey
+>>> secret_key, encoded = create_secret_key()
+>>> api_key = APIKey.objects.create(name="backend-api", encoded=encoded)
+>>> # Proceed with `api_key` or `secret_key`...
+```
+
+**Danger**: be very careful not to leak the `secret_key`!
+
+## Security details
 
 ### Generation scheme
 
 An API key is made of two parts:
 
-- The **API token**: a unique, generated, public string of characters.
-- The **API secret key**: a unique, generated string of characters that the client must keep private.
+- A **name**: a unique identifier for the API key formatted as a slug, e.g. `my-backend-app`.
+- A **secret key**: a generated string of characters that the client server-side application must keep private.
 
-For obvious security purposes, `djangorestframework-api-key` does not store the secret key at all on the server. The latter is shown only once to the client upon API key creation.
+Secret keys are treated with the same level of care than user passwords:
+
+- The secret key is not stored as-is in the database.
+- Instead, it is encoded using the default [password hasher](https://docs.djangoproject.com/en/2.1/topics/auth/passwords/) and the result is stored in the database.
+- The secret key itself is shown only once to the client upon API key creation.
 
 ### Validation scheme
 
-Upon generation, a hash of the token salted by the secret key is computed.
+Access is granted if and only if all the following is true:
 
-To verify their permissions, clients pass both the token and secret key. These are used to compute a hash that is compared with the one stored in database. Access is only granted if hashes match.
+1. The `Authorization` header is present and correctly formatted (see [Making authorized requests](#making-authorized-requests)).
+2. An API key for the given `name` exists and has not been revoked.
+3. The encoded version of the given secret key matches the encoded secret key stored in the database.
 
 ### Caveats
 
-[API keys ≠ Security](https://nordicapis.com/why-api-keys-are-not-enough/): depending on your situation, you should probably not rely on API keys only to authenticate/authorize your clients. Doing so **shifts the responsability of Information Security on your clients**. This induces risks, especially if detaining an API key gives access to confidential information or write operations.
+[API keys ≠ Security](https://nordicapis.com/why-api-keys-are-not-enough/): depending on your situation, you should probably not rely on API keys only to authenticate/authorize your clients.
 
-More specifically, although this package uses cryptographically secure API key generation and validation schemes, a malicious attacker will be able to impersonate clients if the latter leak their API key.
+**Using API keys shifts the responsability of Information Security on your clients**. This induces risks, especially if detaining an API key gives access to confidential information or write operations. For example, an attacker could impersonate clients if their let their API key leak because of insufficient security measures.
 
-As a best practice, you should apply the Principle of Least Privilege: **allow only those who require resources to access those specific resources**. If your non-user client only needs to access a specific endpoint, add API permissions on that endpoint only.
+As a best practice, you should apply the _Principle of Least Privilege_: allow only those who require resources to access those specific resources. In other words: **if your non-user client only needs to access a specific endpoint, add API permissions on that endpoint only**.
 
-Act responsibly.
+Act responsibly!
+
+## Example project
+
+An [example project](https://github.com/florimondmanca/djangorestframework-api-key/tree/master/example_project) shows usage in the context of a Django project.
 
 ## Changelog
 
-See [CHANGELOG.md](https://github.com/florimondmanca/djangorestframework-api-key/blob/master/CHANGELOG.md).
+See [CHANGELOG.md](https://github.com/florimondmanca/djangorestframework-api-key/tree/master/CHANGELOG.md).
 
 ## Contributing
 
-See [CONTRIBUTING.md](https://github.com/florimondmanca/djangorestframework-api-key/blob/master/CONTRIBUTING.md).
+See [CONTRIBUTING.md](https://github.com/florimondmanca/djangorestframework-api-key/tree/master/CONTRIBUTING.md).
 
 ## License
 
