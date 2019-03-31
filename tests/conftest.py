@@ -42,7 +42,7 @@ def view_with_permissions():
 
 def _create_api_key(**kwargs):
     from rest_framework_api_key.models import APIKey
-    from rest_framework_api_key.crypto import create_secret_key
+    from rest_framework_api_key.helpers import create_secret_key
 
     secret_key, encoded = create_secret_key()
     api_key = APIKey.objects.create(encoded=encoded, **kwargs)

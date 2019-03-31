@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import validate_slug
 from django.db import models
 
-from .crypto import create_secret_key
+from .helpers import create_secret_key
 
 
 class APIKeyManager(models.Manager):

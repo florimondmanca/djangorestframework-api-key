@@ -24,6 +24,6 @@ def create_secret_key() -> Tuple[str, str]:
     return secret_key, encoded
 
 
-def check(secret_key: str, encoded: str) -> bool:
+def check_secret_key(secret_key: str, encoded: str) -> bool:
     return check_password(secret_key, encoded)
 

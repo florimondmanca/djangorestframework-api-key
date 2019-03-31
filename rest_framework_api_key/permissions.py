@@ -3,7 +3,7 @@
 from rest_framework import permissions
 
 from .models import APIKey
-from .crypto import check
+from .helpers import check_secret_key
 
 
 class HasAPIKey(permissions.BasePermission):
@@ -39,7 +39,7 @@ class HasAPIKey(permissions.BasePermission):
         except APIKey.DoesNotExist:  # pylint: disable=no-member
             return False
 
-        granted = check(secret_key, api_key.encoded)
+        granted = check_secret_key(secret_key, api_key.encoded)
 
         return granted
 

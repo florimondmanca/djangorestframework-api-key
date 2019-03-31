@@ -4,7 +4,7 @@ from typing import Tuple
 
 from django.contrib import admin, messages
 
-from .crypto import create_secret_key
+from .helpers import create_secret_key
 from .models import APIKey
 
 _SECRET = 16 * "*"
