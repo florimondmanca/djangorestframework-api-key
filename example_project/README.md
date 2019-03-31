@@ -2,82 +2,83 @@
 
 Example project showcasing the usage of [djangorestframework-api-key](../).
 
-This is a simple app for managing animals in a zoo. The API is protected using the `HasAPIKey` permission class.
+This is a pets management app. The API is protected using the `HasAPIKey` permission class.
 
 ## Install
 
-Clone the repo and install dependencies (preferrably in a virtualenv!):
+- Clone the repo and install dependencies (preferrably in a virtualenv!):
 
-```
+```bash
 $ pip install -r requirements.txt
 ```
 
-Then run migrations (creates a SQLite database):
+- Then run migrations (creates an SQLite database):
 
-```
-$ ./manage.py migrate
+```bash
+$ python manage.py migrate
 ```
 
-Create a superuser to access the admin site:
+- Create a superuser to access the admin site:
 
-```
-$ ./manage.py createsuperuser
+```bash
+$ python manage.py createsuperuser
 # Enter user information as instructed
 ```
 
-And start the server:
+- Finally, start the server:
 
-```
-$ ./manage.py runserver
+```bash
+$ python manage.py runserver
 ```
 
 ## Usage
 
-Go to the admin site at http://localhost:8000/admin and:
-
-- Create an API key:
+- Go to the admin site at http://localhost:8000/admin and create an API key:
 
 ![](media/api_key_form.png)
 
-- The generated API secret key is shown to you. You can retrieve the API token on the newly API key's detail page.
+- The generated secret key is shown to you:
 
 ![](media/created_api_key.png)
 
-- Create a few animals:
+- Save it to an environment variable, along with the API key name:
+
+```bash
+export API_KEY_NAME=my-app
+export API_KEY_SECRET_KEY=abcd
+```
+
+- Now, create a few animals:
 
 ![](media/animals.png)
 
-Then try performing requests to the API (may be sensitive to the trailing slash):
-
-```bash
-$ curl http://localhost:8000/animals/
-{"detail":"Authentication credentials were not provided."}
-
-$ curl -H 'Api-Token: YOUR_API_TOKEN' -H 'Api-Secret-Key: YOUR_API_SECRET_KEY' http://localhost:8000/animals/
-[{"id":1,"name":"Dog","noise":"Woof!"},{"id":2,"name":"Cat","noise":"Meow!"}]
-```
-
-Or with [requests](http://docs.python-requests.org) (`pip install requests`):
+- Finally, perform some requests to the API! We're using [requests](http://docs.python-requests.org) here:
 
 ```python
->>> import requests
->>> url = 'http://localhost:8000/animals/'
->>> resp = requests.get(url)
->>> resp.status_code
-403
->>> resp = requests.get(url, headers={
-...     'Api-Token': 'YOUR_API_TOKEN',
-...     'Api-Secret-Key': 'YOUR_API_SECRET_KEY',
-... })
->>> resp.status_code
-200
->>> resp.json()
-[{'id': 1, 'name': 'Dog', 'noise': 'Woof!'}, {'id': 2, 'name': 'Cat', 'noise': 'Meow!'}]
+import os
+import requests
+
+url = 'http://localhost:8000/animals/'
+resp = requests.get(url)
+assert resp.status_code == 403
+
+name = os.getenv("API_KEY_NAME")
+secret_key = os.getenv("API_KEY_SECRET_KEY")
+auth = "Api-Key: {}:{}".format(name, secret_key)
+
+resp = requests.get(url, headers={"Authorization": auth})
+assert resp.status_code == 200
+
+print(resp.json())
 ```
 
-## See also
+Here's the result:
 
-The package itself (`djangorestframework-api-key`):
+```json
+[
+  { "id": 1, "name": "Dog", "noise": "Woof!" },
+  { "id": 2, "name": "Cat", "noise": "Meow!" }
+]
+```
 
-- [GitHub](../)
-- [PyPI](https://pypi.org/project/djangorestframework-api-key/)
+🎉

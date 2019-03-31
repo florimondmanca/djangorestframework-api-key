@@ -1,3 +1,4 @@
+-e ../
 django
 djangorestframework
--e ../
+requests

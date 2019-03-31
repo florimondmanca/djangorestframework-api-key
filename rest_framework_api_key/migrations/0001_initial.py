@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
                 (
                     "name",
                     models.CharField(
-                        help_text="A unique snake-cased name of the client. 50 characters max.",
+                        help_text="A unique name that identifies the client.",
                         max_length=50,
                         unique=True,
                         validators=[

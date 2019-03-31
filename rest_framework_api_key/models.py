@@ -30,9 +30,7 @@ class APIKey(models.Model):
     name = models.CharField(
         max_length=50,
         unique=True,
-        help_text=(
-            "A unique snake-cased name of the client. " "50 characters max."
-        ),
+        help_text="A unique name that identifies the client.",
         validators=[validate_slug],
     )
     encoded = models.CharField(max_length=100, null=True)
