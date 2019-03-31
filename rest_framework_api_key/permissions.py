@@ -7,19 +7,7 @@ from .helpers import check_secret_key
 
 
 class HasAPIKey(permissions.BasePermission):
-    """Authorize if a valid API key is provided.
-
-    The request is authorized if, and only if:
-
-    1. The `Authorization` header is present and correctly formatted:
-    
-    ```
-    Authorization: Api-Key: $NAME:$VALUE
-    ```
-
-    2. An API key for this name exists and it has not been revoked.
-    3. The given API key value matches the encoded version stored in database.
-    """
+    """Authorize if a valid API key is provided."""
 
     def has_permission(self, request, view) -> bool:
         authorization = request.META.get(
@@ -29,7 +17,7 @@ class HasAPIKey(permissions.BasePermission):
         if authorization is None:
             return False
 
-        _, _, key = authorization.partition("Api-Key: ")
+        _, _, key = authorization.partition("Api-Key ")
 
         try:
             name, secret_key = key.split(":")

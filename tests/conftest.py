@@ -74,7 +74,7 @@ def create_request():
             api_key, secret_key = _create_api_key(**kwargs)
 
             if authorization is _MISSING:
-                authorization = "Api-Key: {api_key.name}:{secret_key}"
+                authorization = "Api-Key {api_key.name}:{secret_key}"
 
             authorization = authorization.format(
                 api_key=api_key, secret_key=secret_key

@@ -66,7 +66,7 @@ assert resp.status_code == 403
 
 name = os.getenv("API_KEY_NAME")
 secret_key = os.getenv("API_KEY_SECRET_KEY")
-auth = "Api-Key: {}:{}".format(name, secret_key)
+auth = "Api-Key {}:{}".format(name, secret_key)
 
 resp = requests.get(url, headers={"Authorization": auth})
 assert resp.status_code == 200
