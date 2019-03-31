@@ -2,34 +2,21 @@ language: python
 
 cache: pip
 
+dist: xenial
+
 python:
   - "3.5"
   - "3.6"
+  - "3.7"
 
 env:
-  - DJANGO_VERSION=1.11
   - DJANGO_VERSION=2.0
   - DJANGO_VERSION=2.1.5
 
-matrix:
-  include:
-    # Python 3.7 still not available in usual distro
-    - python: "3.7"
-      dist: xenial
-      sudo: true
-      env: DJANGO_VERSION=2.0
-    - python: "3.7"
-      dist: xenial
-      sudo: true
-      env: DJANGO_VERSION=2.1.5
-    # Django 2.1 not supported in Python 3.4
-    - python: "3.4"
-      env: DJANGO_VERSION=1.11
-    - python: "3.4"
-      env: DJANGO_VERSION=2.0
-
 install:
+  - pip install -U pip
   - pip install -r requirements-ci.txt
+  - pip install django==$DJANGO_VERSION
 
 script:
   - pytest

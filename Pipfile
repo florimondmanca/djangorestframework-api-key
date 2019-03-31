@@ -3,15 +3,13 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 name = "pypi"
 
-[packages]
-djangorestframework = ">=3.8"
-
 [dev-packages]
-django = ">=1.11, <2.2"
+django = "<2.2,>=2.0"
 bumpversion = "*"
-djangorestframework-api-key = {editable = true,path = "."}
 pytest = "*"
 pytest-django = "*"
+djangorestframework = "<4.0,>=3.8"
+djangorestframework-api-key = {editable = true,path = "."}
 
 [requires]
 python_version = "3.7"

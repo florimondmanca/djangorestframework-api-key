@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "cf0af524eda6e07f4f55bf9caa11bba6508aa40f5b09d5e3b33ebc6b1648acb4"
+            "sha256": "2aac80982856417813dcdcef9e8138be7c1528e416e8e88aa84c29762bfd97b7"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -15,16 +15,7 @@
             }
         ]
     },
-    "default": {
-        "djangorestframework": {
-            "hashes": [
-                "sha256:8a435df9007c8b7d8e69a21ef06650e3c0cbe0d4b09e55dd1bd74c89a75a9fcd",
-                "sha256:f7a266260d656e1cf4ca54d7a7349609dc8af4fe2590edd0ecd7d7643ea94a17"
-            ],
-            "index": "pypi",
-            "version": "==3.9.2"
-        }
-    },
+    "default": {},
     "develop": {
         "atomicwrites": {
             "hashes": [
@@ -55,6 +46,14 @@
             ],
             "index": "pypi",
             "version": "==2.1.7"
+        },
+        "djangorestframework": {
+            "hashes": [
+                "sha256:8a435df9007c8b7d8e69a21ef06650e3c0cbe0d4b09e55dd1bd74c89a75a9fcd",
+                "sha256:f7a266260d656e1cf4ca54d7a7349609dc8af4fe2590edd0ecd7d7643ea94a17"
+            ],
+            "index": "pypi",
+            "version": "==3.9.2"
         },
         "djangorestframework-api-key": {
             "editable": true,
