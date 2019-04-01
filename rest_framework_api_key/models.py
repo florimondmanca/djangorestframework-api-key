@@ -22,7 +22,7 @@ class APIKey(models.Model):
 
     objects = APIKeyManager()
 
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True, db_index=True)
     name = models.CharField(
         max_length=50,
         unique=True,
