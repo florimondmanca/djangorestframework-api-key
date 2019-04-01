@@ -30,11 +30,14 @@ def test_if_no_api_key_then_permission_denied(create_request, view):
         "foo",
         "Content-Type: text/plain",
         "Api-Key:",
-        "Api-Key foo",
-        "Api-Key :bar",
+        "Api-Key abcd",
+        "Api-Key foo:bar",
+        "Api Key {secret_key}",
+        "Api-Key: {secret_key}",
+        "{secret_key}",
     ],
 )
-def test_if_junk_api_key_then_permission_denied(
+def test_if_invalid_api_key_then_permission_denied(
     create_request, view, authorization
 ):
     request = create_request(authorization=authorization)
@@ -44,17 +47,5 @@ def test_if_junk_api_key_then_permission_denied(
 
 def test_if_revoked_then_permission_denied(create_request, view):
     request = create_request(revoked=True)
-    response = view(request)
-    assert response.status_code == 403
-
-
-def test_if_invalid_secret_key_then_permission_denied(create_request, view):
-    request = create_request(authorization="Api-Key {api_key.name}:abcd")
-    response = view(request)
-    assert response.status_code == 403
-
-
-def test_if_invalid_name_then_permission_denied(create_request, view):
-    request = create_request(authorization="Api-Key foo:{secret_key}")
     response = view(request)
     assert response.status_code == 403

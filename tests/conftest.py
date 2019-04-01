@@ -42,11 +42,8 @@ def view_with_permissions():
 
 def _create_api_key(**kwargs):
     from rest_framework_api_key.models import APIKey
-    from rest_framework_api_key.helpers import create_secret_key
 
-    secret_key, encoded = create_secret_key()
-    api_key = APIKey.objects.create(encoded=encoded, **kwargs)
-    return api_key, secret_key
+    return APIKey.objects.create_key(encoded=encoded, **kwargs)
 
 
 def _create_user():
@@ -59,6 +56,7 @@ def _create_user():
 @pytest.fixture
 def create_request():
     from rest_framework.test import APIRequestFactory, force_authenticate
+    from rest_framework_api_key.models import APIKey
 
     request_factory = APIRequestFactory()
 
@@ -71,16 +69,14 @@ def create_request():
 
         if authorization is not None:
             kwargs.setdefault("name", "test")
-            api_key, secret_key = _create_api_key(**kwargs)
+            _, secret_key = APIKey.objects.create_key(**kwargs)
 
             if authorization is _MISSING:
-                authorization = "Api-Key {api_key.name}:{secret_key}"
+                authorization = "Api-Key {secret_key}"
 
-            authorization = authorization.format(
-                api_key=api_key, secret_key=secret_key
+            headers["Authorization"] = authorization.format(
+                secret_key=secret_key
             )
-
-            headers["Authorization"] = authorization
 
         request = request_factory.get("/test/", **headers)
 

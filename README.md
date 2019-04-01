@@ -95,15 +95,15 @@ See [Setting the permission policy (DRF docs)](http://www.django-rest-framework.
 Once API key permissions are enabled on your API, clients can pass their API key via the `Authorization` header. It must be formatted as follows:
 
 ```
-Authorization: Api-Key {name}:{secret_key}
+Authorization: Api-Key {secret_key}
 ```
 
-where `{name}` refers to the name of the API key and `{secret_key}` to its secret key (more details in [Generation scheme](#generation-scheme)).
+where `{secret_key}` refers to the API key's secret key (more details in [Generation scheme](#generation-scheme)).
 
 For maximum clarity, here's an example (and fake) request using curl:
 
 ```bash
-$ curl -H 'Authorization: Api-Key myapp:my_secret_key' http://localhost:8000/my-resource/
+$ curl -H 'Authorization: Api-Key 2KlwUc9gJUDmoeZynPHOAsCCQ5jYBfVC' http://localhost:8000/my-resource/
 ```
 
 See [Validation scheme](#validation-scheme) to know under which conditions the access is granted.
@@ -120,7 +120,7 @@ When it is installed, `djangorestframework-api-key` adds an "API Key Permissions
 
 ![](https://github.com/florimondmanca/djangorestframework-api-key/tree/master/example_project/media/admin-created.png)
 
-Screenshots taken form the [example project](#example-project).
+Screenshots are taken from the [example project](#example-project).
 
 #### Programmatic usage (advanced)
 
@@ -136,14 +136,12 @@ API keys can be created, viewed and revoked programmatically by manipulating the
 42
 ```
 
-- If you wish to create an API key programmatically, you'll most likely want a one-time access to its secret key too. To do so, use the `create_secret_key` helper:
+- If you wish to create an API key programmatically, you'll most likely want a one-time access to its secret key too. To do so, use the `.create_key()` method on the `APIKey` objects manager instead of `.create()`:
 
 ```python
->>> from rest_framework_api_key.helpers import create_secret_key
 >>> from rest_framework_api_key.models import APIKey
->>> secret_key, encoded = create_secret_key()
->>> api_key = APIKey.objects.create(name="backend-api", encoded=encoded)
->>> # Proceed with `api_key` or `secret_key`...
+>>> api_key, secret_key = APIKey.objects.create_key(name="backend-api")
+>>> # Proceed with `api_key` and `secret_key`...
 ```
 
 **Danger**: be very careful not to leak the `secret_key`!
@@ -154,13 +152,12 @@ API keys can be created, viewed and revoked programmatically by manipulating the
 
 An API key is made of two parts:
 
-- A **name**: a unique identifier for the API key formatted as a slug, e.g. `my-backend-app`.
+- A **name**: a free-form unique identifier of the API key owner, e.g. `my-backend-app`.
 - A **secret key**: a generated string of characters that the client server-side application must keep private.
 
 Secret keys are treated with the same level of care than user passwords:
 
-- The secret key is not stored as-is in the database.
-- Instead, it is encoded using the default [password hasher](https://docs.djangoproject.com/en/2.1/topics/auth/passwords/) and the result is stored in the database.
+- Only a hash of the secret key is stored in the database. This hash is computed using the default [password hasher](https://docs.djangoproject.com/en/2.1/topics/auth/passwords/).
 - The secret key itself is shown only once to the client upon API key creation.
 
 ### Validation scheme
@@ -168,8 +165,7 @@ Secret keys are treated with the same level of care than user passwords:
 Access is granted if and only if all the following is true:
 
 1. The `Authorization` header is present and correctly formatted (see [Making authorized requests](#making-authorized-requests)).
-2. An API key for the given `name` exists and has not been revoked.
-3. The encoded version of the given secret key matches the encoded secret key stored in the database.
+2. The hash of the given secret key matches that of any usable (non-revoked) API key present in the database.
 
 ### Caveats
 

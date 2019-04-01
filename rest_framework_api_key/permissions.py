@@ -19,19 +19,12 @@ class HasAPIKey(permissions.BasePermission):
 
         _, _, key = authorization.partition("Api-Key ")
 
-        try:
-            name, secret_key = key.split(":")
-        except ValueError:
-            return False
+        usable_keys = APIKey.objects.filter(revoked=False)
 
-        try:
-            api_key = APIKey.objects.get(name=name, revoked=False)
-        except APIKey.DoesNotExist:  # pylint: disable=no-member
-            return False
-
-        granted = check_secret_key(secret_key, api_key.encoded)
-
-        return granted
+        return any(
+            check_secret_key(key, encoded)
+            for encoded in usable_keys.values_list("encoded", flat=True)
+        )
 
 
 class HasAPIKeyOrIsAuthenticated(permissions.BasePermission):

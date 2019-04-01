@@ -1,24 +1,20 @@
 """API key models."""
 
+from typing import Tuple
+
 from django.core.exceptions import ValidationError
-from django.core.validators import validate_slug
 from django.db import models
 
 from .helpers import create_secret_key
 
 
 class APIKeyManager(models.Manager):
-    """Custom model manager for API keys."""
-
-    def create(self, **kwargs) -> "APIKey":
-        """Create an API key.
-
-        Assigns a token generated from the given secret key (or a new one).
-        """
-        if "encoded" not in kwargs:
-            _, encoded = create_secret_key()
-            kwargs["encoded"] = encoded
-        return super().create(**kwargs)
+    def create_key(self, **kwargs) -> Tuple["APIKey", str]:
+        """Create and return an API key along with the generated secret key."""
+        secret_key, encoded = create_secret_key()
+        kwargs["encoded"] = encoded
+        api_key = self.create(**kwargs)
+        return api_key, secret_key
 
 
 class APIKey(models.Model):
@@ -30,10 +26,12 @@ class APIKey(models.Model):
     name = models.CharField(
         max_length=50,
         unique=True,
-        help_text="A unique name that identifies the client.",
-        validators=[validate_slug],
+        default=None,
+        help_text=(
+            "A free-form but unique name that identifies the API key owner."
+        ),
     )
-    encoded = models.CharField(max_length=100, null=True)
+    encoded = models.CharField(max_length=100, unique=True, default=None)
     revoked = models.BooleanField(
         blank=True,
         default=False,
