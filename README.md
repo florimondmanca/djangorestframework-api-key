@@ -95,16 +95,10 @@ See [Setting the permission policy (DRF docs)](http://www.django-rest-framework.
 Once API key permissions are enabled on your API, clients can pass their API key via the `Authorization` header. It must be formatted as follows:
 
 ```
-Authorization: Api-Key XXX
+Authorization: Api-Key ********
 ```
 
-where `XXX` refers to the API key.
-
-For example, here's how an authorized request with `curl` may look:
-
-```bash
-$ curl -H 'Authorization: Api-Key erNM1KXd.jNKEnSC3bSPwaJVHOtj3vjkNHLPGTHX5' http://localhost:8000/my-resource/
-```
+where `********` refers to the API key.
 
 To know under which conditions the access is granted, please see [Grant scheme](#grant-scheme).
 
