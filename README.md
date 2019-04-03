@@ -14,7 +14,7 @@
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Security details](#security-details)
+- [Security](#security)
 - [Example project](#example-project)
 
 ## Features
@@ -25,10 +25,10 @@ Server-side clients are third-party backends and services which does not have a 
 
 Intended to be:
 
-- ✌️ **Simple to use**: create, manage and revoke API keys via the admin site, or use built-in helpers to create API keys programmatically.
-- 🔒 **As secure as possible**: API keys treated with the same level of care than user passwords. They are only visible at creation, hashed before being stored in the database, and never shown again.
+- ✌️ **Simple to use**: create, view and revoke API keys via the admin site, or use built-in helpers to create API keys programmatically.
+- 🔒 **As secure as possible**: API keys are treated with the same level of care than user passwords. They are hashed before being stored in the database and only visible at creation.
 
-**Note**: there are important security aspects you need to consider before switching to an API key access control scheme. See also [Security caveats](#caveats).
+**Note**: there are important security aspects you need to consider before switching to an API key access control scheme. See [Security caveats](#caveats).
 
 ## Installation
 
@@ -95,18 +95,18 @@ See [Setting the permission policy (DRF docs)](http://www.django-rest-framework.
 Once API key permissions are enabled on your API, clients can pass their API key via the `Authorization` header. It must be formatted as follows:
 
 ```
-Authorization: Api-Key {secret_key}
+Authorization: Api-Key XXX
 ```
 
-where `{secret_key}` refers to the API key's secret key (more details in [Generation scheme](#generation-scheme)).
+where `XXX` refers to the API key.
 
-For maximum clarity, here's an example (and fake) request using curl:
+For example, here's how an authorized request with `curl` may look:
 
 ```bash
-$ curl -H 'Authorization: Api-Key 2KlwUc9gJUDmoeZynPHOAsCCQ5jYBfVC' http://localhost:8000/my-resource/
+$ curl -H 'Authorization: Api-Key erNM1KXd.jNKEnSC3bSPwaJVHOtj3vjkNHLPGTHX5' http://localhost:8000/my-resource/
 ```
 
-See [Validation scheme](#validation-scheme) to know under which conditions the access is granted.
+To know under which conditions the access is granted, please see [Grant scheme](#grant-scheme).
 
 ### Creating and managing API keys
 
@@ -120,7 +120,7 @@ When it is installed, `djangorestframework-api-key` adds an "API Key Permissions
 
 ![](https://github.com/florimondmanca/djangorestframework-api-key/tree/master/example_project/media/admin-created.png)
 
-Screenshots are taken from the [example project](#example-project).
+(Screenshots were taken from the [example project](#example-project).)
 
 #### Programmatic usage (advanced)
 
@@ -128,7 +128,7 @@ API keys can be created, viewed and revoked programmatically by manipulating the
 
 > The examples below use the [Django shell](https://docs.djangoproject.com/en/2.1/ref/django-admin/#django-admin-shell).
 
-- You can view and query API keys like any other model:
+- You can view and query `APIKey` like any other model. For example, to know the number of active (unrevoked) API keys:
 
 ```python
 >>> from rest_framework_api_key.models import APIKey
@@ -136,36 +136,37 @@ API keys can be created, viewed and revoked programmatically by manipulating the
 42
 ```
 
-- If you wish to create an API key programmatically, you'll most likely want a one-time access to its secret key too. To do so, use the `.create_key()` method on the `APIKey` objects manager instead of `.create()`:
+- If you wish to create an API key programmatically, you'll most likely want a one-time access to its generated key too. To do so, use the `.create_key()` method on the `APIKey` objects manager instead of `.create()`:
 
 ```python
 >>> from rest_framework_api_key.models import APIKey
->>> api_key, secret_key = APIKey.objects.create_key(name="backend-api")
->>> # Proceed with `api_key` and `secret_key`...
+>>> api_key, generated_key = APIKey.objects.create_key(name="Backend API")
+>>> # Proceed with `api_key` and `generated_key`...
 ```
 
-**Danger**: be very careful not to leak the `secret_key`!
+**Danger**: to preserve confidentiality, only give the generated key to the client, and do not keep any trace of it on the server after that is done.
 
-## Security details
+## Security
 
-### Generation scheme
+### Key generation scheme
 
-An API key is made of two parts:
+An API key is composed of two items:
 
-- A **name**: a free-form unique identifier of the API key owner, e.g. `my-backend-app`.
-- A **secret key**: a generated string of characters that the client server-side application must keep private.
+- A prefix `P`, which is a generated string of 8 characters.
+- A secret key `SK`, which is a generated string of 32 characters.
 
-Secret keys are treated with the same level of care than user passwords:
+The generated key that clients use to [make authorized requests](#making-authorized-requests) is `GK = P.SK`. It is treated with the same level of care than passwords:
 
-- Only a hash of the secret key is stored in the database. This hash is computed using the default [password hasher](https://docs.djangoproject.com/en/2.1/topics/auth/passwords/).
-- The secret key itself is shown only once to the client upon API key creation.
+- Only a hashed version is stored in the database. The hash is computed using the default [password hasher](https://docs.djangoproject.com/en/2.1/topics/auth/passwords/).
+- The generated key is shown only once to the client upon API key creation.
 
-### Validation scheme
+### Grant scheme
 
-Access is granted if and only if all the following is true:
+Access is granted if and only if all of the following is true:
 
 1. The `Authorization` header is present and correctly formatted (see [Making authorized requests](#making-authorized-requests)).
-2. The hash of the given secret key matches that of any usable (non-revoked) API key present in the database.
+2. An unrevoked API key with the prefix of the given key exists in the database.
+3. The hash of the given key matches that of the API key.
 
 ### Caveats
 

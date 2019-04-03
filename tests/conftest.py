@@ -69,14 +69,15 @@ def create_request():
 
         if authorization is not None:
             kwargs.setdefault("name", "test")
-            _, secret_key = APIKey.objects.create_key(**kwargs)
+            _, key = APIKey.objects.create_key(**kwargs)
 
             if authorization is _MISSING:
-                authorization = "Api-Key {secret_key}"
+                authorization = "Api-Key {key}"
 
-            headers["Authorization"] = authorization.format(
-                secret_key=secret_key
-            )
+            if callable(authorization):
+                authorization = authorization(key)
+
+            headers["Authorization"] = authorization.format(key=key)
 
         request = request_factory.get("/test/", **headers)
 

@@ -3,7 +3,6 @@
 from rest_framework import permissions
 
 from .models import APIKey
-from .helpers import check_secret_key
 
 
 class HasAPIKey(permissions.BasePermission):
@@ -19,12 +18,7 @@ class HasAPIKey(permissions.BasePermission):
 
         _, _, key = authorization.partition("Api-Key ")
 
-        usable_keys = APIKey.objects.filter(revoked=False)
-
-        return any(
-            check_secret_key(key, encoded)
-            for encoded in usable_keys.values_list("encoded", flat=True)
-        )
+        return APIKey.objects.is_valid(key)
 
 
 class HasAPIKeyOrIsAuthenticated(permissions.BasePermission):

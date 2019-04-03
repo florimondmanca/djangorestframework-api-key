@@ -5,16 +5,31 @@ from typing import Tuple
 from django.core.exceptions import ValidationError
 from django.db import models
 
-from .helpers import create_secret_key
+from ._helpers import generate_key, check_key, PREFIX_LENGTH
 
 
 class APIKeyManager(models.Manager):
     def create_key(self, **kwargs) -> Tuple["APIKey", str]:
-        """Create and return an API key along with the generated secret key."""
-        secret_key, encoded = create_secret_key()
-        kwargs["encoded"] = encoded
-        api_key = self.create(**kwargs)
-        return api_key, secret_key
+        """Create and return an API key object along with the generated key."""
+        kwargs.pop("id", None)
+        obj = self.model(**kwargs)
+        generated_key, key_id = generate_key()
+        obj.id = key_id
+        obj.save()
+        return obj, generated_key
+
+    def is_valid(self, key: str) -> bool:
+        try:
+            prefix, _ = key.split(".")
+        except ValueError:
+            return False
+
+        try:
+            obj = self.get(id__startswith=prefix, revoked=False)
+        except self.model.DoesNotExist:
+            return False
+
+        return obj.is_valid(key)
 
 
 class APIKey(models.Model):
@@ -22,16 +37,11 @@ class APIKey(models.Model):
 
     objects = APIKeyManager()
 
+    PREFIX_LENGTH = PREFIX_LENGTH
+
+    id = models.CharField(max_length=100, unique=True, primary_key=True)
     created = models.DateTimeField(auto_now_add=True, db_index=True)
-    name = models.CharField(
-        max_length=50,
-        unique=True,
-        default=None,
-        help_text=(
-            "A free-form but unique name that identifies the API key owner."
-        ),
-    )
-    encoded = models.CharField(max_length=100, unique=True, default=None)
+    name = models.CharField(max_length=50, blank=False, default=None)
     revoked = models.BooleanField(
         blank=True,
         default=False,
@@ -44,23 +54,33 @@ class APIKey(models.Model):
         verbose_name_plural = "API keys"
 
     def __init__(self, *args, **kwargs):
-        """Store the initial value of `revoked` to detect changes."""
         super().__init__(*args, **kwargs)
+        # Store the initial value of `revoked` to detect changes.
         self._initial_revoked = self.revoked
 
-    def _check_for_unrevoke(self):
+    def prefix(self) -> str:
+        return self.pk.split(".")[0]
+
+    # Ensure compatibility with Django admin.
+    prefix.short_description = "Prefix"
+    prefix = property(prefix)
+
+    def is_valid(self, key: str):
+        _, hashed_key = self.pk.split(".")
+        return check_key(key, hashed_key)
+
+    def clean(self):
+        self._validate_revoked()
+
+    def save(self, *args, **kwargs):
+        self._validate_revoked()
+        super().save(*args, **kwargs)
+
+    def _validate_revoked(self):
         if self._initial_revoked and not self.revoked:
             raise ValidationError(
                 "The API key has been revoked, which cannot be undone."
             )
-
-    def clean(self):
-        self._check_for_unrevoke()
-
-    def save(self, *args, **kwargs):
-        # Prevent from un-revoking API keys on save.
-        self._check_for_unrevoke()
-        super().save(*args, **kwargs)
 
     def __str__(self) -> str:
         return str(self.name)

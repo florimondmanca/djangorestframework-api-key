@@ -4,24 +4,21 @@ from typing import Tuple
 
 from django.contrib import admin, messages
 
-from .helpers import create_secret_key
+from ._helpers import generate_key
 from .models import APIKey
-
-_SECRET = 16 * "*"
 
 
 @admin.register(APIKey)
 class APIKeyAdmin(admin.ModelAdmin):
     """Admin panel for API keys."""
 
-    list_display = ("name", "created", "revoked")
+    list_display = ("name", "prefix", "created", "revoked")
     list_filter = ("created", "revoked")
-    readonly_fields = ("secret_key_message",)
+
+    readonly_fields = ("get_api_key",)
     search_fields = ("name",)
-    fieldsets = (
-        (None, {"fields": ("name", "revoked")}),
-        ("Credentials", {"fields": ("secret_key_message",)}),
-    )
+
+    fieldsets = ((None, {"fields": ("name", "revoked", "get_api_key")}),)
 
     def get_readonly_fields(self, request, obj: APIKey = None) -> Tuple[str]:
         """Set revoked as read-only if the API key has been revoked."""
@@ -29,27 +26,28 @@ class APIKeyAdmin(admin.ModelAdmin):
             return self.readonly_fields + ("name", "revoked")
         return self.readonly_fields
 
-    @staticmethod
-    def secret_key_message(obj: APIKey) -> str:
+    def get_api_key(self, obj: APIKey) -> str:
         if obj.pk:
-            return _SECRET
-        return "The secret key will be generated when clicking 'Save'."
+            return 16 * "*"
+        return "The API key will be generated when clicking 'Save'."
 
-    secret_key_message.short_description = "Secret key"
+    get_api_key.short_description = "API key"
 
     def save_model(self, request, obj: APIKey, form, change):
         """Display the API key on save."""
         created = not obj.pk
 
         if created:
-            secret_key, encoded = create_secret_key()
-            obj.encoded = encoded
+            generated_key, key_id = generate_key()
+            obj.id = key_id
 
-        obj.save()
+            obj.save()
 
-        if created:
             message = (
-                "The secret key for {} is: {}. ".format(obj.name, secret_key)
-                + "Please note it down: you will not be able to see it again."
+                "The API key for {} is: {}. ".format(obj.name, generated_key)
+                + "Please store it somewhere safe: "
+                + "you will not be able to see it again."
             )
             messages.add_message(request, messages.WARNING, message)
+        else:
+            obj.save()

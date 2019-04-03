@@ -32,9 +32,9 @@ def test_if_no_api_key_then_permission_denied(create_request, view):
         "Api-Key:",
         "Api-Key abcd",
         "Api-Key foo:bar",
-        "Api Key {secret_key}",
-        "Api-Key: {secret_key}",
-        "{secret_key}",
+        "Api Key {key}",
+        "Api-Key: {key}",
+        "{key}",
     ],
 )
 def test_if_invalid_api_key_then_permission_denied(
@@ -47,5 +47,16 @@ def test_if_invalid_api_key_then_permission_denied(
 
 def test_if_revoked_then_permission_denied(create_request, view):
     request = create_request(revoked=True)
+    response = view(request)
+    assert response.status_code == 403
+
+
+def test_full_prefix_must_be_present(create_request, view):
+    def get_authorization(key: str) -> str:
+        prefix, secret_key = key.split(".")
+        truncated_prefix = prefix[:-1]
+        return "Api-Key " + truncated_prefix + "." + secret_key
+
+    request = create_request(authorization=get_authorization)
     response = view(request)
     assert response.status_code == 403

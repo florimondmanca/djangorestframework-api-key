@@ -39,15 +39,14 @@ $ python manage.py runserver
 
 ![](media/admin-form.png)
 
-- The generated secret key is shown to you:
+- The generated API key is shown to you:
 
 ![](media/admin-created.png)
 
-- Save it to an environment variable, along with the API key name:
+- Save it to an environment variable:
 
 ```bash
-export API_KEY_NAME=pets-friends-community
-export API_KEY_SECRET_KEY=...  # replace with your own secret key
+export API_KEY="<The generated API key here>"
 ```
 
 - Now, create a few pets:
@@ -64,9 +63,8 @@ url = 'http://localhost:8000/pets/'
 resp = requests.get(url)
 assert resp.status_code == 403
 
-name = os.getenv("API_KEY_NAME")
-secret_key = os.getenv("API_KEY_SECRET_KEY")
-auth = "Api-Key {}:{}".format(name, secret_key)
+api_key = os.getenv("API_KEY")
+auth = f"Api-Key {api_key}"
 
 resp = requests.get(url, headers={"Authorization": auth})
 assert resp.status_code == 200
@@ -78,8 +76,8 @@ Here's the result:
 
 ```json
 [
-  { "id": 1, "name": "Dog", "noise": "Woof!" },
-  { "id": 2, "name": "Cat", "noise": "Meow!" }
+  { "id": 1, "animal": "DOG", "nickname": "Jerry" },
+  { "id": 2, "animal": "CAT", "nickname": "Suzy" }
 ]
 ```
 
