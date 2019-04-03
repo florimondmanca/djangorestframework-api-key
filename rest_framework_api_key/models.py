@@ -12,7 +12,7 @@ class APIKeyManager(models.Manager):
     def create_key(self, **kwargs) -> Tuple["APIKey", str]:
         """Create and return an API key object along with the generated key."""
         kwargs.pop("id", None)
-        obj = self.model(**kwargs)
+        obj = self.model(**kwargs)  # type: APIKey
         generated_key, key_id = generate_key()
         obj.id = key_id
         obj.save()
@@ -65,7 +65,7 @@ class APIKey(models.Model):
     prefix.short_description = "Prefix"
     prefix = property(prefix)
 
-    def is_valid(self, key: str):
+    def is_valid(self, key: str) -> bool:
         _, hashed_key = self.pk.split(".")
         return check_key(key, hashed_key)
 
