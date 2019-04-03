@@ -11,6 +11,8 @@
 
 🔐 API key permissions for the [Django REST Framework](http://www.django-rest-framework.org).
 
+**Important**: Make sure to pin your dependency to `0.x` (i.e. `rest_framework_api_key < 1.0`). The upcoming 1.0 release will introduce a new (non-backwards compatible) API key scheme.
+
 ## Features
 
 **`djangorestframework-api-key` allows server-side clients to safely use your API**.
