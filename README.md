@@ -58,6 +58,7 @@ $ python manage.py migrate
 This package provides permission classes to allow external clients to use your API.
 
 - `HasAPIKey`: this permission class requires **all clients** to provide a valid API key, regardless of whether they provide authentication details.
+- `HasAPIKeyAndIsAuthenticated`: if you want clients to **provide both an API key and authentication credentials** use this class.
 - `HasAPIKeyOrIsAuthenticated`: if you want to allow clients to provide either an API key or authentication credentials, use this permission class instead.
 
 As with every permission class, you can either use them globally:

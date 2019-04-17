@@ -47,3 +47,12 @@ class HasAPIKeyOrIsAuthenticated(permissions.BasePermission):
     def has_permission(self, request, view):
         perms = [HasAPIKey(), permissions.IsAuthenticated()]
         return any(perm.has_permission(request, view) for perm in perms)
+
+class HasAPIKeyAndIsAuthenticated(permissions.BasePermission):
+    """Authorize if a valid API key is provided and the request is authenticated."""
+    
+    def has_permission(self, request, view):
+        hasKey = HasAPIKey().has_permission(request, view)
+        IsAuthenticated = permissions.IsAuthenticated().has_permission(request, view)
+        return (hasKey and IsAuthenticated)
+            
