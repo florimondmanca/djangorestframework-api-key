@@ -1,7 +1,8 @@
 import pytest
+from rest_framework import generics, permissions
+from rest_framework.response import Response
 
 from rest_framework_api_key.permissions import HasAPIKey
-
 
 pytestmark = pytest.mark.django_db
 
@@ -46,3 +47,23 @@ def test_if_valid_token_and_secret_key_then_permission_granted(
     request = create_request(token=key.token, secret_key="foo")
     response = view(request)
     assert response.status_code == 200
+
+
+def test_object_permission(create_request):
+    class DenyObject(permissions.BasePermission):
+        def has_object_permission(self, request, view, obj):
+            return False
+
+    class View(generics.GenericAPIView):
+        permission_classes = [HasAPIKey | DenyObject]
+
+        def get(self, request):
+            self.check_object_permissions(request, object())
+            return Response()
+
+    view = View.as_view()
+
+    # NOTE: no API key passed => permission checks should fail
+    request = create_request()
+    response = view(request)
+    assert response.status_code == 403
