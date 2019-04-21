@@ -63,17 +63,12 @@ def create_api_key():
     return create
 
 
-@pytest.fixture(name="request_factory")
-def fixture_request_factory():
-    from rest_framework.test import APIRequestFactory
-
-    return APIRequestFactory()
-
-
 @pytest.fixture
-def create_request(request_factory):
-    from rest_framework.test import force_authenticate
+def create_request():
+    from rest_framework.test import APIRequestFactory, force_authenticate
     from rest_framework_api_key.settings import TOKEN_HEADER, SECRET_KEY_HEADER
+
+    request_factory = APIRequestFactory()
 
     def create(token=None, secret_key=None, authenticated=False):
         kwargs = {}
