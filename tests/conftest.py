@@ -35,6 +35,8 @@ def view_with_permissions():
         def view(*args):
             return Response()
 
+        return view
+
     return create_view
 
 
@@ -57,7 +59,7 @@ def create_request():
     from rest_framework.test import APIRequestFactory, force_authenticate
     from rest_framework_api_key.settings import TOKEN_HEADER, SECRET_KEY_HEADER
 
-    factory = APIRequestFactory()
+    request_factory = APIRequestFactory()
 
     def create(token=None, secret_key=None, authenticated=False):
         kwargs = {}
@@ -68,7 +70,7 @@ def create_request():
         if secret_key is not None:
             kwargs[SECRET_KEY_HEADER] = secret_key
 
-        request = factory.get("/test/", **kwargs)
+        request = request_factory.get("/test/", **kwargs)
 
         if authenticated:
             user = _create_user()
