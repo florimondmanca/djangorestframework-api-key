@@ -1,5 +1,3 @@
-"""Test the APIKey model."""
-
 import pytest
 from django.core.exceptions import ValidationError
 

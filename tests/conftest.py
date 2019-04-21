@@ -47,11 +47,20 @@ def _create_user():
     return User.objects.create_user(username="foo", password="bar")
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def create_api_key():
-    from .factory import create_api_key as factory
+    from rest_framework_api_key.models import APIKey
 
-    return factory
+    index = 0
+
+    def create(**kwargs):
+        nonlocal index
+        # Ensure client_id is unique.
+        kwargs.setdefault("client_id", "test_{}".format(index))
+        index += 1
+        return APIKey.objects.create(**kwargs)
+
+    return create
 
 
 @pytest.fixture
