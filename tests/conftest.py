@@ -40,12 +40,6 @@ def view_with_permissions():
     return create_view
 
 
-def _create_api_key(**kwargs):
-    from rest_framework_api_key.models import APIKey
-
-    return APIKey.objects.create_key(encoded=encoded, **kwargs)
-
-
 def _create_user():
     from django.contrib.auth import get_user_model
 

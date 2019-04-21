@@ -20,10 +20,9 @@ class HasAPIKey(permissions.BasePermission):
 
         return APIKey.objects.is_valid(key)
 
+    def has_object_permission(self, request, view, obj):
+        return self.has_permission(request, view)
 
-class HasAPIKeyOrIsAuthenticated(permissions.BasePermission):
-    """Authorize if a valid API key is provided or request is authenticated."""
 
-    def has_permission(self, request, view) -> bool:
-        perms = [HasAPIKey(), permissions.IsAuthenticated()]
-        return any(perm.has_permission(request, view) for perm in perms)
+# TODO: remove in 1.0 and document how to implement OR and AND compositions.
+HasAPIKeyOrIsAuthenticated = HasAPIKey | permissions.IsAuthenticated

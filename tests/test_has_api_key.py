@@ -1,6 +1,6 @@
-"""Test the HasAPIKey permission class."""
-
 import pytest
+from rest_framework import generics, permissions
+from rest_framework.response import Response
 
 from rest_framework_api_key.permissions import HasAPIKey
 
@@ -58,5 +58,24 @@ def test_full_prefix_must_be_present(create_request, view):
         return "Api-Key " + truncated_prefix + "." + secret_key
 
     request = create_request(authorization=get_authorization)
+    response = view(request)
+    assert response.status_code == 403
+
+
+def test_object_permission(create_request):
+    class DenyObject(permissions.BasePermission):
+        def has_object_permission(self, request, view, obj):
+            return False
+
+    class View(generics.GenericAPIView):
+        permission_classes = [HasAPIKey | DenyObject]
+
+        def get(self, request):
+            self.check_object_permissions(request, object())
+            return Response()
+
+    view = View.as_view()
+
+    request = create_request(authorization=None)
     response = view(request)
     assert response.status_code == 403

@@ -1,5 +1,3 @@
-"""Test the HasAPIKeyOrIsAuthenticated permission class."""
-
 import pytest
 
 from rest_framework_api_key.permissions import HasAPIKeyOrIsAuthenticated
