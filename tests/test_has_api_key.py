@@ -24,40 +24,37 @@ def test_if_no_api_key_then_permission_denied(create_request, view):
     assert response.status_code == 403
 
 
+def _scramble_prefix(key: str) -> str:
+    prefix, secret_key = key.split(".")
+    truncated_prefix = prefix[:-1]
+    return truncated_prefix + "." + secret_key
+
+
 @pytest.mark.parametrize(
-    "authorization",
+    "modifier",
     [
-        "foo",
-        "Content-Type: text/plain",
-        "Api-Key:",
-        "Api-Key abcd",
-        "Api-Key foo:bar",
-        "Api Key {key}",
-        "Api-Key: {key}",
-        "{key}",
+        lambda key: "",
+        lambda key: "abcd",
+        lambda key: "foo.bar",
+        lambda key: " " + key,
+        str.upper,
+        str.lower,
+        _scramble_prefix,
     ],
 )
 def test_if_invalid_api_key_then_permission_denied(
-    create_request, view, authorization
+    create_request, view, backend, modifier
 ):
-    request = create_request(authorization=authorization)
+    def get_authorization(key):
+        return backend["default"].format(key=modifier(key))
+
+    request = create_request(authorization=get_authorization)
     response = view(request)
     assert response.status_code == 403
 
 
 def test_if_revoked_then_permission_denied(create_request, view):
     request = create_request(revoked=True)
-    response = view(request)
-    assert response.status_code == 403
-
-
-def test_full_prefix_must_be_present(create_request, view):
-    def get_authorization(key: str) -> str:
-        prefix, secret_key = key.split(".")
-        truncated_prefix = prefix[:-1]
-        return "Api-Key " + truncated_prefix + "." + secret_key
-
-    request = create_request(authorization=get_authorization)
     response = view(request)
     assert response.status_code == 403
 
