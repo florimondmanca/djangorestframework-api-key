@@ -105,15 +105,42 @@ See also [Setting the permission policy](http://www.django-rest-framework.org/ap
 
 ### Making authorized requests
 
+#### Default behavior
+
 Once API key permissions are enabled on your API, clients can pass their API key via the `Authorization` header. It must be formatted as follows:
 
 ```
 Authorization: Api-Key ********
 ```
 
-where `********` refers to the API key.
+where `********` refers to the generated API key.
 
-To know under which conditions the access is granted, please see [Grant scheme](#grant-scheme).
+To know under which conditions access is granted, please see [Grant scheme](#grant-scheme).
+
+#### Custom header
+
+You can set the `API_KEY_CUSTOM_HEADER` setting to a non-`None` value to require clients to pass their API key in a custom header instead of the `Authorization` header.
+
+This is useful if you plan to use API keys _and_ an authentication scheme which already uses the `Authorization` header (e.g. token-based authentication).
+
+For example, to require clients to pass their API key in the `X-Api-Key` header, edit `settings.py` with:
+
+```python
+# Django 2.0, 2.1
+API_KEY_CUSTOM_HEADER = "HTTP_X_API_KEY"
+# Django 2.2+
+API_KEY_CUSTOM_HEADER = "X-Api-Key"
+```
+
+Clients can then make authorized requests using:
+
+```
+X-Api-Key: ********
+```
+
+where `********` refers to the generated API key.
+
+Please refer to [HttpRequest.META](https://docs.djangoproject.com/en/2.1/ref/request-response/#django.http.HttpRequest.META) and [HttpRequest.headers](https://docs.djangoproject.com/en/2.2/ref/request-response/#django.http.HttpRequest.headers) (Django 2.2+) for more information on custom headers in Django.
 
 ### Creating and managing API keys
 
