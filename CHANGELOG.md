@@ -7,13 +7,51 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+**This release is incompatible with 0.x**. It introduces a new and more transparent API key generation and validation scheme which allows to pass it in a single header, instead of two previously.
+
+### Migrating from 0.x
+
+Unfortunately, we are not able to provide a migration that would preserve existing API keys. This is because the shape of API keys themselves has changed, and new keys cannot be inferred from existing ones.
+
+As a result, **any existing API key will be destroyed** during Step 1) described below. You will need to regenerate them and notify your clients.
+
+To migrate from 0.x, please follow these steps:
+
+1. _Before upgrading_, reset migrations:
+
+```bash
+python manage.py migrate rest_framework_api_key zero
+```
+
+2. Upgrade:
+
+```bash
+pip install -U djangorestframework-api-key
+```
+
+3. Run migrations again:
+
+```bash
+python manage.py migrate rest_framework_api_key
+```
+
 ### Added
 
+- **BREAKING**: New API key generation and validation scheme:
+  - Clients must authorize a single API key header instead of token and secret key headers.
+  - The API key header is `Authorization` by default, and can be customized using the `API_KEY_CUSTOM_HEADER` setting.
 - Official support for Django 2.2.
+- Use `APIKey.objects.create_key()` for programmatic API key creation.
+- Improve how API keys are stored by using Django's password hashing helpers.
+
+### Changed
+
+- **BREAKING**: The `client_id` field on `APIKey` has been removed. Use the `name` field to identify clients instead.
+- **BREAKING**: the `DRF_API_KEY_*` settings have been removed.
 
 ### Removed
 
-- The `HasAPIKeyOrIsAuthenticated` permission class has been removed. Please use bitwise composition now: `HasAPIKey | IsAuthenticated` (or `HasAPIKey & IsAuthenticated` for the _AND_ equivalent).
+- **BREAKING**: The `HasAPIKeyOrIsAuthenticated` permission class has been removed. Please use bitwise composition now: `HasAPIKey | IsAuthenticated` (or `HasAPIKey & IsAuthenticated` for the _AND_ equivalent).
 
 ## [0.4.0]
 
