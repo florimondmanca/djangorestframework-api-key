@@ -29,23 +29,19 @@ def _get_key(request) -> typing.Optional[str]:
 
 
 def _get_key_from_authorization(request) -> typing.Optional[str]:
-    authorization = request.META.get(
-        "HTTP_AUTHORIZATION", request.META.get("Authorization")
-    )
+    authorization = request.META.get("HTTP_AUTHORIZATION")
+
     if not authorization:
         return None
 
     try:
         _, key = authorization.split("Api-Key ")
     except ValueError:
-        return None
-    else:
-        return key
+        key = None
+
+    return key
 
 
 def _get_key_from_custom_header(request, name: str) -> typing.Optional[str]:
     header = request.META.get(name)
-    if not header:
-        return None
-
-    return header
+    return header if header else None

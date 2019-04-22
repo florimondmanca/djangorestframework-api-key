@@ -53,14 +53,18 @@ def _create_user():
 @pytest.fixture(
     name="backend",
     params=[
-        {"header": "Authorization", "default": "Api-Key {key}"},
-        {"header": "X-Api-Key", "default": "{key}"},
+        {"header": "HTTP_AUTHORIZATION", "default": "Api-Key {key}"},
+        {
+            "header": "HTTP_X_API_KEY",
+            "default": "{key}",
+            "set_custom_header_setting": True,
+        },
     ],
 )
 def fixture_backend(request) -> dict:
     backend = request.param
 
-    if backend["header"] != "Authorization":
+    if backend.get("set_custom_header_setting"):
         ctx = override_settings(API_KEY_CUSTOM_HEADER=backend["header"])
     else:
         ctx = nullcontext()
