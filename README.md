@@ -13,6 +13,12 @@
 
 **Important**: Make sure to pin your dependency to `0.x` (i.e. `rest_framework_api_key < 1.0`). The upcoming 1.0 release will introduce a new (non-backwards compatible) API key scheme.
 
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Security](#security)
+- [Example project](#example-project)
+
 ## Features
 
 **`djangorestframework-api-key` allows server-side clients to safely use your API**.
@@ -21,8 +27,8 @@ Server-side clients are third-party backends and services which does not have a 
 
 Intended to be:
 
-- ✌️ **Simple to use**: create, view and revoke API keys via the admin site.
-- 🔒 **As secure as possible**: secret keys are treated with the same level of care than passwords. They are hashed before being stored in the database and only visible at creation.
+- ✌️ **Simple to use**: create, view and revoke API keys via the admin site, or use built-in helpers to create API keys programmatically.
+- 🔒 **As secure as possible**: API keys are treated with the same level of care than user passwords. They are hashed before being stored in the database and only visible at creation.
 
 **Note**: there are important security aspects you need to consider before switching to an API key access control scheme. See [Security caveats](#caveats).
 
@@ -99,54 +105,73 @@ See also [Setting the permission policy](http://www.django-rest-framework.org/ap
 
 ### Making authorized requests
 
-Once API key permissions are enabled on your API, clients can pass their API key via the `Api-Token` and `Api-Secret-Key` headers (this is customizable, see [Settings](#settings)):
+Once API key permissions are enabled on your API, clients can pass their API key via the `Authorization` header. It must be formatted as follows:
 
-```bash
-$ curl -H 'Api-Token: YOUR_API_TOKEN_HERE' -H 'Api-Secret-Key: YOUR_API_SECRET_KEY_HERE' http://localhost:8000/my-resource/
 ```
+Authorization: Api-Key ********
+```
+
+where `********` refers to the API key.
 
 To know under which conditions the access is granted, please see [Grant scheme](#grant-scheme).
 
 ### Creating and managing API keys
 
-#### Admin site
+#### Admin panel
 
 When it is installed, `djangorestframework-api-key` adds an "API Key Permissions" section to the Django admin site where you can create, view and revoke API keys.
 
 ![](https://github.com/florimondmanca/djangorestframework-api-key/tree/master/img/admin-section.png)
 
-## Settings
+![](https://github.com/florimondmanca/djangorestframework-api-key/tree/master/example_project/media/admin-form.png)
 
-> Note: values of header settings should be set according to the behavior of [HttpRequest.META](https://docs.djangoproject.com/en/dev/ref/request-response/#django.http.HttpRequest.META). For example, `HTTP_API_KEY` maps to the `Api-Key` header.
+![](https://github.com/florimondmanca/djangorestframework-api-key/tree/master/example_project/media/admin-created.png)
 
-`DRF_API_KEY_TOKEN_HEADER`:
+#### Programmatic usage (advanced)
 
-- Name of the header which clients use to pass their API token.
-- Default value: `"HTTP_API_TOKEN"`.
+API keys can be created, viewed and revoked programmatically by manipulating the `APIKey` model.
 
-`DRF_API_KEY_SECRET_KEY_HEADER`:
+> The examples below use the [Django shell](https://docs.djangoproject.com/en/2.1/ref/django-admin/#django-admin-shell).
 
-- Name of the header which clients use the pass their API secret key.
-- Default value: `"HTTP_API_SECRET_KEY"`.
+- You can view and query `APIKey` like any other model. For example, to know the number of active (unrevoked) API keys:
+
+```python
+>>> from rest_framework_api_key.models import APIKey
+>>> APIKey.objects.filter(revoked=False).count()
+42
+```
+
+- If you wish to create an API key programmatically, you'll most likely want a one-time access to its generated key too. To do so, use the `.create_key()` method on the `APIKey` objects manager instead of `.create()`:
+
+```python
+>>> from rest_framework_api_key.models import APIKey
+>>> api_key, generated_key = APIKey.objects.create_key(name="Backend API")
+>>> # Proceed with `api_key` and `generated_key`...
+```
+
+**Danger**: to preserve confidentiality, only give the generated key to the client, and do not keep any trace of it on the server after that is done.
 
 ## Security
 
-### Generation scheme
+### Key generation scheme
 
-An API key is made of two parts:
+An API key is composed of two items:
 
-- The **API token**: a unique, generated, public string of characters.
-- The **API secret key**: a unique, generated string of characters that the client must keep private.
+- A prefix `P`, which is a generated string of 8 characters.
+- A secret key `SK`, which is a generated string of 32 characters.
 
-For obvious security purposes, `djangorestframework-api-key` does not store the secret key at all on the server. The latter is shown only once to the client upon API key creation.
+The generated key that clients use to [make authorized requests](#making-authorized-requests) is `GK = P.SK`. It is treated with the same level of care than passwords:
+
+- Only a hashed version is stored in the database. The hash is computed using the default [password hasher](https://docs.djangoproject.com/en/2.1/topics/auth/passwords/).
+- The generated key is shown only once to the client upon API key creation.
 
 ### Grant scheme
 
 Access is granted if and only if all of the following is true:
 
-1. The API key headers are present and correctly formatted (see [Making authorized requests](#making-authorized-requests)).
-2. An unrevoked API key corresponding to the API token exists in the database.
-3. The hash computed from the token and secret key matches the one of the API key.
+1. The `Authorization` header is present and correctly formatted (see [Making authorized requests](#making-authorized-requests)).
+2. An unrevoked API key with the prefix of the given key exists in the database.
+3. The hash of the given key matches that of the API key.
 
 ### Caveats
 

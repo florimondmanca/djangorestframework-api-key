@@ -12,41 +12,54 @@ def fixture_view(view_with_permissions):
     return view_with_permissions(HasAPIKey)
 
 
-def test_if_no_token_then_permission_denied(create_request, view):
-    request = create_request(token=None, secret_key="1234")
-    response = view(request)
-    assert response.status_code == 403
-
-
-def test_if_no_secret_key_then_permission_denied(create_request, view):
-    request = create_request(token="abc", secret_key=None)
-    response = view(request)
-    assert response.status_code == 403
-
-
-def test_if_no_api_key_for_token_then_permission_denied(create_request, view):
-    # No API key in database, so token won't be found.
-    request = create_request(token="abc", secret_key="1234")
-    response = view(request)
-    assert response.status_code == 403
-
-
-def test_if_revoked_then_permission_denied(
-    create_request, create_api_key, view
-):
-    key = create_api_key(secret_key="foo", revoked=True)
-    request = create_request(token=key.token, secret_key="bar")
-    response = view(request)
-    assert response.status_code == 403
-
-
-def test_if_valid_token_and_secret_key_then_permission_granted(
-    create_request, create_api_key, view
-):
-    key = create_api_key(secret_key="foo")
-    request = create_request(token=key.token, secret_key="foo")
+def test_if_valid_api_key_then_permission_granted(create_request, view):
+    request = create_request()
     response = view(request)
     assert response.status_code == 200
+
+
+def test_if_no_api_key_then_permission_denied(create_request, view):
+    request = create_request(authorization=None)
+    response = view(request)
+    assert response.status_code == 403
+
+
+@pytest.mark.parametrize(
+    "authorization",
+    [
+        "foo",
+        "Content-Type: text/plain",
+        "Api-Key:",
+        "Api-Key abcd",
+        "Api-Key foo:bar",
+        "Api Key {key}",
+        "Api-Key: {key}",
+        "{key}",
+    ],
+)
+def test_if_invalid_api_key_then_permission_denied(
+    create_request, view, authorization
+):
+    request = create_request(authorization=authorization)
+    response = view(request)
+    assert response.status_code == 403
+
+
+def test_if_revoked_then_permission_denied(create_request, view):
+    request = create_request(revoked=True)
+    response = view(request)
+    assert response.status_code == 403
+
+
+def test_full_prefix_must_be_present(create_request, view):
+    def get_authorization(key: str) -> str:
+        prefix, secret_key = key.split(".")
+        truncated_prefix = prefix[:-1]
+        return "Api-Key " + truncated_prefix + "." + secret_key
+
+    request = create_request(authorization=get_authorization)
+    response = view(request)
+    assert response.status_code == 403
 
 
 def test_object_permission(create_request):
@@ -63,7 +76,6 @@ def test_object_permission(create_request):
 
     view = View.as_view()
 
-    # NOTE: no API key passed => permission checks should fail
-    request = create_request()
+    request = create_request(authorization=None)
     response = view(request)
     assert response.status_code == 403

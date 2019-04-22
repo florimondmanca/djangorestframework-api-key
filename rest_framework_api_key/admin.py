@@ -1,54 +1,53 @@
 """rest_framework_api_key administration panel."""
 
+from typing import Tuple
+
 from django.contrib import admin, messages
+
+from ._helpers import generate_key
 from .models import APIKey
-from .crypto import assign_token
-
-
-_SECRET = 16 * "*"
-_SECRET_KEY_MESSAGE = (
-    "The secret key for {client_id} is: {secret_key}. "
-    "Please note it down: you will not be able to see it again."
-)
 
 
 @admin.register(APIKey)
 class APIKeyAdmin(admin.ModelAdmin):
     """Admin panel for API keys."""
 
-    list_display = ("client_id", "created", "revoked")
+    list_display = ("name", "prefix", "created", "revoked")
     list_filter = ("created", "revoked")
-    readonly_fields = ("token", "secret_key_message")
-    search_fields = ("id", "client_id")
-    fieldsets = (
-        (None, {"fields": ("client_id", "revoked")}),
-        ("Credentials", {"fields": ("token", "secret_key_message")}),
-    )
 
-    def get_readonly_fields(self, request, obj=None):
+    readonly_fields = ("get_api_key",)
+    search_fields = ("name",)
+
+    fieldsets = ((None, {"fields": ("name", "revoked", "get_api_key")}),)
+
+    def get_readonly_fields(self, request, obj: APIKey = None) -> Tuple[str]:
         """Set revoked as read-only if the API key has been revoked."""
-        if obj and obj.revoked:
-            return self.readonly_fields + ("client_id", "revoked")
+        if obj is not None and obj.revoked:
+            return self.readonly_fields + ("name", "revoked")
         return self.readonly_fields
 
-    def secret_key_message(self, obj):
-        """Show a message about the secret key."""
+    def get_api_key(self, obj: APIKey) -> str:
         if obj.pk:
-            return _SECRET
-        return "The secret key will be generated when clicking save."
+            return 16 * "*"
+        return "The API key will be generated when clicking 'Save'."
 
-    secret_key_message.short_description = "Secret key"
+    get_api_key.short_description = "API key"
 
-    def save_model(self, request, obj, form, change):
+    def save_model(self, request, obj: APIKey, form, change):
         """Display the API key on save."""
-        if not obj.pk:
-            # If the object is being created, generate its token.
-            secret_key = assign_token(obj)
+        created = not obj.pk
+
+        if created:
+            generated_key, key_id = generate_key()
+            obj.id = key_id
+
             obj.save()
-            message = _SECRET_KEY_MESSAGE.format(
-                client_id=obj.client_id, secret_key=secret_key
+
+            message = (
+                "The API key for {} is: {}. ".format(obj.name, generated_key)
+                + "Please store it somewhere safe: "
+                + "you will not be able to see it again."
             )
             messages.add_message(request, messages.WARNING, message)
         else:
-            # Save as usual
             obj.save()

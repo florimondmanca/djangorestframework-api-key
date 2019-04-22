@@ -1,21 +1,35 @@
 """API key models."""
 
+from typing import Tuple
+
 from django.core.exceptions import ValidationError
 from django.db import models
 
-from .crypto import assign_token
+from ._helpers import generate_key, check_key, PREFIX_LENGTH
 
 
 class APIKeyManager(models.Manager):
-    """Custom model manager for API keys."""
+    def create_key(self, **kwargs) -> Tuple["APIKey", str]:
+        """Create and return an API key object along with the generated key."""
+        kwargs.pop("id", None)
+        obj = self.model(**kwargs)  # type: APIKey
+        generated_key, key_id = generate_key()
+        obj.id = key_id
+        obj.save()
+        return obj, generated_key
 
-    def create(self, *, secret_key=None, **kwargs):
-        """Create an API key.
+    def is_valid(self, key: str) -> bool:
+        try:
+            prefix, _ = key.split(".")
+        except ValueError:
+            return False
 
-        Assigns a token generated from the given secret key (or a new one).
-        """
-        assign_token(kwargs, secret_key=secret_key)
-        return super().create(**kwargs)
+        try:
+            obj = self.get(id__startswith=prefix, revoked=False)
+        except self.model.DoesNotExist:
+            return False
+
+        return obj.is_valid(key)
 
 
 class APIKey(models.Model):
@@ -23,28 +37,16 @@ class APIKey(models.Model):
 
     objects = APIKeyManager()
 
-    created = models.DateTimeField(auto_now_add=True)
-    client_id = models.CharField(
-        max_length=50,
-        unique=True,
-        help_text=(
-            "A free-form unique identifier of the client. " "50 characters max."
-        ),
+    PREFIX_LENGTH = PREFIX_LENGTH
+
+    id = models.CharField(max_length=100, unique=True, primary_key=True)
+    created = models.DateTimeField(auto_now_add=True, db_index=True)
+    name = models.CharField(max_length=50, blank=False, default=None)
+    revoked = models.BooleanField(
+        blank=True,
+        default=False,
+        help_text="If the API key is revoked, clients cannot use it anymore.",
     )
-    token = models.CharField(
-        max_length=40,
-        unique=True,
-        help_text=("A public, unique identifier for this API key."),
-    )
-    hashed_token = models.CharField(
-        max_length=100,
-        null=True,
-        help_text=(
-            "A public hash of the token, generated using the secret key "
-            "(which is given to the client and not kept in database)."
-        ),
-    )
-    revoked = models.BooleanField(blank=True, default=False)
 
     class Meta:  # noqa
         ordering = ("-created",)
@@ -52,27 +54,33 @@ class APIKey(models.Model):
         verbose_name_plural = "API keys"
 
     def __init__(self, *args, **kwargs):
-        """Store the initial value of `revoked` to detect changes."""
         super().__init__(*args, **kwargs)
+        # Store the initial value of `revoked` to detect changes.
         self._initial_revoked = self.revoked
 
-    def _validated_not_unrevoked(self):
-        """Validate the key has not been unrevoked."""
+    def prefix(self) -> str:
+        return self.pk.split(".")[0]
+
+    # Ensure compatibility with Django admin.
+    prefix.short_description = "Prefix"
+    prefix = property(prefix)
+
+    def is_valid(self, key: str) -> bool:
+        _, hashed_key = self.pk.split(".")
+        return check_key(key, hashed_key)
+
+    def clean(self):
+        self._validate_revoked()
+
+    def save(self, *args, **kwargs):
+        self._validate_revoked()
+        super().save(*args, **kwargs)
+
+    def _validate_revoked(self):
         if self._initial_revoked and not self.revoked:
             raise ValidationError(
                 "The API key has been revoked, which cannot be undone."
             )
 
-    def clean(self, *args, **kwargs):
-        """Prevent from un-revoking API keys on clean."""
-        super().clean(*args, **kwargs)
-        self._validated_not_unrevoked()
-
-    def save(self, *args, **kwargs):
-        """Prevent from un-revoking API keys on save."""
-        self._validated_not_unrevoked()
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        """Represent by the client ID."""
-        return str(self.client_id)
+    def __str__(self) -> str:
+        return str(self.name)

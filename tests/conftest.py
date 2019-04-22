@@ -47,43 +47,37 @@ def _create_user():
     return User.objects.create_user(username="foo", password="bar")
 
 
-@pytest.fixture(scope="session")
-def create_api_key():
-    from rest_framework_api_key.models import APIKey
-
-    index = 0
-
-    def create(**kwargs):
-        nonlocal index
-        # Ensure client_id is unique.
-        kwargs.setdefault("client_id", "test_{}".format(index))
-        index += 1
-        return APIKey.objects.create(**kwargs)
-
-    return create
-
-
 @pytest.fixture
 def create_request():
     from rest_framework.test import APIRequestFactory, force_authenticate
-    from rest_framework_api_key.settings import TOKEN_HEADER, SECRET_KEY_HEADER
+    from rest_framework_api_key.models import APIKey
 
     request_factory = APIRequestFactory()
 
-    def create(token=None, secret_key=None, authenticated=False):
-        kwargs = {}
+    _MISSING = object()
 
-        if token is not None:
-            kwargs[TOKEN_HEADER] = token
+    def create(
+        authenticated: bool = False, authorization: str = _MISSING, **kwargs
+    ):
+        headers = {}
 
-        if secret_key is not None:
-            kwargs[SECRET_KEY_HEADER] = secret_key
+        if authorization is not None:
+            kwargs.setdefault("name", "test")
+            _, key = APIKey.objects.create_key(**kwargs)
 
-        request = request_factory.get("/test/", **kwargs)
+            if authorization is _MISSING:
+                authorization = "Api-Key {key}"
+
+            if callable(authorization):
+                authorization = authorization(key)
+
+            headers["Authorization"] = authorization.format(key=key)
+
+        request = request_factory.get("/test/", **headers)
 
         if authenticated:
             user = _create_user()
-            force_authenticate(request, user=user)
+            force_authenticate(request, user)
 
         return request
 
