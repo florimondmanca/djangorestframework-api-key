@@ -10,12 +10,15 @@ from ._helpers import generate_key, check_key, PREFIX_LENGTH
 
 class APIKeyManager(models.Manager):
     def create_key(self, **kwargs) -> Tuple["APIKey", str]:
-        """Create and return an API key object along with the generated key."""
+        # Prevent manually setting the primary key.
         kwargs.pop("id", None)
+
         obj = self.model(**kwargs)  # type: APIKey
+
         generated_key, key_id = generate_key()
         obj.id = key_id
         obj.save()
+
         return obj, generated_key
 
     def is_valid(self, key: str) -> bool:

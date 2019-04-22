@@ -1,5 +1,8 @@
 import pytest
 from django.conf import settings
+from django.test import override_settings
+
+from .compat import nullcontext
 
 
 def pytest_configure():
@@ -47,8 +50,27 @@ def _create_user():
     return User.objects.create_user(username="foo", password="bar")
 
 
+@pytest.fixture(
+    name="backend",
+    params=[
+        {"header": "Authorization", "default": "Api-Key {key}"},
+        {"header": "X-Api-Key", "default": "{key}"},
+    ],
+)
+def fixture_backend(request) -> dict:
+    backend = request.param
+
+    if backend["header"] != "Authorization":
+        ctx = override_settings(API_KEY_CUSTOM_HEADER=backend["header"])
+    else:
+        ctx = nullcontext()
+
+    with ctx:
+        yield backend
+
+
 @pytest.fixture
-def create_request():
+def create_request(backend):
     from rest_framework.test import APIRequestFactory, force_authenticate
     from rest_framework_api_key.models import APIKey
 
@@ -65,13 +87,13 @@ def create_request():
             kwargs.setdefault("name", "test")
             _, key = APIKey.objects.create_key(**kwargs)
 
-            if authorization is _MISSING:
-                authorization = "Api-Key {key}"
-
             if callable(authorization):
                 authorization = authorization(key)
 
-            headers["Authorization"] = authorization.format(key=key)
+            if authorization is _MISSING:
+                authorization = backend["default"]
+
+            headers[backend["header"]] = authorization.format(key=key)
 
         request = request_factory.get("/test/", **headers)
 
