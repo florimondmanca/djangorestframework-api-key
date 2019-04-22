@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Official support for Django 2.2.
+
 ### Removed
 
 - The `HasAPIKeyOrIsAuthenticated` permission class has been removed. Please use bitwise composition now: `HasAPIKey | IsAuthenticated` (or `HasAPIKey & IsAuthenticated` for the _AND_ equivalent).
