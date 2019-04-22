@@ -194,7 +194,7 @@ The generated key that clients use to [make authorized requests](#making-authori
 
 Access is granted if and only if all of the following is true:
 
-1. The `Authorization` header is present and correctly formatted (see [Making authorized requests](#making-authorized-requests)).
+1. The API key header is present and correctly formatted (see [Making authorized requests](#making-authorized-requests)).
 2. An unrevoked API key with the prefix of the given key exists in the database.
 3. The hash of the given key matches that of the API key.
 
@@ -202,7 +202,7 @@ Access is granted if and only if all of the following is true:
 
 [API keys ≠ Security](https://nordicapis.com/why-api-keys-are-not-enough/): depending on your situation, you should probably not rely on API keys only to authenticate/authorize your clients.
 
-**Using API keys shifts the responsability of Information Security on your clients**. This induces risks, especially if detaining an API key gives access to confidential information or write operations. For example, an attacker could impersonate clients if their let their API key leak because of insufficient security measures.
+**Using API keys shifts the responsability of Information Security on your clients**. This induces risks, especially if detaining an API key gives access to confidential information or write operations. For example, an attacker could impersonate clients if they let their API keys leak.
 
 As a best practice, you should apply the _Principle of Least Privilege_: allow only those who require resources to access those specific resources. In other words: **if your non-user client only needs to access a specific endpoint, add API permissions on that endpoint only**.
 
@@ -210,7 +210,7 @@ Act responsibly!
 
 ## Example project
 
-An [example project](https://github.com/florimondmanca/djangorestframework-api-key/tree/master/example_project) shows usage in the context of a Django project.
+The [example project](https://github.com/florimondmanca/djangorestframework-api-key/tree/master/example_project) shows usage in the context of a Django project.
 
 ## Changelog
 
