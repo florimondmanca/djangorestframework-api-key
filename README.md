@@ -23,7 +23,7 @@
 
 **`djangorestframework-api-key` allows server-side clients to safely use your API**.
 
-Server-side clients are third-party backends and services which does not have a user account but still need to interact with your API in a secure way.
+Server-side clients are third-party backends and services which do not have a user account but still need to interact with your API in a secure way.
 
 Intended to be:
 
@@ -62,9 +62,9 @@ $ python manage.py migrate
 
 ### Setting permissions
 
-This package provides the `HasAPIKey` permission class which requires clients to provide a valid API key.
+This package provides an `HasAPIKey` permission class. It requires clients to provide a valid API key.
 
-As with every permission class, you can either set it globally:
+As any permission class, you can either set it globally:
 
 ```python
 # settings.py
@@ -87,7 +87,7 @@ class UserListView(APIView):
     # ...
 ```
 
-Besides, you can use the bitwise operators `|` and `&` to compose `HasAPIKey` with other permission classes and achieve more complex authorization behaviour, e.g.:
+**Tip**: you can use the bitwise operators `|` and `&` to compose `HasAPIKey` with other permission classes and achieve more complex authorization behaviour, e.g.:
 
 - Require clients to pass a valid API key _AND_ their authentication credentials:
 
@@ -117,7 +117,7 @@ To know under which conditions the access is granted, please see [Grant scheme](
 
 ### Creating and managing API keys
 
-#### Admin panel
+#### Admin site
 
 When it is installed, `djangorestframework-api-key` adds an "API Key Permissions" section to the Django admin site where you can create, view and revoke API keys.
 
@@ -149,7 +149,7 @@ API keys can be created, viewed and revoked programmatically by manipulating the
 >>> # Proceed with `api_key` and `generated_key`...
 ```
 
-**Danger**: to preserve confidentiality, only give the generated key to the client, and do not keep any trace of it on the server after that is done.
+**Danger**: to preserve confidentiality, give the generated key _to the client only_, and _do not keep any trace of it_ on the server afterwards.
 
 ## Security
 
