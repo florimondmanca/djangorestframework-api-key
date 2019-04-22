@@ -1,4 +1,3 @@
-"""API key permissions."""
 import typing
 
 from django.conf import settings
@@ -8,8 +7,6 @@ from .models import APIKey
 
 
 class HasAPIKey(permissions.BasePermission):
-    """Authorize if a valid API key is provided."""
-
     def has_permission(self, request, view) -> bool:
         key = _get_key(request)
 
