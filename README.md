@@ -56,12 +56,9 @@ $ python manage.py migrate
 
 ### Setting permissions
 
-This package provides permission classes to allow external clients to use your API:
+This package provides the `HasAPIKey` permission class which requires clients to provide a valid API key.
 
-- `HasAPIKey`: this permission class requires **all clients** to provide a valid API key, regardless of whether they provide authentication details.
-- `HasAPIKeyOrIsAuthenticated`: if you want to allow clients to provide either an API key or authentication credentials, use this permission class instead.
-
-As with every permission class, you can either use them globally:
+As with every permission class, you can either set it globally:
 
 ```python
 # settings.py
@@ -84,7 +81,21 @@ class UserListView(APIView):
     # ...
 ```
 
-See [Setting the permission policy (DRF docs)](http://www.django-rest-framework.org/api-guide/permissions/#setting-the-permission-policy) for more information on using permission classes.
+Besides, you can use the bitwise operators `|` and `&` to compose `HasAPIKey` with other permission classes and achieve more complex authorization behaviour, e.g.:
+
+- Require clients to pass a valid API key _AND_ their authentication credentials:
+
+```python
+permission_clases = [HasAPIKey & IsAuthenticated]
+```
+
+- Require clients to pass a valid API key _OR_ their authentication credentials:
+
+```python
+permission_clases = [HasAPIKey | IsAuthenticated]
+```
+
+See also [Setting the permission policy](http://www.django-rest-framework.org/api-guide/permissions/#setting-the-permission-policy) for more information on using permission classes.
 
 ### Making authorized requests
 

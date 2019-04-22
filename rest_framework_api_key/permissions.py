@@ -42,7 +42,3 @@ class HasAPIKey(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         return self.has_permission(request, view)
-
-
-# TODO: remove in 1.0 and document how to implement OR and AND compositions.
-HasAPIKeyOrIsAuthenticated = HasAPIKey | permissions.IsAuthenticated
