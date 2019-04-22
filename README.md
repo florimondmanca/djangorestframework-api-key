@@ -86,13 +86,13 @@ Besides, you can use the bitwise operators `|` and `&` to compose `HasAPIKey` wi
 - Require clients to pass a valid API key _AND_ their authentication credentials:
 
 ```python
-permission_clases = [HasAPIKey & IsAuthenticated]
+permission_classes = [HasAPIKey & IsAuthenticated]
 ```
 
 - Require clients to pass a valid API key _OR_ their authentication credentials:
 
 ```python
-permission_clases = [HasAPIKey | IsAuthenticated]
+permission_classes = [HasAPIKey | IsAuthenticated]
 ```
 
 See also [Setting the permission policy](http://www.django-rest-framework.org/api-guide/permissions/#setting-the-permission-policy) for more information on using permission classes.
