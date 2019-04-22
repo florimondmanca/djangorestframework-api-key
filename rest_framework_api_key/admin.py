@@ -1,6 +1,4 @@
-"""rest_framework_api_key administration panel."""
-
-from typing import Tuple
+import typing
 
 from django.contrib import admin, messages
 
@@ -10,8 +8,6 @@ from .models import APIKey
 
 @admin.register(APIKey)
 class APIKeyAdmin(admin.ModelAdmin):
-    """Admin panel for API keys."""
-
     list_display = ("name", "prefix", "created", "revoked")
     list_filter = ("created", "revoked")
 
@@ -20,8 +16,9 @@ class APIKeyAdmin(admin.ModelAdmin):
 
     fieldsets = ((None, {"fields": ("name", "revoked", "get_api_key")}),)
 
-    def get_readonly_fields(self, request, obj: APIKey = None) -> Tuple[str]:
-        """Set revoked as read-only if the API key has been revoked."""
+    def get_readonly_fields(
+        self, request, obj: APIKey = None
+    ) -> typing.Tuple[str]:
         if obj is not None and obj.revoked:
             return self.readonly_fields + ("name", "revoked")
         return self.readonly_fields
@@ -34,7 +31,6 @@ class APIKeyAdmin(admin.ModelAdmin):
     get_api_key.short_description = "API key"
 
     def save_model(self, request, obj: APIKey, form, change):
-        """Display the API key on save."""
         created = not obj.pk
 
         if created:

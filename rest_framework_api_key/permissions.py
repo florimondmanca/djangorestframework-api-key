@@ -1,13 +1,9 @@
-"""API key permissions."""
-
 from rest_framework import permissions
 
 from .models import APIKey
 
 
 class HasAPIKey(permissions.BasePermission):
-    """Authorize if a valid API key is provided."""
-
     def has_permission(self, request, view) -> bool:
         authorization = request.META.get(
             "Authorization", request.META.get("HTTP_AUTHORIZATION")

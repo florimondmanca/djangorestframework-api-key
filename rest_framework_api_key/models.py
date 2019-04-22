@@ -1,21 +1,22 @@
-"""API key models."""
-
 from typing import Tuple
 
 from django.core.exceptions import ValidationError
 from django.db import models
 
-from ._helpers import generate_key, check_key, PREFIX_LENGTH
+from ._helpers import generate_key, check_key
 
 
 class APIKeyManager(models.Manager):
     def create_key(self, **kwargs) -> Tuple["APIKey", str]:
-        """Create and return an API key object along with the generated key."""
+        # Prevent from manually setting the primary key.
         kwargs.pop("id", None)
+
         obj = self.model(**kwargs)  # type: APIKey
+
         generated_key, key_id = generate_key()
         obj.id = key_id
         obj.save()
+
         return obj, generated_key
 
     def is_valid(self, key: str) -> bool:
@@ -33,11 +34,7 @@ class APIKeyManager(models.Manager):
 
 
 class APIKey(models.Model):
-    """Represents an API key."""
-
     objects = APIKeyManager()
-
-    PREFIX_LENGTH = PREFIX_LENGTH
 
     id = models.CharField(max_length=100, unique=True, primary_key=True)
     created = models.DateTimeField(auto_now_add=True, db_index=True)

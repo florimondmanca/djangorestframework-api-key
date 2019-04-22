@@ -7,13 +7,13 @@ if TYPE_CHECKING:
     from .models import APIKey
 
 
-PREFIX_LENGTH = 8
-SECRET_KEY_LENGTH = 32
+_PREFIX_LENGTH = 8
+_SECRET_KEY_LENGTH = 32
 
 
 def generate_key() -> Tuple[str, str]:
-    prefix = get_random_string(PREFIX_LENGTH)
-    secret_key = get_random_string(SECRET_KEY_LENGTH)
+    prefix = get_random_string(_PREFIX_LENGTH)
+    secret_key = get_random_string(_SECRET_KEY_LENGTH)
 
     key = prefix + "." + secret_key  # for the client
     key_id = prefix + "." + make_password(key)  # for database storage
