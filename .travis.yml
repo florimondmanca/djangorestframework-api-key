@@ -35,4 +35,4 @@ deploy:
     tags: true
     # deploy only once
     python: "3.7"
-    condition: "$DJANGO_VERSION = 2.1.5"
+    condition: "$DJANGO_VERSION = 2.2"
