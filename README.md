@@ -23,7 +23,7 @@
 
 **`djangorestframework-api-key` allows server-side clients to safely use your API**.
 
-Server-side clients are third-party backends and services which do not have a user account but still need to interact with your API in a secure way.
+Server-side clients are third-party backends and services (i.e. _machines_) which do not have a user account but still need to interact with your API in a secure way.
 
 Intended to be:
 
@@ -37,7 +37,7 @@ Intended to be:
 - Install from PyPI:
 
 ```bash
-$ pip install djangorestframework-api-key
+pip install djangorestframework-api-key
 ```
 
 - Add the app to your `INSTALLED_APPS`:
@@ -55,7 +55,7 @@ INSTALLED_APPS = [
 - Run the included migrations:
 
 ```bash
-$ python manage.py migrate
+python manage.py migrate
 ```
 
 ## Usage
@@ -101,7 +101,7 @@ permission_classes = [HasAPIKey & IsAuthenticated]
 permission_classes = [HasAPIKey | IsAuthenticated]
 ```
 
-See also [Setting the permission policy](http://www.django-rest-framework.org/api-guide/permissions/#setting-the-permission-policy) for more information on using permission classes.
+See also [Setting the permission policy](http://www.django-rest-framework.org/api-guide/permissions/#setting-the-permission-policy) for more information on using permission classes in the Django REST Framework.
 
 ### Making authorized requests
 
@@ -146,11 +146,11 @@ Please refer to [HttpRequest.META](https://docs.djangoproject.com/en/2.1/ref/req
 
 When it is installed, `djangorestframework-api-key` adds an "API Key Permissions" section to the Django admin site where you can create, view and revoke API keys.
 
-![](https://github.com/florimondmanca/djangorestframework-api-key/tree/master/img/admin-section.png)
+![](https://github.com/florimondmanca/djangorestframework-api-key/blob/master/img/admin-section.png?raw=true)
 
-![](https://github.com/florimondmanca/djangorestframework-api-key/tree/master/example_project/media/admin-form.png)
+![](https://github.com/florimondmanca/djangorestframework-api-key/blob/master/example_project/media/admin-form.png?raw=true)
 
-![](https://github.com/florimondmanca/djangorestframework-api-key/tree/master/example_project/media/admin-created.png)
+![](https://github.com/florimondmanca/djangorestframework-api-key/blob/master/example_project/media/admin-created.png?raw=true)
 
 #### Programmatic usage (advanced)
 
@@ -174,7 +174,7 @@ API keys can be created, viewed and revoked programmatically by manipulating the
 >>> # Proceed with `api_key` and `generated_key`...
 ```
 
-**Danger**: to preserve confidentiality, give the generated key _to the client only_, and _do not keep any trace of it_ on the server afterwards.
+**Danger**: to preserve confidentiality, give the generated key **to the client only**, and **do not keep any trace of it** on the server afterwards.
 
 ## Security
 
@@ -204,7 +204,9 @@ Access is granted if and only if all of the following is true:
 
 **Using API keys shifts the responsability of Information Security on your clients**. This induces risks, especially if detaining an API key gives access to confidential information or write operations. For example, an attacker could impersonate clients if they let their API keys leak.
 
-As a best practice, you should apply the _Principle of Least Privilege_: allow only those who require resources to access those specific resources. In other words: **if your non-user client only needs to access a specific endpoint, add API permissions on that endpoint only**.
+As a best practice, you should apply the _Principle of Least Privilege_: allow only those who require resources to access those specific resources. In other words: **if your client needs to access an endpoint, add API permissions on that endpoint only** instead of the whole API.
+
+Besides, it is highly recommended to serve the API over **HTTPS** to ensure the confidentiality of API keys passed in requests.
 
 Act responsibly!
 
