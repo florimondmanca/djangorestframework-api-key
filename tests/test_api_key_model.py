@@ -10,7 +10,7 @@ pytestmark = pytest.mark.django_db
 
 def test_key_generation():
     api_key, generated_key = APIKey.objects.create_key(name="test")
-    prefix, hashed_key = api_key.id.split(".")
+    prefix, _, hashed_key = api_key.id.partition(".")
 
     assert prefix and hashed_key
 

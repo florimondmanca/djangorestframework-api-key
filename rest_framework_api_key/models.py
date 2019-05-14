@@ -3,7 +3,7 @@ from typing import Tuple
 from django.core.exceptions import ValidationError
 from django.db import models
 
-from ._helpers import generate_key, check_key
+from ._helpers import check_key, generate_key
 
 
 class APIKeyManager(models.Manager):
@@ -20,10 +20,7 @@ class APIKeyManager(models.Manager):
         return obj, generated_key
 
     def is_valid(self, key: str) -> bool:
-        try:
-            prefix, _ = key.split(".")
-        except ValueError:
-            return False
+        prefix, _, _ = key.partition(".")
 
         try:
             obj = self.get(id__startswith=prefix, revoked=False)
@@ -56,14 +53,14 @@ class APIKey(models.Model):
         self._initial_revoked = self.revoked
 
     def prefix(self) -> str:
-        return self.pk.split(".")[0]
+        return self.pk.partition(".")[0]
 
     # Ensure compatibility with Django admin.
     prefix.short_description = "Prefix"
     prefix = property(prefix)
 
     def is_valid(self, key: str) -> bool:
-        _, hashed_key = self.pk.split(".")
+        _, _, hashed_key = self.pk.partition(".")
         return check_key(key, hashed_key)
 
     def clean(self):
