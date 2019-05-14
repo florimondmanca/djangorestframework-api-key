@@ -16,7 +16,7 @@ env:
 install:
   - pip install -U pip
   - pip install -r requirements-ci.txt
-  - pip install django==$DJANGO_VERSION
+  - pip install django[argon2,bcrypt]==$DJANGO_VERSION
 
 script:
   - pytest

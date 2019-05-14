@@ -1,4 +1,6 @@
 import pytest
+from django.conf.global_settings import PASSWORD_HASHERS
+from django.test import override_settings
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 
@@ -16,6 +18,12 @@ def test_if_valid_api_key_then_permission_granted(create_request, view):
     request = create_request()
     response = view(request)
     assert response.status_code == 200
+
+
+@pytest.mark.parametrize("hasher", PASSWORD_HASHERS)
+def test_hashers(create_request, view, hasher):
+    with override_settings(PASSWORD_HASHERS=[hasher]):
+        test_if_valid_api_key_then_permission_granted(create_request, view)
 
 
 def test_if_no_api_key_then_permission_denied(create_request, view):
