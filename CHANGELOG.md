@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0]
+
+Released: 2019-05-14
+
 ### Added
 
 - Better documentation on which password hasher is used.
@@ -87,7 +91,8 @@ Released: 2018-11-17
 - Generate, view and revoke API keys from the Django admin.
 - Authenticate requests using the `Api-Token` and `Api-Secret-Key` headers. Customizable via the `DRF_API_KEY_TOKEN_HEADER` and `DRF_API_KEY_SECRET_KEY_HEADER` settings.
 
-[unreleased]: https://github.com/florimondmanca/djangorestframework-api-key/compare/v1.0.0...HEAD
+[unreleased]: https://github.com/florimondmanca/djangorestframework-api-key/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/florimondmanca/djangorestframework-api-key/compare/v1.0.0...1.1.0
 [1.0.0]: https://github.com/florimondmanca/djangorestframework-api-key/compare/v0.4.0...v1.0.0
 [0.4.0]: https://github.com/florimondmanca/djangorestframework-api-key/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/florimondmanca/djangorestframework-api-key/compare/9980141e10b1dfeaaca3a6e0deebd36f5c144e7a...v0.3.1
