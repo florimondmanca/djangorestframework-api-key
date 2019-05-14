@@ -20,10 +20,7 @@ class APIKeyManager(models.Manager):
         return obj, generated_key
 
     def is_valid(self, key: str) -> bool:
-        try:
-            prefix, _, _ = key.partition(".")
-        except ValueError:
-            return False
+        prefix, _, _ = key.partition(".")
 
         try:
             obj = self.get(id__startswith=prefix, revoked=False)
