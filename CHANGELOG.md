@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Better documentation on which password hasher is used.
+- Tests for the Argon2, BcryptSHA256 and PBKDF2SHA1 hashers (in addition to PBKDF2).
+
+### Fixed
+
+- The validation scheme used to fail when the configured password hasher generated hashes that contain dots. This has been fixed: all Django password hashers should now be supported.
+
 ## [1.0.0]
 
 Released: 2019-04-24

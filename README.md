@@ -28,7 +28,7 @@ Server-side clients are third-party backends and services (i.e. _machines_) whic
 Intended to be:
 
 - ✌️ **Simple to use**: create, view and revoke API keys via the admin site, or use built-in helpers to create API keys programmatically.
-- 🔒 **As secure as possible**: API keys are treated with the same level of care than user passwords. They are hashed before being stored in the database and only visible at creation.
+- 🔒 **As secure as possible**: API keys are treated with the same level of care than user passwords. They are hashed using the default password hasher before being stored in the database, and only visible at creation.
 
 **Note**: there are important security aspects you need to consider before switching to an API key access control scheme. See [Security caveats](#caveats).
 
@@ -187,8 +187,10 @@ An API key is composed of two items:
 
 The generated key that clients use to [make authorized requests](#making-authorized-requests) is `GK = P.SK`. It is treated with the same level of care than passwords:
 
-- Only a hashed version is stored in the database. The hash is computed using the default [password hasher](https://docs.djangoproject.com/en/2.1/topics/auth/passwords/).
+- Only a hashed version is stored in the database. The hash is computed using the default password hasher\* (see also [How Django stores passwords](https://docs.djangoproject.com/en/2.1/topics/auth/passwords/#how-django-stores-passwords)).
 - The generated key is shown only once to the client upon API key creation.
+
+\*All hashers provided by Django should be supported. `djangorestframework-api-key` is tested against the [default list of `PASSWORD_HASHERS`](https://docs.djangoproject.com/en/2.2/ref/settings/#std:setting-PASSWORD_HASHERS).
 
 ### Grant scheme
 

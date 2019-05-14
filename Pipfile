@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [dev-packages]
-django = ">=2.0,<2.3"
+django = {extras = ["argon2", "bcrypt"],version = ">=2.0,<2.3"}
 bumpversion = "*"
 pytest = "*"
 pytest-django = "*"
