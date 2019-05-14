@@ -25,7 +25,7 @@ def test_if_no_api_key_then_permission_denied(create_request, view):
 
 
 def _scramble_prefix(key: str) -> str:
-    prefix, secret_key = key.split(".")
+    prefix, _, secret_key = key.partition(".")
     truncated_prefix = prefix[:-1]
     return truncated_prefix + "." + secret_key
 
