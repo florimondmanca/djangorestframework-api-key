@@ -10,4 +10,3 @@ if __name__ == "__main__":
     settings.configure(INSTALLED_APPS=[APP])
     django.setup()
     call_command("makemigrations", APP)
-    call_command("migrate", APP)
