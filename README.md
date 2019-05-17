@@ -6,6 +6,7 @@
 [![django](https://img.shields.io/pypi/djversions/djangorestframework-api-key.svg?colorB=44b78b)][pypi-url]
 [![drf](https://img.shields.io/badge/drf-3.8+-7f2d2d.svg)][pypi-url]
 [![license](https://img.shields.io/pypi/l/djangorestframework-api-key.svg)][pypi-url]
+[![Say Thanks!](https://img.shields.io/badge/Say_Thanks-!-1EAEDB.svg)](https://saythanks.io/to/florimondmanca)
 
 [pypi-url]: https://pypi.org/project/djangorestframework-api-key/
 
