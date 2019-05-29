@@ -14,7 +14,7 @@ class APIKeyAdmin(admin.ModelAdmin):
     readonly_fields = ("get_api_key",)
     search_fields = ("name",)
 
-    fieldsets = ((None, {"fields": ("name", "revoked", "get_api_key")}),)
+    fieldsets = ((None, {"fields": ("name", 'has_expired', 'expiry_date', "revoked", "get_api_key")}),)
 
     def get_readonly_fields(
         self, request, obj: APIKey = None

@@ -1,8 +1,7 @@
 from typing import Tuple
-
+from datetime import datetime
 from django.core.exceptions import ValidationError
 from django.db import models
-
 from ._helpers import check_key, generate_key
 
 
@@ -21,12 +20,12 @@ class APIKeyManager(models.Manager):
 
     def is_valid(self, key: str) -> bool:
         prefix, _, _ = key.partition(".")
-
         try:
             obj = self.get(id__startswith=prefix, revoked=False)
         except self.model.DoesNotExist:
             return False
-
+        if obj.has_expired:
+            return obj.expiry_date > datetime.now(obj.expiry_date.tzinfo)
         return obj.is_valid(key)
 
 
@@ -41,7 +40,8 @@ class APIKey(models.Model):
         default=False,
         help_text="If the API key is revoked, clients cannot use it anymore.",
     )
-
+    expiry_date = models.DateTimeField(blank=True, null=True)
+    has_expired = models.BooleanField(default=False)
     class Meta:  # noqa
         ordering = ("-created",)
         verbose_name = "API key"
