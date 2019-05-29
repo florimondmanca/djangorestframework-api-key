@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 import pytest
 from django.conf.global_settings import PASSWORD_HASHERS
 from django.test import override_settings
@@ -65,6 +67,21 @@ def test_if_revoked_then_permission_denied(create_request, view):
     request = create_request(revoked=True)
     response = view(request)
     assert response.status_code == 403
+
+
+NOW = datetime.now()
+TOMORROW = NOW + timedelta(days=1)
+TWO_DAYS_AGO = NOW - timedelta(days=2)
+
+
+@pytest.mark.parametrize(
+    "expiry_date, ok", [(TOMORROW, True), (TWO_DAYS_AGO, False)]
+)
+def test_expiry_date(create_request, view, expiry_date, ok):
+    request = create_request(expiry_date=expiry_date)
+    response = view(request)
+    status_code = 200 if ok else 403
+    assert response.status_code == status_code
 
 
 def test_object_permission(create_request):

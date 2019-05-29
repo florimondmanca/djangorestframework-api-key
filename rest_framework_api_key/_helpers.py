@@ -23,4 +23,3 @@ def generate_key() -> Tuple[str, str]:
 
 def check_key(key: str, hashed_key: str) -> bool:
     return check_password(key, hashed_key)
-

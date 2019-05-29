@@ -1,8 +1,9 @@
 from typing import Tuple
-from datetime import datetime
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils import timezone
 from ._helpers import check_key, generate_key
+from ._decorators import djangoproperty
 
 
 class APIKeyManager(models.Manager):
@@ -20,13 +21,19 @@ class APIKeyManager(models.Manager):
 
     def is_valid(self, key: str) -> bool:
         prefix, _, _ = key.partition(".")
+
         try:
-            obj = self.get(id__startswith=prefix, revoked=False)
+            api_key = self.get(id__startswith=prefix, revoked=False)
         except self.model.DoesNotExist:
             return False
-        if obj.has_expired:
-            return obj.expiry_date > datetime.now(obj.expiry_date.tzinfo)
-        return obj.is_valid(key)
+
+        if not api_key.is_valid(key):
+            return False
+
+        if api_key.has_expired:
+            return False
+
+        return True
 
 
 class APIKey(models.Model):
@@ -34,14 +41,31 @@ class APIKey(models.Model):
 
     id = models.CharField(max_length=100, unique=True, primary_key=True)
     created = models.DateTimeField(auto_now_add=True, db_index=True)
-    name = models.CharField(max_length=50, blank=False, default=None)
+    name = models.CharField(
+        max_length=50,
+        blank=False,
+        default=None,
+        help_text=(
+            "A free-form name for the API key. "
+            "Need not be unique. "
+            "50 characters max."
+        ),
+    )
     revoked = models.BooleanField(
         blank=True,
         default=False,
-        help_text="If the API key is revoked, clients cannot use it anymore.",
+        help_text=(
+            "If the API key is revoked, clients cannot use it anymore. "
+            "(This cannot be undone.)"
+        ),
     )
-    expiry_date = models.DateTimeField(blank=True, null=True)
-    has_expired = models.BooleanField(default=False)
+    expiry_date = models.DateTimeField(
+        blank=True,
+        null=True,
+        verbose_name="Expires",
+        help_text="Once API key expires, clients cannot use it anymore.",
+    )
+
     class Meta:  # noqa
         ordering = ("-created",)
         verbose_name = "API key"
@@ -52,12 +76,15 @@ class APIKey(models.Model):
         # Store the initial value of `revoked` to detect changes.
         self._initial_revoked = self.revoked
 
+    @djangoproperty(short_description="Prefix")
     def prefix(self) -> str:
         return self.pk.partition(".")[0]
 
-    # Ensure compatibility with Django admin.
-    prefix.short_description = "Prefix"
-    prefix = property(prefix)
+    @djangoproperty(short_description="Has expired", boolean=True)
+    def has_expired(self) -> bool:
+        if self.expiry_date is None:
+            return False
+        return self.expiry_date < timezone.now()
 
     def is_valid(self, key: str) -> bool:
         _, _, hashed_key = self.pk.partition(".")
