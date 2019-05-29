@@ -12,7 +12,7 @@ This is a pets management app. The API is protected using the `HasAPIKey` permis
 $ pip install -r requirements.txt
 ```
 
-- Then run migrations (creates an SQLite database):
+- Run migrations (creates an SQLite database):
 
 ```bash
 $ python manage.py migrate
@@ -25,7 +25,7 @@ $ python manage.py createsuperuser
 # Enter user information as instructed
 ```
 
-- Finally, start the server:
+- Start the server:
 
 ```bash
 $ python manage.py runserver
@@ -33,27 +33,15 @@ $ python manage.py runserver
 
 ## Usage
 
-- Go to the admin site at http://localhost:8000/admin and create an API key:
-
-![](media/admin-section.png)
-
-![](media/admin-form.png)
-
-- The generated API key is shown to you:
-
-![](media/admin-created.png)
-
-- Save it to an environment variable:
+- Go to the admin site at http://localhost:8000/admin and create an API key.
+- The generated API key is shown to you: save it to an environment variable:
 
 ```bash
 export API_KEY="<The generated API key here>"
 ```
 
-- Now, create a few pets:
-
-![](media/pets.png)
-
-- Finally, perform some requests to the API! We're using [requests](http://docs.python-requests.org) here:
+- Create a few pets.
+- Try things out by performing requests to the API. We're using [requests](http://docs.python-requests.org) here:
 
 ```python
 import os

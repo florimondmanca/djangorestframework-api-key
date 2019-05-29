@@ -147,12 +147,6 @@ Please refer to [HttpRequest.META](https://docs.djangoproject.com/en/2.1/ref/req
 
 When it is installed, `djangorestframework-api-key` adds an "API Key Permissions" section to the Django admin site where you can create, view and revoke API keys.
 
-![](https://github.com/florimondmanca/djangorestframework-api-key/blob/master/img/admin-section.png?raw=true)
-
-![](https://github.com/florimondmanca/djangorestframework-api-key/blob/master/example_project/media/admin-form.png?raw=true)
-
-![](https://github.com/florimondmanca/djangorestframework-api-key/blob/master/example_project/media/admin-created.png?raw=true)
-
 #### Programmatic usage (advanced)
 
 API keys can be created, viewed and revoked programmatically by manipulating the `APIKey` model.
