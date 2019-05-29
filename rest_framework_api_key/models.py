@@ -35,7 +35,7 @@ class APIKeyManager(models.Manager):
         return True
 
 
-class APIKey(models.Model):
+class BaseAPIKey(models.Model):
     objects = APIKeyManager()
 
     id = models.CharField(max_length=100, unique=True, primary_key=True)
@@ -66,6 +66,7 @@ class APIKey(models.Model):
     )
 
     class Meta:  # noqa
+        abstract = True
         ordering = ("-created",)
         verbose_name = "API key"
         verbose_name_plural = "API keys"
@@ -109,3 +110,7 @@ class APIKey(models.Model):
 
     def __str__(self) -> str:
         return str(self.name)
+
+
+class APIKey(BaseAPIKey):
+    pass
