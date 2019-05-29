@@ -5,6 +5,8 @@ from django.core.exceptions import ValidationError
 from django.db.utils import IntegrityError
 from rest_framework_api_key.models import APIKey
 
+from .dateutils import NOW, TOMORROW, YESTERDAY
+
 pytestmark = pytest.mark.django_db
 
 
@@ -40,3 +42,12 @@ def test_cannot_unrevoke():
 
     with pytest.raises(ValidationError):
         api_key.clean()
+
+
+@pytest.mark.parametrize(
+    "expiry_date, has_expired",
+    [(None, False), (NOW, True), (TOMORROW, False), (YESTERDAY, True)],
+)
+def test_has_expired(expiry_date, has_expired):
+    api_key, _ = APIKey.objects.create_key(name="test", expiry_date=expiry_date)
+    assert api_key.has_expired is has_expired

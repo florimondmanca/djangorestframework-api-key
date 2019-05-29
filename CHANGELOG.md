@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+**NOTE**: this release contains migrations. In your Django project, run them using:
+
+```python
+python manage.py migrate rest_framework_api_key
+```
+
+### Added
+
+- API keys can now have an optional `expiry_date`.
+- `HasAPIKey` denies access if the API key has expired, i.e. if `expiry_date`, if set, is in the past.
+- It is now possible to search by `prefix` in the API key admin panel.
+- The `prefix` is now displayed in the edit view of the API key admin panel.
+
 ## [1.1.0]
 
 Released: 2019-05-14

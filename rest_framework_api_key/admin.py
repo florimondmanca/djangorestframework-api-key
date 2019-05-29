@@ -8,20 +8,27 @@ from .models import APIKey
 
 @admin.register(APIKey)
 class APIKeyAdmin(admin.ModelAdmin):
-    list_display = ("name", "prefix", "created", "revoked")
-    list_filter = ("created", "revoked")
-
-    readonly_fields = ("get_api_key",)
-    search_fields = ("name",)
-
-    fieldsets = ((None, {"fields": ("name", 'has_expired', 'expiry_date', "revoked", "get_api_key")}),)
+    list_display = (
+        "name",
+        "prefix",
+        "created",
+        "expiry_date",
+        "has_expired_func",
+        "revoked",
+    )
+    list_filter = ("created",)
+    search_fields = ("name", "prefix")
+    fieldsets = (
+        (None, {"fields": ("name", "prefix", "expiry_date", "revoked")}),
+    )
 
     def get_readonly_fields(
         self, request, obj: APIKey = None
     ) -> typing.Tuple[str]:
+        fields = ("prefix",)
         if obj is not None and obj.revoked:
-            return self.readonly_fields + ("name", "revoked")
-        return self.readonly_fields
+            fields = fields + ("name", "revoked", "expiry_date")
+        return fields
 
     def get_api_key(self, obj: APIKey) -> str:
         if obj.pk:
