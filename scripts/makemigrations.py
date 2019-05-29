@@ -7,6 +7,6 @@ from django.core.management import call_command
 
 if __name__ == "__main__":
     APP = "rest_framework_api_key"
-    settings.configure(INSTALLED_APPS=[APP])
+    settings.configure(INSTALLED_APPS=[APP, "tests.heroes"])
     django.setup()
-    call_command("makemigrations", APP)
+    call_command("makemigrations", APP, "heroes")
