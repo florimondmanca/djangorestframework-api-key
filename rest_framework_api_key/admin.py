@@ -13,7 +13,6 @@ class APIKeyAdmin(admin.ModelAdmin):
         "prefix",
         "created",
         "expiry_date",
-        "has_expired_func",
         "revoked",
     )
     list_filter = ("created",)
