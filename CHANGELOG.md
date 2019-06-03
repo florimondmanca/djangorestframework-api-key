@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed a critical bug in `APIKeyModelAdmin` that prevented `rest_framework_api_key` from passing Django system checks.
+
 ## [1.2.0]
 
 Released: 2019-05-29
