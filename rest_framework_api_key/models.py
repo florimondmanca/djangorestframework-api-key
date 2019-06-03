@@ -3,7 +3,6 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 from ._helpers import check_key, generate_key
-from ._decorators import djangoproperty
 
 
 class APIKeyManager(models.Manager):
@@ -76,15 +75,20 @@ class APIKey(models.Model):
         # Store the initial value of `revoked` to detect changes.
         self._initial_revoked = self.revoked
 
-    @djangoproperty(short_description="Prefix")
-    def prefix(self) -> str:
+    def _prefix(self) -> str:
         return self.pk.partition(".")[0]
 
-    @djangoproperty(short_description="Has expired", boolean=True)
-    def has_expired(self) -> bool:
+    _prefix.short_description = "Prefix"
+    prefix = property(_prefix)
+
+    def _has_expired(self) -> bool:
         if self.expiry_date is None:
             return False
         return self.expiry_date < timezone.now()
+
+    _has_expired.short_description = "Has expired"
+    _has_expired.boolean = True
+    has_expired = property(_has_expired)
 
     def is_valid(self, key: str) -> bool:
         _, _, hashed_key = self.pk.partition(".")

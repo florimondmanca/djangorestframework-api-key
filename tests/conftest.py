@@ -10,11 +10,35 @@ def pytest_configure():
         **dict(
             SECRET_KEY="abcd",
             INSTALLED_APPS=[
-                "django.contrib.auth",
-                "django.contrib.sessions",
+                # Mandatory
                 "django.contrib.contenttypes",
+                # Permissions
+                "django.contrib.auth",
+                # Admin
+                "django.contrib.admin",
+                "django.contrib.messages",
+                "django.contrib.sessions",
+                # Project
                 "rest_framework",
                 "rest_framework_api_key",
+            ],
+            TEMPLATES=[
+                # Admin
+                {
+                    "BACKEND": "django.template.backends.django.DjangoTemplates",
+                    "OPTIONS": {
+                        "context_processors": [
+                            "django.contrib.auth.context_processors.auth",
+                            "django.contrib.messages.context_processors.messages",
+                        ]
+                    },
+                }
+            ],
+            MIDDLEWARE=[
+                # Admin
+                "django.contrib.messages.middleware.MessageMiddleware",
+                "django.contrib.sessions.middleware.SessionMiddleware",
+                "django.contrib.auth.middleware.AuthenticationMiddleware",
             ],
             ROOT_URL_CONF="urls",
             DATABASES={

@@ -6,14 +6,13 @@ from ._helpers import generate_key
 from .models import APIKey
 
 
-@admin.register(APIKey)
 class APIKeyAdmin(admin.ModelAdmin):
     list_display = (
         "name",
         "prefix",
         "created",
         "expiry_date",
-        "has_expired_func",
+        "_has_expired",
         "revoked",
     )
     list_filter = ("created",)
@@ -54,3 +53,6 @@ class APIKeyAdmin(admin.ModelAdmin):
             messages.add_message(request, messages.WARNING, message)
         else:
             obj.save()
+
+
+admin.site.register(APIKey, APIKeyAdmin)
