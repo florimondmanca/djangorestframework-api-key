@@ -11,14 +11,13 @@ _PREFIX_LENGTH = 8
 _SECRET_KEY_LENGTH = 32
 
 
-def generate_key() -> Tuple[str, str]:
+def generate_key() -> Tuple[str, str, str]:
     prefix = get_random_string(_PREFIX_LENGTH)
     secret_key = get_random_string(_SECRET_KEY_LENGTH)
 
     key = prefix + "." + secret_key  # for the client
-    key_id = prefix + "." + make_password(key)  # for database storage
 
-    return key, key_id
+    return key, prefix, make_password(key)
 
 
 def check_key(key: str, hashed_key: str) -> bool:

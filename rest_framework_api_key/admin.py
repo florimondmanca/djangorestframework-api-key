@@ -29,19 +29,13 @@ class APIKeyAdmin(admin.ModelAdmin):
             fields = fields + ("name", "revoked", "expiry_date")
         return fields
 
-    def get_api_key(self, obj: APIKey) -> str:
-        if obj.pk:
-            return 16 * "*"
-        return "The API key will be generated when clicking 'Save'."
-
-    get_api_key.short_description = "API key"
-
     def save_model(self, request, obj: APIKey, form, change):
         created = not obj.pk
 
         if created:
-            generated_key, key_id = generate_key()
-            obj.id = key_id
+            generated_key, prefix, hashed_key = generate_key()
+            obj.prefix = prefix
+            obj.hashed_key = hashed_key
 
             obj.save()
 

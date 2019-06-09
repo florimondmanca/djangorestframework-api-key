@@ -12,8 +12,9 @@ class APIKeyManager(models.Manager):
 
         obj = self.model(**kwargs)  # type: APIKey
 
-        generated_key, key_id = generate_key()
-        obj.id = key_id
+        generated_key, prefix, hashed_key = generate_key()
+        obj.prefix = prefix
+        obj.hashed_key = hashed_key
         obj.save()
 
         return obj, generated_key
@@ -22,7 +23,7 @@ class APIKeyManager(models.Manager):
         prefix, _, _ = key.partition(".")
 
         try:
-            api_key = self.get(id__startswith=prefix, revoked=False)
+            api_key = self.get(prefix=prefix, revoked=False)
         except self.model.DoesNotExist:
             return False
 
@@ -38,7 +39,9 @@ class APIKeyManager(models.Manager):
 class APIKey(models.Model):
     objects = APIKeyManager()
 
-    id = models.CharField(max_length=100, unique=True, primary_key=True)
+    prefix = models.CharField(max_length=8, unique=True)
+    hashed_key = models.CharField(max_length=32)
+
     created = models.DateTimeField(auto_now_add=True, db_index=True)
     name = models.CharField(
         max_length=50,
@@ -75,12 +78,6 @@ class APIKey(models.Model):
         # Store the initial value of `revoked` to detect changes.
         self._initial_revoked = self.revoked
 
-    def _prefix(self) -> str:
-        return self.pk.partition(".")[0]
-
-    _prefix.short_description = "Prefix"
-    prefix = property(_prefix)
-
     def _has_expired(self) -> bool:
         if self.expiry_date is None:
             return False
@@ -91,8 +88,7 @@ class APIKey(models.Model):
     has_expired = property(_has_expired)
 
     def is_valid(self, key: str) -> bool:
-        _, _, hashed_key = self.pk.partition(".")
-        return check_key(key, hashed_key)
+        return check_key(key, str(self.hashed_key))
 
     def clean(self):
         self._validate_revoked()
