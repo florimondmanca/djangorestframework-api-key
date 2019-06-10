@@ -12,14 +12,6 @@ def split_prefix_hash(apps, schema_editor):
         api_key.save()
 
 
-def merge_prefix_hash(apps, schema_editor):
-    APIKey = apps.get_model('rest_framework_api_key', 'APIKey')
-
-    for api_key in APIKey.objects.all():
-        api_key.pk = "{}.{}".format(api_key.prefix, api_key.hashed_key)
-        api_key.save()
-
-
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -30,20 +22,24 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='apikey',
             name='hashed_key',
-            field=models.CharField(max_length=32, null=True),
+            field=models.CharField(max_length=100, null=True),
         ),
         migrations.AddField(
             model_name='apikey',
             name='prefix',
             field=models.CharField(max_length=8, null=True, unique=True),
         ),
-        migrations.RunPython(split_prefix_hash, merge_prefix_hash),
+        migrations.RunPython(split_prefix_hash, migrations.RunPython.noop, elidable=True),
         migrations.AlterField(
             model_name='apikey',
             name='hashed_key',
-            field=models.CharField(max_length=32),
+            field=models.CharField(max_length=100),
         ),
-        migrations.AlterField(
+        migrations.RemoveField(
+            model_name='apikey',
+            name='id',
+        ),
+        migrations.AddField(
             model_name='apikey',
             name='id',
             field=models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID'),

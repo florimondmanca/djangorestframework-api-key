@@ -40,7 +40,7 @@ class APIKey(models.Model):
     objects = APIKeyManager()
 
     prefix = models.CharField(max_length=8, unique=True)
-    hashed_key = models.CharField(max_length=32)
+    hashed_key = models.CharField(max_length=100)
 
     created = models.DateTimeField(auto_now_add=True, db_index=True)
     name = models.CharField(
