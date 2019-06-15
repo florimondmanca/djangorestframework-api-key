@@ -10,16 +10,17 @@ from .crypto import KeyGenerator
 class BaseAPIKeyManager(models.Manager):
     key_generator = KeyGenerator()
 
-    def create_key(self, **kwargs) -> Tuple["APIKey", str]:
-        # Prevent from manually setting the primary key.
-        kwargs.pop("id", None)
-
-        obj = self.model(**kwargs)  # type: APIKey
-
+    def assign_key(self, obj: "AbstractAPIKey") -> str:
         key, hashed_key = self.key_generator.generate()
         obj.id = hashed_key
-        obj.save()
+        return key
 
+    def create_key(self, **kwargs) -> Tuple["AbstractAPIKey", str]:
+        # Prevent from manually setting the primary key.
+        kwargs.pop("id", None)
+        obj = self.model(**kwargs)  # type: AbstractAPIKey
+        key = self.assign_key(obj)
+        obj.save()
         return obj, key
 
     def is_valid(self, key: str) -> bool:
@@ -28,8 +29,8 @@ class BaseAPIKeyManager(models.Manager):
         try:
             api_key = self.get(
                 id__startswith=prefix, revoked=False
-            )  # type: APIKey
-        except self.model.DoesNotExist:
+            )  # type: AbstractAPIKey
+        except (self.model.DoesNotExist, self.model.MultipleObjectsReturned):
             return False
 
         if not api_key.is_valid(key):
@@ -103,7 +104,7 @@ class AbstractAPIKey(models.Model):
 
     def is_valid(self, key: str) -> bool:
         _, _, hashed_key = self.pk.partition(".")
-        return self.__class__.objects.key_generator.verify(key, hashed_key)
+        return type(self).objects.key_generator.verify(key, hashed_key)
 
     def clean(self):
         self._validate_revoked()

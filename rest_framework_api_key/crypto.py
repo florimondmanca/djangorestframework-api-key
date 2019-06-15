@@ -8,14 +8,15 @@ if TYPE_CHECKING:
 
 
 class KeyGenerator:
-    PREFIX_LENGTH = 8
-    SECRET_KEY_LENGTH = 32
+    def __init__(self, prefix_length: int = 8, secret_key_length: int = 32):
+        self.prefix_length = prefix_length
+        self.secret_key_length = secret_key_length
 
     def get_prefix(self) -> str:
-        return get_random_string(self.PREFIX_LENGTH)
+        return get_random_string(self.prefix_length)
 
     def get_secret_key(self) -> str:
-        return get_random_string(self.SECRET_KEY_LENGTH)
+        return get_random_string(self.secret_key_length)
 
     @staticmethod
     def concatenate(left: str, right: str) -> str:
