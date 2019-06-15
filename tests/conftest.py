@@ -1,4 +1,7 @@
+import typing
+
 import pytest
+from django.http import HttpRequest
 from django.conf import settings
 from django.test import override_settings
 
@@ -76,7 +79,7 @@ def _create_user():
 
 
 @pytest.fixture(
-    name="backend",
+    name="key_header_config",
     params=[
         {"header": "HTTP_AUTHORIZATION", "default": "Api-Key {key}"},
         {
@@ -86,50 +89,62 @@ def _create_user():
         },
     ],
 )
-def fixture_backend(request) -> dict:
-    backend = request.param
+def fixture_key_header_config(request) -> dict:
+    config = request.param
 
-    if backend.get("set_custom_header_setting"):
-        ctx = override_settings(API_KEY_CUSTOM_HEADER=backend["header"])
+    if config.get("set_custom_header_setting"):
+        ctx = override_settings(API_KEY_CUSTOM_HEADER=config["header"])
     else:
         ctx = nullcontext()
 
     with ctx:
-        yield backend
+        yield config
 
 
-@pytest.fixture
-def create_request(backend):
+@pytest.fixture(name="build_create_request")
+def fixture_build_create_request(key_header_config: dict):
     from rest_framework.test import APIRequestFactory, force_authenticate
+    from rest_framework_api_key.models import AbstractAPIKey
+
+    def build_create_request(model: typing.Type[AbstractAPIKey]):
+        request_factory = APIRequestFactory()
+
+        _MISSING = object()
+
+        def create_request(
+            authenticated: bool = False, authorization: str = _MISSING, **kwargs
+        ):
+            headers = {}
+
+            if authorization is not None:
+                kwargs.setdefault("name", "test")
+                _, key = model.objects.create_key(**kwargs)
+
+                if callable(authorization):
+                    authorization = authorization(key)
+
+                if authorization is _MISSING:
+                    authorization = key_header_config["default"]
+
+                headers[key_header_config["header"]] = authorization.format(
+                    key=key
+                )
+
+            request = request_factory.get("/test/", **headers)
+
+            if authenticated:
+                user = _create_user()
+                force_authenticate(request, user)
+
+            return request
+
+        return create_request
+
+    return build_create_request
+
+
+@pytest.fixture(name="create_request")
+def fixture_create_request(build_create_request) -> HttpRequest:
     from rest_framework_api_key.models import APIKey
 
-    request_factory = APIRequestFactory()
-
-    _MISSING = object()
-
-    def create(
-        authenticated: bool = False, authorization: str = _MISSING, **kwargs
-    ):
-        headers = {}
-
-        if authorization is not None:
-            kwargs.setdefault("name", "test")
-            _, key = APIKey.objects.create_key(**kwargs)
-
-            if callable(authorization):
-                authorization = authorization(key)
-
-            if authorization is _MISSING:
-                authorization = backend["default"]
-
-            headers[backend["header"]] = authorization.format(key=key)
-
-        request = request_factory.get("/test/", **headers)
-
-        if authenticated:
-            user = _create_user()
-            force_authenticate(request, user)
-
-        return request
-
-    return create
+    return build_create_request(APIKey)
