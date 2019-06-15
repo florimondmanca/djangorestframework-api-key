@@ -1,28 +1,34 @@
 from typing import Tuple
+
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
-from ._helpers import check_key, generate_key
+
+from .crypto import KeyGenerator
 
 
-class APIKeyManager(models.Manager):
+class BaseAPIKeyManager(models.Manager):
+    key_generator = KeyGenerator()
+
     def create_key(self, **kwargs) -> Tuple["APIKey", str]:
         # Prevent from manually setting the primary key.
         kwargs.pop("id", None)
 
         obj = self.model(**kwargs)  # type: APIKey
 
-        generated_key, key_id = generate_key()
-        obj.id = key_id
+        key, hashed_key = self.key_generator.generate()
+        obj.id = hashed_key
         obj.save()
 
-        return obj, generated_key
+        return obj, key
 
     def is_valid(self, key: str) -> bool:
         prefix, _, _ = key.partition(".")
 
         try:
-            api_key = self.get(id__startswith=prefix, revoked=False)
+            api_key = self.get(
+                id__startswith=prefix, revoked=False
+            )  # type: APIKey
         except self.model.DoesNotExist:
             return False
 
@@ -35,7 +41,11 @@ class APIKeyManager(models.Manager):
         return True
 
 
-class BaseAPIKey(models.Model):
+class APIKeyManager(BaseAPIKeyManager):
+    pass
+
+
+class AbstractAPIKey(models.Model):
     objects = APIKeyManager()
 
     id = models.CharField(max_length=100, unique=True, primary_key=True)
@@ -93,7 +103,7 @@ class BaseAPIKey(models.Model):
 
     def is_valid(self, key: str) -> bool:
         _, _, hashed_key = self.pk.partition(".")
-        return check_key(key, hashed_key)
+        return self.__class__.objects.key_generator.verify(key, hashed_key)
 
     def clean(self):
         self._validate_revoked()
@@ -112,5 +122,5 @@ class BaseAPIKey(models.Model):
         return str(self.name)
 
 
-class APIKey(BaseAPIKey):
+class APIKey(AbstractAPIKey):
     pass

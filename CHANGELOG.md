@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `BaseAPIKey` abstract model.
+- Introduce `BaseAPIKeyManager`, of which `APIKeyManager` is now a direct subclass.
+- Add `AbstractAPIKey` abstract model, of which `APIKey` is now a direct subclass. Uses `APIKeyMaanger` as a manager.
 
 ## [v1.2.1] - 2019-06-03
 
