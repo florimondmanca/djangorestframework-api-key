@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Introduce `BaseAPIKeyManager`, of which `APIKeyManager` is now a direct subclass.
+- Add `AbstractAPIKey` abstract model, of which `APIKey` is now a direct subclass. Uses `APIKeyManager` as a manager.
+- Customize key generation using the new `rest_framework_api_key.crypto.KeyGenerator` class and the `.key_generator` attribute on `BaseAPIKeyManager`.
+
 ## [v1.2.1] - 2019-06-03
 
 ### Fixed
