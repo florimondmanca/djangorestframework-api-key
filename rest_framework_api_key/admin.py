@@ -1,8 +1,10 @@
 import typing
 
 from django.contrib import admin, messages
+from django.utils.html import format_html_join
+from django.utils.safestring import mark_safe
 
-from .models import APIKey
+from .models import APIKey, APIKeyGroup, EndpointPermission
 
 
 class APIKeyAdmin(admin.ModelAdmin):
@@ -13,11 +15,12 @@ class APIKeyAdmin(admin.ModelAdmin):
         "expiry_date",
         "_has_expired",
         "revoked",
+        "group",
     )
     list_filter = ("created",)
     search_fields = ("name", "prefix")
     fieldsets = (
-        (None, {"fields": ("name", "prefix", "expiry_date", "revoked")}),
+        (None, {"fields": ("name", "prefix", "expiry_date", "revoked", "group")}),
     )
 
     def get_readonly_fields(
@@ -50,5 +53,45 @@ class APIKeyAdmin(admin.ModelAdmin):
         else:
             obj.save()
 
+
+
+class APIKeyGroupEndpointPermissionInline(admin.TabularInline):
+    model = APIKeyGroup.endpoint_permissions.through
+    verbose_name = 'API Key Group <-> Endpoint Permission Relationship'
+    verbose_name_plural = 'API Key Group <-> Endpoint Permission Relationships'
+
+
+@admin.register(APIKeyGroup)
+class APIKeyGroupAdmin(admin.ModelAdmin):
+    list_display = (
+        'name',
+        'get_endpoint_permissions',
+        'get_number_of_api_keys_in_group',
+    )
+
+    def get_endpoint_permissions(self, obj):
+        return format_html_join(
+            mark_safe('<br>'),
+            '{}',
+            ((str(endpoint_permission),)
+             for endpoint_permission in obj.endpoint_permissions.all()),
+        )
+
+    def get_number_of_api_keys_in_group(self, obj):
+        return APIKey.objects.all().filter(group=obj).count()
+
+    get_endpoint_permissions.short_description = 'Endpoint Permissions'
+    get_number_of_api_keys_in_group.short_description = 'API Key Count'
+
+
+@admin.register(EndpointPermission)
+class EndpointPermissionAdmin(admin.ModelAdmin):
+    inlines = [
+        APIKeyGroupEndpointPermissionInline,
+    ]
+    list_display = (
+        'path',
+        'method',
+    )
 
 admin.site.register(APIKey, APIKeyAdmin)

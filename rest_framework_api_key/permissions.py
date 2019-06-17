@@ -1,3 +1,4 @@
+import re
 import typing
 
 from django.conf import settings
@@ -12,7 +13,6 @@ class HasAPIKey(permissions.BasePermission):
 
         if not key:
             return False
-
         return APIKey.objects.is_valid(key)
 
     def has_object_permission(self, request, view, obj):
@@ -45,3 +45,18 @@ def _get_key_from_authorization(request) -> typing.Optional[str]:
 def _get_key_from_custom_header(request, name: str) -> typing.Optional[str]:
     header = request.META.get(name)
     return header if header else None
+
+
+
+class EndpointMethodPermission(HasAPIKey):
+    def has_permission(self, request, view):
+        has_api_key = super(EndpointMethodPermission, self).has_permission(request, view)
+        if not has_api_key[0]:
+            return False
+        endpoint_permissions = has_api_key[1].group.endpoint_permissions.filter(method=request.method)
+        for endpoint_permission in endpoint_permissions:
+            if re.match(endpoint_permission.path, request.path):
+                return True
+        return False
+
+HasEndpointMethodPermissionOrIsAuthenticated = EndpointMethodPermission | permissions.IsAuthenticated

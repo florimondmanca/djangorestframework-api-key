@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 
+from . import validators
 from .crypto import KeyGenerator
 
 
@@ -39,11 +40,32 @@ class BaseAPIKeyManager(models.Manager):
         if api_key.has_expired:
             return False
 
-        return True
+        return True, api_key
 
 
 class APIKeyManager(BaseAPIKeyManager):
     pass
+
+
+class APIKeyGroup(models.Model):
+    name = models.CharField(
+        max_length=50,
+        unique=True,
+        help_text='The name of the API key group',
+    )
+
+    endpoint_permissions = models.ManyToManyField(
+        'EndpointPermission',
+        related_name='api_key_groups',
+        blank=True,
+    )
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'API Key Group'
+        verbose_name_plural = 'API Key Groups'
 
 
 class AbstractAPIKey(models.Model):
@@ -74,6 +96,13 @@ class AbstractAPIKey(models.Model):
         null=True,
         verbose_name="Expires",
         help_text="Once API key expires, clients cannot use it anymore.",
+    )
+
+    group = models.ForeignKey(
+        APIKeyGroup,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
     )
 
     class Meta:  # noqa
@@ -125,3 +154,38 @@ class AbstractAPIKey(models.Model):
 
 class APIKey(AbstractAPIKey):
     pass
+
+
+class EndpointPermission(models.Model):
+    METHODS = [
+        'CONNECT',
+        'DELETE',
+        'GET',
+        'HEAD',
+        'OPTIONS',
+        'PATCH',
+        'POST',
+        'PUT',
+        'TRACE',
+    ]
+    METHOD_CHOICES = [(method, method) for method in METHODS]
+
+    path = models.CharField(
+        max_length=100,
+        help_text=('A regex matching the URL path. '
+                   'This should begin with / and include the version, eg "/v1/time"'),
+        validators=[validators.validate_regex_pattern],
+    )
+    method = models.CharField(
+        max_length=100,
+        choices=METHOD_CHOICES,
+        default='',
+    )
+
+    def __str__(self):
+        return f'{self.path}, {self.method}'
+
+    class Meta:
+        verbose_name = 'Endpoint Permission'
+        verbose_name_plural = 'Endpoint Permissions'
+        unique_together = ('path', 'method')
