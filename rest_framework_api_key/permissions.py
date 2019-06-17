@@ -8,11 +8,11 @@ from .models import APIKey
 
 
 class HasAPIKey(permissions.BasePermission):
-    def has_permission(self, request, view) -> bool:
+    def has_permission(self, request, view) -> tuple:
         key = _get_key(request)
 
         if not key:
-            return False
+            return False, None
         return APIKey.objects.is_valid(key)
 
     def has_object_permission(self, request, view, obj):

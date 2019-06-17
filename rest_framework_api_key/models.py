@@ -24,7 +24,7 @@ class BaseAPIKeyManager(models.Manager):
         obj.save()
         return obj, key
 
-    def is_valid(self, key: str) -> bool:
+    def is_valid(self, key: str) -> tuple:
         prefix, _, _ = key.partition(".")
 
         try:
@@ -32,13 +32,13 @@ class BaseAPIKeyManager(models.Manager):
                 id__startswith=prefix, revoked=False
             )  # type: AbstractAPIKey
         except (self.model.DoesNotExist, self.model.MultipleObjectsReturned):
-            return False
+            return False, None
 
         if not api_key.is_valid(key):
-            return False
+            return False, api_key
 
         if api_key.has_expired:
-            return False
+            return False, api_key
 
         return True, api_key
 
