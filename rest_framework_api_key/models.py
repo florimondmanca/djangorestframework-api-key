@@ -64,8 +64,8 @@ class APIKeyGroup(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = 'API Key Group'
-        verbose_name_plural = 'API Key Groups'
+        verbose_name = 'API key group'
+        verbose_name_plural = 'API key groups'
 
 
 class AbstractAPIKey(models.Model):
@@ -183,9 +183,9 @@ class EndpointPermission(models.Model):
     )
 
     def __str__(self):
-        return f'{self.path}, {self.method}'
+        return f'{self.method} {self.path}'
 
     class Meta:
-        verbose_name = 'Endpoint Permission'
-        verbose_name_plural = 'Endpoint Permissions'
+        verbose_name = 'Endpoint permission'
+        verbose_name_plural = 'Endpoint permissions'
         unique_together = ('path', 'method')

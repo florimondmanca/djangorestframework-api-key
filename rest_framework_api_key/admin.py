@@ -54,11 +54,10 @@ class APIKeyAdmin(admin.ModelAdmin):
             obj.save()
 
 
-
 class APIKeyGroupEndpointPermissionInline(admin.TabularInline):
     model = APIKeyGroup.endpoint_permissions.through
-    verbose_name = 'API Key Group <-> Endpoint Permission Relationship'
-    verbose_name_plural = 'API Key Group <-> Endpoint Permission Relationships'
+    verbose_name = 'API key group to endpoint relationship'
+    verbose_name_plural = 'API key group to endpoint relationships'
 
 
 @admin.register(APIKeyGroup)
@@ -73,15 +72,16 @@ class APIKeyGroupAdmin(admin.ModelAdmin):
         return format_html_join(
             mark_safe('<br>'),
             '{}',
-            ((str(endpoint_permission),)
-             for endpoint_permission in obj.endpoint_permissions.all()),
+            ((str(endpoint_permission), )
+             for endpoint_permission in obj.endpoint_permissions.all()
+                                           .sort_by('path', 'method')),
         )
 
     def get_number_of_api_keys_in_group(self, obj):
         return APIKey.objects.all().filter(group=obj).count()
 
-    get_endpoint_permissions.short_description = 'Endpoint Permissions'
-    get_number_of_api_keys_in_group.short_description = 'API Key Count'
+    get_endpoint_permissions.short_description = 'Endpoint permissions'
+    get_number_of_api_keys_in_group.short_description = 'API key count'
 
 
 @admin.register(EndpointPermission)
@@ -93,5 +93,6 @@ class EndpointPermissionAdmin(admin.ModelAdmin):
         'path',
         'method',
     )
+
 
 admin.site.register(APIKey, APIKeyAdmin)
