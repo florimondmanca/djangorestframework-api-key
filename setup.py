@@ -2,8 +2,8 @@
 
 import setuptools
 
-with open("README.md", "r") as readme:
-    long_description = readme.read()
+# with open("README.md", "r") as readme:
+#     long_description = readme.read()
 
 
 setuptools.setup(
@@ -12,8 +12,8 @@ setuptools.setup(
     author="Florimond Manca",
     author_email="florimond.manca@gmail.com",
     description="API key permissions for the Django REST Framework",
-    long_description=long_description,
-    long_description_content_type="text/markdown",
+    # long_description=long_description,
+    # long_description_content_type="text/markdown",
     url="https://github.com/florimondmanca/djangorestframework-api-key",
     packages=setuptools.find_packages(exclude=["example_project"]),
     license="MIT",
