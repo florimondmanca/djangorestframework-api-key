@@ -74,7 +74,7 @@ class APIKeyGroupAdmin(admin.ModelAdmin):
             '{}',
             ((str(endpoint_permission), )
              for endpoint_permission in obj.endpoint_permissions.all()
-                                           .sort_by('path', 'method')),
+                                           .order_by('path', 'method')),
         )
 
     def get_number_of_api_keys_in_group(self, obj):
