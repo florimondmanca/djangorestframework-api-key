@@ -20,6 +20,7 @@ nav:
 
 markdown_extensions:
   - admonition
+  - footnotes
   - pymdownx.superfences
   - codehilite:
       guess_lang: false

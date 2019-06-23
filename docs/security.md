@@ -9,17 +9,17 @@ An API key is composed of two items:
 
 The generated key that clients use to [make authorized requests](#making-authorized-requests) is `GK = P.SK`. It is treated with the same level of care than passwords:
 
-- Only a hashed version is stored in the database. The hash is computed using the default password hasher\* (see also [How Django stores passwords](https://docs.djangoproject.com/en/2.1/topics/auth/passwords/#how-django-stores-passwords)).
+- Only a hashed version is stored in the database. The hash is computed using the default password hasher. [^1]
 - The generated key is shown only once to the client upon API key creation.
 
-\*All hashers provided by Django should be supported. `djangorestframework-api-key` is tested against the [default list of `PASSWORD_HASHERS`](https://docs.djangoproject.com/en/2.2/ref/settings/#std:setting-PASSWORD_HASHERS).
+[^1]: All hashers provided by Django should be supported. `djangorestframework-api-key` is tested against the [default list of `PASSWORD_HASHERS`](https://docs.djangoproject.com/en/2.2/ref/settings/#std:setting-PASSWORD_HASHERS). See also [How Django stores passwords](https://docs.djangoproject.com/en/2.2/topics/auth/passwords/#how-django-stores-passwords) for more information.
 
 ## Grant scheme
 
 Access is granted if and only if all of the following is true:
 
-1. The API key header is present and correctly formatted (see [Making authorized requests](#making-authorized-requests)).
-2. An unrevoked API key with the prefix of the given key exists in the database.
+1. The configured API key header is present and correctly formatted.
+2. A usable API key with the prefix of the given key exists in the database.
 3. The hash of the given key matches that of the API key.
 
 ## Caveats
