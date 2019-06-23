@@ -73,7 +73,6 @@ See also [Setting the permission policy](http://www.django-rest-framework.org/ap
     permission_classes = [HasAPIKey | IsAuthenticated]
     ```
 
-
 ### Making authorized requests
 
 #### Authorization header
