@@ -23,13 +23,13 @@ class BaseAPIKeyManager(models.Manager):
         obj.save()
         return obj, key
 
-    def get_active_keys(self) -> models.QuerySet:
+    def get_usable_keys(self) -> models.QuerySet:
         return self.filter(revoked=False)
 
     def is_valid(self, key: str) -> bool:
         prefix, _, _ = key.partition(".")
 
-        queryset = self.get_active_keys()
+        queryset = self.get_usable_keys()
 
         try:
             api_key = queryset.get(

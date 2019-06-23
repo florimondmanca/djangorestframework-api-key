@@ -8,8 +8,8 @@ class Hero(models.Model):
 
 
 class HeroAPIKeyManager(BaseAPIKeyManager):
-    def get_active_keys(self):
-        return super().get_active_keys().filter(hero__retired=False)
+    def get_usable_keys(self):
+        return super().get_usable_keys().filter(hero__retired=False)
 
 
 class HeroAPIKey(AbstractAPIKey):
