@@ -11,6 +11,7 @@ pytest-django = "*"
 djangorestframework = "<4.0,>=3.8"
 djangorestframework-api-key = {editable = true,path = "."}
 pylint = "*"
+mkdocs = "*"
 
 [requires]
 python_version = "3.7"
