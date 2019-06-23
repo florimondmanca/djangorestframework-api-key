@@ -11,10 +11,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Improved customization via base classes:
 
-- Add `BaseAPIKeyManager`, which `APIKeyManager` now directly subclasses.
-  - Customize key generation using `crypto.KeyGenerator` and the `.key_generator` attribute on `BaseAPIKeyManager`.
-- Add `AbstractAPIKey` abstract model, which `APIKey` now directly subclasses. Uses `APIKeyManager` as a manager.
-- Add `BaseHasAPIKey` as a base permission class, which `HasAPIKey` now directly subclasses. Includes a `.model` class attribute to define which API key model should be used to validate the incoming API key.
+- Models:
+  - Add `BaseAPIKeyManager`.
+  - Add `AbstractAPIKey` abstract model. Uses `APIKeyManager` as a manager.
+  - Refactor `APIKeyManager` as a direct subclass of `BaseAPIKeyManager`.
+  - Refactor `APIKey` as a direct concrete model of `AbstractAPIKey`.
+- Permission classes:
+  - Add `BaseHasAPIKey` base permission class. Features a `.model` and `.key_parser` class attribute.
+  - Refactor `HasAPIKey` as a subclass of `BaseHasAPIKey` with `model = APIKey`.
+- Add documentation for extending `APIKeyModelAdmin`.
+- Key generation: `.key_generator` attribute on `BaseAPIKeyManager`.
+
+### Fixed
+
+- The `id` field of `APIKey` is now non-`editable`.
+- `APIKeyModelAdmin` does not define `fieldsets` anymore. This allows subclasses to benefit from Django's automatic fieldsets.
 
 ## [v1.2.1] - 2019-06-03
 
