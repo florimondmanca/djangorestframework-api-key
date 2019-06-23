@@ -1,5 +1,7 @@
 # djangorestframework-api-key
 
+API key permissions for the [Django REST Framework](https://www.django-rest-framework.org).
+
 <div>
   <a href="https://travis-ci.org/florimondmanca/djangorestframework-api-key">
       <img src="https://img.shields.io/travis/florimondmanca/djangorestframework-api-key.svg" alt="build status"/>
@@ -16,8 +18,6 @@
   <img src="https://img.shields.io/pypi/djversions/djangorestframework-api-key.svg?colorB=44b78b" alt="django versions"/>
   <img src="https://img.shields.io/badge/drf-3.8+-7f2d2d.svg" alt="drf versions"/>
 </div>
-
-API key permissions for the [Django REST Framework](https://www.django-rest-framework.org).
 
 ## Introduction
 
@@ -49,8 +49,8 @@ Add the app to your `INSTALLED_APPS`:
 
 INSTALLED_APPS = [
   # ...
-  'rest_framework',
-  'rest_framework_api_key',
+  "rest_framework",
+  "rest_framework_api_key",
 ]
 ```
 
