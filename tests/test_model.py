@@ -6,7 +6,7 @@ from django.db.utils import IntegrityError
 from rest_framework_api_key.models import APIKey
 
 from .dateutils import NOW, TOMORROW, YESTERDAY
-from .heroes.models import HeroAPIKey, Hero
+from .project.heroes.models import HeroAPIKey, Hero
 
 pytestmark = pytest.mark.django_db
 

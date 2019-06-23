@@ -18,6 +18,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "rest_framework_api_key",
+    "heroes",
 ]
 
 MIDDLEWARE = [

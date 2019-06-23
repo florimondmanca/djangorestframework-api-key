@@ -24,7 +24,7 @@ def pytest_configure():
                 # Project
                 "rest_framework",
                 "rest_framework_api_key",
-                "tests.heroes",
+                "tests.project.heroes",
             ],
             TEMPLATES=[
                 # Admin
