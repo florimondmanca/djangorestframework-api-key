@@ -53,10 +53,10 @@ def _scramble_prefix(key: str) -> str:
     ],
 )
 def test_if_invalid_api_key_then_permission_denied(
-    create_request, view, backend, modifier
+    create_request, view, key_header_config, modifier
 ):
     def get_authorization(key):
-        return backend["default"].format(key=modifier(key))
+        return key_header_config["default"].format(key=modifier(key))
 
     request = create_request(authorization=get_authorization)
     response = view(request)
