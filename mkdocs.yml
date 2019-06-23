@@ -1,1 +1,27 @@
-site_name: My Docs
+site_name: djangorestframework-api-key
+site_url: https://florimondmanca.github.io/djangorestframework-api-key
+copyright: © 2018-present Florimond Manca
+theme:
+  name: "material"
+  palette:
+    primary: "red"
+    accent: "red"
+
+repo_name: florimondmanca/djangorestframework-api-key
+repo_url: https://github.com/florimondmanca/djangorestframework-api-key
+
+nav:
+  - Home: index.md
+  - User Guide: guide.md
+  - Security: security.md
+  - Contributing: https://github.com/florimondmanca/djangorestframework-api-key/tree/master/CONTRIBUTING.md
+  - Changelog: https://github.com/florimondmanca/djangorestframework-api-key/path/master/CHANGELOG.md
+  - License: https://github.com/florimondmanca/djangorestframework-api-key/path/master/LICENSE
+
+markdown_extensions:
+  - admonition
+  - pymdownx.superfences
+  - codehilite:
+      guess_lang: false
+  - toc:
+      permalink: true
