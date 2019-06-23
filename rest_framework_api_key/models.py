@@ -23,12 +23,17 @@ class BaseAPIKeyManager(models.Manager):
         obj.save()
         return obj, key
 
+    def get_active_keys(self) -> models.QuerySet:
+        return self.filter(revoked=False)
+
     def is_valid(self, key: str) -> bool:
         prefix, _, _ = key.partition(".")
 
+        queryset = self.get_active_keys()
+
         try:
-            api_key = self.get(
-                id__startswith=prefix, revoked=False
+            api_key = queryset.get(
+                id__startswith=prefix
             )  # type: AbstractAPIKey
         except (self.model.DoesNotExist, self.model.MultipleObjectsReturned):
             return False
