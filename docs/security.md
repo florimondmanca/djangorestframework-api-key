@@ -18,9 +18,12 @@ The generated key that clients use to [make authorized requests](#making-authori
 
 Access is granted if and only if all of the following is true:
 
-1. The configured API key header is present and correctly formatted.
-2. A usable API key with the prefix of the given key exists in the database.
+1. The configured API key header is present and correctly formatted. [^3]
+2. A usable API key with the prefix of the given key exists in the database. [^4]
 3. The hash of the given key matches that of the API key.
+
+[^3]: To customize this behavior, see [API key parsing](guide.md#api-key-parsing).
+[^4]: Only unrevoked keys are usable by default, but this can be customized with a [custom manager](guide.md#managers).
 
 ## Caveats
 

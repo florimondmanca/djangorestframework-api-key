@@ -1,5 +1,3 @@
-"""Django settings for example project."""
-
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,7 +18,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "rest_framework_api_key",
-    "pets",
+    "heroes",
 ]
 
 MIDDLEWARE = [
@@ -33,7 +31,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "example.urls"
+ROOT_URLCONF = "project.urls"
 
 TEMPLATES = [
     {
@@ -51,7 +49,7 @@ TEMPLATES = [
     }
 ]
 
-WSGI_APPLICATION = "example.wsgi.application"
+WSGI_APPLICATION = "project.wsgi.application"
 
 # Database
 

@@ -1,7 +1,7 @@
 import pytest
 
-from .heroes.models import HeroAPIKey, Hero
-from .heroes.permissions import HasHeroAPIKey
+from .project.heroes.models import HeroAPIKey, Hero
+from .project.heroes.permissions import HasHeroAPIKey
 
 pytestmark = pytest.mark.django_db
 

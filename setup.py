@@ -15,7 +15,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/florimondmanca/djangorestframework-api-key",
-    packages=setuptools.find_packages(exclude=["example_project"]),
+    packages=setuptools.find_packages(),
     license="MIT",
     classifiers=[
         "Topic :: Software Development :: Libraries :: Python Modules",

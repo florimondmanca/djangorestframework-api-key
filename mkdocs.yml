@@ -15,8 +15,8 @@ nav:
   - User Guide: guide.md
   - Security: security.md
   - Contributing: https://github.com/florimondmanca/djangorestframework-api-key/tree/master/CONTRIBUTING.md
-  - Changelog: https://github.com/florimondmanca/djangorestframework-api-key/path/master/CHANGELOG.md
-  - License: https://github.com/florimondmanca/djangorestframework-api-key/path/master/LICENSE
+  - Changelog: https://github.com/florimondmanca/djangorestframework-api-key/tree/master/CHANGELOG.md
+  - License: https://github.com/florimondmanca/djangorestframework-api-key/tree/master/LICENSE
 
 markdown_extensions:
   - admonition
