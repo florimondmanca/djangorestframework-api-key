@@ -17,16 +17,22 @@
   <img src="https://img.shields.io/badge/drf-3.8+-7f2d2d.svg" alt="drf versions"/>
 </div>
 
-## API key permissions for the Django REST Framework
+API key permissions for the [Django REST Framework](https://www.django-rest-framework.org).
 
-**`djangorestframework-api-key` allows server-side clients to safely use your API**.
+## Introduction
 
-Server-side clients are third-party backends and services (i.e. _machines_) which do not have a user account but still need to interact with your API in a secure way.
+**`djangorestframework-api-key` is a powerful library for allowing server-side clients to safely use your API.** These clients are typically third-party backends and services (i.e. _machines_) which do not have a user account but still need to interact with your API in a secure way.
 
-Intended to be:
+### Features
 
 - ✌️ **Simple to use**: create, view and revoke API keys via the admin site, or use built-in helpers to create API keys programmatically.
 - 🔒 **As secure as possible**: API keys are treated with the same level of care than user passwords. They are hashed using the default password hasher before being stored in the database, and only visible at creation.
+- 🎨 **Customizable**: satisfy specific business requirements by building your own customized API key models, permission classes and admin panels.
+
+### Example use cases
+
+- Using the built-in `APIKey` model, you can generate an API key and embed it in your frontend app server so that only it can access your API.
+- By customizing API key models and permissions, you can associate API keys to an entity (e.g. a user, person, organization…), and then build endpoints to allow them to manage their API keys.
 
 ## Quickstart
 
@@ -54,7 +60,7 @@ Run the included migrations:
 python manage.py migrate
 ```
 
-To learn how to configure permissions and manage API keys, read the [Documentation](https://florimondmanca.github.io/djangorestframework-api-key).
+To learn how to configure permissions and manage API keys, head to the [Documentation](https://florimondmanca.github.io/djangorestframework-api-key).
 
 ## Changelog
 

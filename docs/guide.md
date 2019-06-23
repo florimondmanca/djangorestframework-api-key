@@ -21,8 +21,8 @@ Add the app to your `INSTALLED_APPS`:
 
 INSTALLED_APPS = [
   # ...
-  'rest_framework',
-  'rest_framework_api_key',
+  "rest_framework",
+  "rest_framework_api_key",
 ]
 ```
 
@@ -41,8 +41,8 @@ You can set the permission globally:
 ```python
 # settings.py
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework_api_key.permissions.HasAPIKey',
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework_api_key.permissions.HasAPIKey",
     ]
 }
 ```
@@ -85,7 +85,7 @@ Authorization: Api-Key ********
 
 where `********` refers to the generated API key.
 
-To know under which conditions access is granted, please see [Grant scheme](#grant-scheme).
+To know under which conditions access is granted, please see [Grant scheme](security.md#grant-scheme).
 
 #### Custom header
 
@@ -120,7 +120,8 @@ When it is installed, `djangorestframework-api-key` adds an "API Key Permissions
 
 API keys can be created, viewed and revoked programmatically by manipulating the `APIKey` model.
 
-> The examples below use the [Django shell](https://docs.djangoproject.com/en/2.2/ref/django-admin/#django-admin-shell).
+!!! note
+    The examples below use the [Django shell](https://docs.djangoproject.com/en/2.2/ref/django-admin/#django-admin-shell).
 
 - You can view and query `APIKey` like any other model. For example, to know the total number of API keys:
 
@@ -218,7 +219,7 @@ class OrganizationAPIKeyManager(BaseAPIKeyManager):
 
 #### Admin panel
 
-If you'd like to view and manage your custom API key model via the [Django admin site](https://docs.djangoproject.com/en/2.2/ref/contrib/admin/), you can create register a subclass of `APIKeyModelAdmin`:
+If you'd like to view and manage your custom API key model via the [Django admin site](https://docs.djangoproject.com/en/2.2/ref/contrib/admin/), you can create and register a subclass of `APIKeyModelAdmin`:
 
 ```python
 # organizations/admin.py
@@ -231,14 +232,19 @@ class OrganizationAPIKeyModelAdmin(APIKeyModelAdmin):
     pass
 ```
 
-You can also customize any of the default attributes given by `APIKeyModelAdmin`. For example, to allow to search organization API keys by organization name while keeping the original search behavior, you can write:
+You can also customize any of the default attributes defined in `APIKeyModelAdmin`. For example, to display the organization's name in the list view, and allow searching `OrganizationAPIKey` instances by organization name while keeping the original search behavior, you can write:
 
 ```python
+    list_display = [*APIKeyModelAdmin.list_display, "organization__name"]
     search_fields = [*APIKeyModelAdmin.search_fields, "organization__name"]
 ```
 
-!!! question "Are model inlines supported?"
-    Unfortunately, showing editable API keys in the related model via [inlines](https://docs.djangoproject.com/en/2.2/ref/contrib/admin/#inlinemodeladmin-objects) is **not supported**. This is due to limited customization of saving inline forms, which does not allow to correctly save and display the generated key.
+!!! question "How can I display API keys on the detail page of a related model instance?"
+    In theory, this could be done using Django's [`InlineModelAdmin`](https://docs.djangoproject.com/en/2.2/ref/contrib/admin/#inlinemodeladmin-objects).
+
+    However, due to the limitations of inlines, this cannot be easily achieved while correctly saving and displaying the generated key in the detail page of the related model.
+
+    As an alternative, you can use the `.list_filter` class attribute to filter API keys by an identifying field on the related model. In the examples above, you could use `organization__name` to filter API keys by organization.
 
 ### Permission classes
 
