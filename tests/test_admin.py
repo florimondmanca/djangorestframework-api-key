@@ -1,5 +1,8 @@
 import pytest
-from django.contrib.admin import site
+from django.contrib.admin import ModelAdmin, site
+from django.contrib.auth import login
+from django.contrib.auth.middleware import AuthenticationMiddleware
+from django.contrib.auth.models import User
 from django.contrib.messages import get_messages
 from django.contrib.messages.middleware import MessageMiddleware
 from django.contrib.sessions.middleware import SessionMiddleware
@@ -16,7 +19,7 @@ from .project.heroes.models import Hero, HeroAPIKey
 def fixture_req(rf: RequestFactory):
     messages = MessageMiddleware()
     sessions = SessionMiddleware()
-    request = rf.get("/")
+    request = rf.post("/")
     sessions.process_request(request)
     messages.process_request(request)
     return request
@@ -34,12 +37,12 @@ def fixture_req(rf: RequestFactory):
         ),
     ],
 )
-def test_save_model(req, model, model_admin, build_api_key):
-    admin = model_admin(model, site)
+def test_create(req, model, model_admin, build_api_key):
+    admin = model_admin(model, site)  # type: ModelAdmin
     api_key = build_api_key(model)
 
     assert not api_key.pk
-    admin.save_model(req, api_key)
+    admin.save_model(req, obj=api_key)
     assert api_key.pk
 
     messages = get_messages(req)

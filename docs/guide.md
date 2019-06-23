@@ -238,22 +238,8 @@ You can also customize any of the default attributes given by `APIKeyModelAdmin`
     search_fields = [*APIKeyModelAdmin.search_fields, "organization__name"]
 ```
 
-You can also very easily build [inlines](https://docs.djangoproject.com/en/2.2/ref/contrib/admin/#inlinemodeladmin-objects) to display API keys in the admin panel of the related model. For example, to display the list of API keys on an organization's page, you can write:
-
-```python
-# organizations/admin.py
-from django.contrib import admin
-from .models import OrganizationAPIKey, Organization
-
-# ...
-
-class OrganizationAPIKeyInline(admin.TabularInline):
-    model = OrganizationAPIKey
-
-@admin.register(Organization)
-class OrganizationModelAdmin(admin.ModelAdmin):
-    inlines = [OrganizationAPIKeyInline]
-```
+!!! question "Are model inlines supported?"
+    Unfortunately, showing editable API keys in the related model via [inlines](https://docs.djangoproject.com/en/2.2/ref/contrib/admin/#inlinemodeladmin-objects) is **not supported**. This is due to limited customization of saving inline forms, which does not allow to correctly save and display the generated key.
 
 ### Permission classes
 

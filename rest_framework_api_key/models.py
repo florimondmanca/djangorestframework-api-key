@@ -12,7 +12,6 @@ class BaseAPIKeyManager(models.Manager):
 
     def assign_key(self, obj: "AbstractAPIKey") -> str:
         key, hashed_key = self.key_generator.generate()
-        print("Assigning key")
         obj.id = hashed_key
         return key
 
@@ -55,7 +54,9 @@ class APIKeyManager(BaseAPIKeyManager):
 class AbstractAPIKey(models.Model):
     objects = APIKeyManager()
 
-    id = models.CharField(max_length=100, unique=True, primary_key=True)
+    id = models.CharField(
+        max_length=100, unique=True, primary_key=True, editable=False
+    )
     created = models.DateTimeField(auto_now_add=True, db_index=True)
     name = models.CharField(
         max_length=50,

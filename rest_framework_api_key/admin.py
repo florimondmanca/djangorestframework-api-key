@@ -16,9 +16,6 @@ class APIKeyModelAdmin(admin.ModelAdmin):
     )
     list_filter = ("created",)
     search_fields = ("name", "prefix")
-    fieldsets = (
-        (None, {"fields": ("name", "prefix", "expiry_date", "revoked")}),
-    )
 
     def get_readonly_fields(
         self, request, obj: APIKey = None
@@ -28,14 +25,7 @@ class APIKeyModelAdmin(admin.ModelAdmin):
             fields = fields + ("name", "revoked", "expiry_date")
         return fields
 
-    def get_api_key(self, obj: APIKey) -> str:
-        if obj.pk:
-            return 16 * "*"
-        return "The API key will be generated when clicking 'Save'."
-
-    get_api_key.short_description = "API key"
-
-    def save_model(self, request, obj: APIKey, form=None, change: bool = None):
+    def save_model(self, request, obj: APIKey, form=None, change: bool = False):
         created = not obj.pk
 
         if created:
@@ -54,4 +44,3 @@ class APIKeyModelAdmin(admin.ModelAdmin):
 admin.site.register(APIKey, APIKeyModelAdmin)
 
 APIKeyAdmin = APIKeyModelAdmin  # Compatibility with <1.3
-
