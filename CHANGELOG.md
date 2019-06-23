@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v1.3.0.b0] - 2019-06-23
+
+**NOTE**: this release contains migrations. In your Django project, run them using:
+
+```python
+python manage.py migrate rest_framework_api_key
+```
+
 ### Added
 
 Improved customization via base classes:
@@ -135,6 +143,7 @@ Released: 2018-11-17
 - Authenticate requests using the `Api-Token` and `Api-Secret-Key` headers. Customizable via the `DRF_API_KEY_TOKEN_HEADER` and `DRF_API_KEY_SECRET_KEY_HEADER` settings.
 
 [unreleased]: https://github.com/florimondmanca/djangorestframework-api-key/compare/v1.2.1...HEAD
+[v1.3.0.b0]: https://github.com/florimondmanca/djangorestframework-api-key/compare/v1.2.1...v1.3.0.b0
 [v1.2.1]: https://github.com/florimondmanca/djangorestframework-api-key/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/florimondmanca/djangorestframework-api-key/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/florimondmanca/djangorestframework-api-key/compare/v1.0.0...v1.1.0
