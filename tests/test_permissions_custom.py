@@ -27,3 +27,10 @@ def test_hero_api_key_granted(create_hero_request, view):
     hero_request = create_hero_request(hero=hero)
     response = view(hero_request)
     assert response.status_code == 200
+
+
+def test_retired_hero_denied(create_hero_request, view):
+    hero = Hero.objects.create(retired=True)
+    hero_request = create_hero_request(hero=hero)
+    response = view(hero_request)
+    assert response.status_code == 403
