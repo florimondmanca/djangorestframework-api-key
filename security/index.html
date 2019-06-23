@@ -411,15 +411,14 @@
 </ul>
 <p>The generated key that clients use to <a href="#making-authorized-requests">make authorized requests</a> is <code>GK = P.SK</code>. It is treated with the same level of care than passwords:</p>
 <ul>
-<li>Only a hashed version is stored in the database. The hash is computed using the default password hasher* (see also <a href="https://docs.djangoproject.com/en/2.1/topics/auth/passwords/#how-django-stores-passwords">How Django stores passwords</a>).</li>
+<li>Only a hashed version is stored in the database. The hash is computed using the default password hasher. <sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></li>
 <li>The generated key is shown only once to the client upon API key creation.</li>
 </ul>
-<p>*All hashers provided by Django should be supported. <code>djangorestframework-api-key</code> is tested against the <a href="https://docs.djangoproject.com/en/2.2/ref/settings/#std:setting-PASSWORD_HASHERS">default list of <code>PASSWORD_HASHERS</code></a>.</p>
 <h2 id="grant-scheme">Grant scheme<a class="headerlink" href="#grant-scheme" title="Permanent link">&para;</a></h2>
 <p>Access is granted if and only if all of the following is true:</p>
 <ol>
-<li>The API key header is present and correctly formatted (see <a href="#making-authorized-requests">Making authorized requests</a>).</li>
-<li>An unrevoked API key with the prefix of the given key exists in the database.</li>
+<li>The configured API key header is present and correctly formatted.</li>
+<li>A usable API key with the prefix of the given key exists in the database.</li>
 <li>The hash of the given key matches that of the API key.</li>
 </ol>
 <h2 id="caveats">Caveats<a class="headerlink" href="#caveats" title="Permanent link">&para;</a></h2>
@@ -428,6 +427,14 @@
 <p>As a best practice, you should apply the <em>Principle of Least Privilege</em>: allow only those who require resources to access those specific resources. In other words: <strong>if your client needs to access an endpoint, add API permissions on that endpoint only</strong> instead of the whole API.</p>
 <p>Besides, it is highly recommended to serve the API over <strong>HTTPS</strong> to ensure the confidentiality of API keys passed in requests.</p>
 <p>Act responsibly!</p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>All hashers provided by Django should be supported. <code>djangorestframework-api-key</code> is tested against the <a href="https://docs.djangoproject.com/en/2.2/ref/settings/#std:setting-PASSWORD_HASHERS">default list of <code>PASSWORD_HASHERS</code></a>. See also <a href="https://docs.djangoproject.com/en/2.2/topics/auth/passwords/#how-django-stores-passwords">How Django stores passwords</a> for more information.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
                 
                   
                 
