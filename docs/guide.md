@@ -217,6 +217,44 @@ class OrganizationAPIKeyManager(BaseAPIKeyManager):
 !!! tip
     You don't need to use a custom model to use a custom manager — it can be used on the built-in `APIKey` model as well.
 
+#### Admin panel
+
+If you'd like to view and manage your custom API key model via the [Django admin site](https://docs.djangoproject.com/en/2.2/ref/contrib/admin/), you can create register a subclass of `APIKeyModelAdmin`:
+
+```python
+# organizations/admin.py
+from django.contrib import admin
+from rest_framework_api_key.admin import APIKeyModelAdmin
+from .models import OrganizationAPIKey
+
+@admin.register(OrganizationAPIKey)
+class OrganizationAPIKeyModelAdmin(APIKeyModelAdmin):
+    pass
+```
+
+You can also customize any of the default attributes given by `APIKeyModelAdmin`. For example, to allow to search organization API keys by organization name while keeping the original search behavior, you can write:
+
+```python
+    search_fields = [*APIKeyModelAdmin.search_fields, "organization__name"]
+```
+
+You can also very easily build [inlines](https://docs.djangoproject.com/en/2.2/ref/contrib/admin/#inlinemodeladmin-objects) to display API keys in the admin panel of the related model. For example, to display the list of API keys on an organization's page, you can write:
+
+```python
+# organizations/admin.py
+from django.contrib import admin
+from .models import OrganizationAPIKey, Organization
+
+# ...
+
+class OrganizationAPIKeyInline(admin.TabularInline):
+    model = OrganizationAPIKey
+
+@admin.register(Organization)
+class OrganizationModelAdmin(admin.ModelAdmin):
+    inlines = [OrganizationAPIKeyInline]
+```
+
 ### Permission classes
 
 The built-in `HasAPIKey` permission class only checks against the built-in `APIKey` model. This means that if you use a custom API key model, you need to create a **custom permission class** for your application to validate API keys against it.
