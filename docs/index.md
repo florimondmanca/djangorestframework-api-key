@@ -44,7 +44,7 @@ pip install djangorestframework-api-key
 
 Add the app to your `INSTALLED_APPS`:
 
-```py
+```python
 # settings.py
 
 INSTALLED_APPS = [
