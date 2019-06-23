@@ -5,7 +5,7 @@ from django.contrib import admin, messages
 from .models import APIKey
 
 
-class APIKeyAdmin(admin.ModelAdmin):
+class APIKeyModelAdmin(admin.ModelAdmin):
     list_display = (
         "name",
         "prefix",
@@ -51,4 +51,7 @@ class APIKeyAdmin(admin.ModelAdmin):
             obj.save()
 
 
-admin.site.register(APIKey, APIKeyAdmin)
+admin.site.register(APIKey, APIKeyModelAdmin)
+
+APIKeyAdmin = APIKeyModelAdmin  # Compatibility with <1.3
+
