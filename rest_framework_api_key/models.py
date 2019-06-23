@@ -54,7 +54,9 @@ class APIKeyManager(BaseAPIKeyManager):
 class AbstractAPIKey(models.Model):
     objects = APIKeyManager()
 
-    id = models.CharField(max_length=100, unique=True, primary_key=True)
+    id = models.CharField(
+        max_length=100, unique=True, primary_key=True, editable=False
+    )
     created = models.DateTimeField(auto_now_add=True, db_index=True)
     name = models.CharField(
         max_length=50,
