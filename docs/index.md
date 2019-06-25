@@ -33,7 +33,7 @@
 
 - ✌️ **Simple to use**: create, view and revoke API keys via the admin site, or use built-in helpers to create API keys programmatically.
 - 🔒 **As secure as possible**: API keys are treated with the same level of care than user passwords. They are hashed using the default password hasher before being stored in the database, and only visible at creation.
-- 🎨 **Customizable**: satisfy specific business requirements by building your own customized API key models, permission classes and admin panels.
+- 🎨 **Customizable**: satisfy specific business requirements by building your own customized API key models, permission classes and admin panels. (Currently in public beta.)
 
 !!! info
     There are important security aspects you need to consider before switching to an API key access control scheme. See [Security caveats](security.md#caveats).

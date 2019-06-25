@@ -144,6 +144,13 @@ API keys can be created, viewed and revoked programmatically by manipulating the
 
 ## Customization
 
+!!! warning
+    This section documents functionality that is currently in public beta. To use it, install this package using:
+
+    ```bash
+    pip install "djangorestframework-api-key==1.3.0.b0"
+    ```
+
 This package provides various customization APIs that allow you to extend its basic behavior.
 
 ### API key models
