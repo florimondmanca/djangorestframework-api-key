@@ -1,8 +1,10 @@
+#!/usr/bin/env python
+# encoding: utf-8
 """Package setup."""
 
 import setuptools
 
-with open("README.md", "r") as readme:
+with open("README.md", "r", encoding="utf-8") as readme:
     long_description = readme.read()
 
 
