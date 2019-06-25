@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Explicitly use `utf-8` encoding in `setup.py`, which could previously lead to issues when installing on certain systems.
+
 ## [v1.3.0.b0] - 2019-06-23
 
 **NOTE**: this release contains migrations. In your Django project, run them using:
