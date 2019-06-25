@@ -324,7 +324,7 @@
 
 
   <li class="md-nav__item">
-    <a href="https://github.com/florimondmanca/djangorestframework-api-key/path/master/CHANGELOG.md" title="Changelog" class="md-nav__link">
+    <a href="https://github.com/florimondmanca/djangorestframework-api-key/tree/master/CHANGELOG.md" title="Changelog" class="md-nav__link">
       Changelog
     </a>
   </li>
@@ -336,7 +336,7 @@
 
 
   <li class="md-nav__item">
-    <a href="https://github.com/florimondmanca/djangorestframework-api-key/path/master/LICENSE" title="License" class="md-nav__link">
+    <a href="https://github.com/florimondmanca/djangorestframework-api-key/tree/master/LICENSE" title="License" class="md-nav__link">
       License
     </a>
   </li>
@@ -417,8 +417,8 @@
 <h2 id="grant-scheme">Grant scheme<a class="headerlink" href="#grant-scheme" title="Permanent link">&para;</a></h2>
 <p>Access is granted if and only if all of the following is true:</p>
 <ol>
-<li>The configured API key header is present and correctly formatted.</li>
-<li>A usable API key with the prefix of the given key exists in the database.</li>
+<li>The configured API key header is present and correctly formatted. <sup id="fnref:3"><a class="footnote-ref" href="#fn:3">2</a></sup></li>
+<li>A usable API key with the prefix of the given key exists in the database. <sup id="fnref:4"><a class="footnote-ref" href="#fn:4">3</a></sup></li>
 <li>The hash of the given key matches that of the API key.</li>
 </ol>
 <h2 id="caveats">Caveats<a class="headerlink" href="#caveats" title="Permanent link">&para;</a></h2>
@@ -432,6 +432,12 @@
 <ol>
 <li id="fn:1">
 <p>All hashers provided by Django should be supported. <code>djangorestframework-api-key</code> is tested against the <a href="https://docs.djangoproject.com/en/2.2/ref/settings/#std:setting-PASSWORD_HASHERS">default list of <code>PASSWORD_HASHERS</code></a>. See also <a href="https://docs.djangoproject.com/en/2.2/topics/auth/passwords/#how-django-stores-passwords">How Django stores passwords</a> for more information.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:3">
+<p>To customize this behavior, see <a href="../guide/#api-key-parsing">API key parsing</a>.&#160;<a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+<li id="fn:4">
+<p>Only unrevoked keys are usable by default, but this can be customized with a <a href="../guide/#managers">custom manager</a>.&#160;<a class="footnote-backref" href="#fnref:4" title="Jump back to footnote 3 in the text">&#8617;</a></p>
 </li>
 </ol>
 </div>
