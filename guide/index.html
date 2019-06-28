@@ -38,7 +38,7 @@
     
     
       
-        <title>User Guide - djangorestframework-api-key</title>
+        <title>User Guide - Django REST Framework API Key</title>
       
     
     
@@ -96,7 +96,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="https://florimondmanca.github.io/djangorestframework-api-key" title="djangorestframework-api-key" class="md-header-nav__button md-logo">
+        <a href="https://florimondmanca.github.io/djangorestframework-api-key" title="Django REST Framework API Key" class="md-header-nav__button md-logo">
           
             <i class="md-icon"></i>
           
@@ -109,7 +109,7 @@
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
           
             <span class="md-header-nav__topic">
-              djangorestframework-api-key
+              Django REST Framework API Key
             </span>
             <span class="md-header-nav__topic">
               
@@ -188,12 +188,12 @@
                   <div class="md-sidebar__inner">
                     <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="https://florimondmanca.github.io/djangorestframework-api-key" title="djangorestframework-api-key" class="md-nav__button md-logo">
+    <a href="https://florimondmanca.github.io/djangorestframework-api-key" title="Django REST Framework API Key" class="md-nav__button md-logo">
       
         <i class="md-icon"></i>
       
     </a>
-    djangorestframework-api-key
+    Django REST Framework API Key
   </label>
   
     <div class="md-nav__source">
@@ -705,7 +705,7 @@
 <div class="codehilite"><pre><span></span>pip install djangorestframework-api-key
 </pre></div>
 
-<p><strong>Note</strong>: <code>djangorestframework-api-key</code> requires Django REST Framework &gt;= 3.8.</p>
+<p><strong>Note</strong>: this package requires Python 3.5+, Django 2.0+ and Django REST Framework 3.8+.</p>
 <h3 id="project-setup">Project setup<a class="headerlink" href="#project-setup" title="Permanent link">&para;</a></h3>
 <p>Add the app to your <code>INSTALLED_APPS</code>:</p>
 <div class="codehilite"><pre><span></span><span class="c1"># settings.py</span>
@@ -848,7 +848,7 @@ python manage.py migrate
 
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>If <code>AbstractAPIKey</code> changes (e.g. because of an update to <code>djangorestframework-api-key</code>), you will need to <strong>generate and apply migrations again</strong> to account for these changes.</p>
+<p>If <code>AbstractAPIKey</code> changes (e.g. because of an update to Django REST Framework API Key), you will need to <strong>generate and apply migrations again</strong> to account for these changes.</p>
 </div>
 <h4 id="managers">Managers<a class="headerlink" href="#managers" title="Permanent link">&para;</a></h4>
 <p>The <code>APIKey</code> model as well as custom API keys models inherited from <code>AbstractAPIKey</code> have a dedicated <a href="https://docs.djangoproject.com/en/2.2/topics/db/managers">manager</a> which is responsible for implementing <code>.create_key()</code> and other important behavior.</p>
