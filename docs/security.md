@@ -1,6 +1,8 @@
 # Security
 
-## Key generation scheme
+## Implementation details
+
+### Key generation scheme
 
 An API key is composed of two items:
 
@@ -14,7 +16,7 @@ The generated key that clients use to [make authorized requests](#making-authori
 
 [^1]: All hashers provided by Django should be supported. `djangorestframework-api-key` is tested against the [default list of `PASSWORD_HASHERS`](https://docs.djangoproject.com/en/2.2/ref/settings/#std:setting-PASSWORD_HASHERS). See also [How Django stores passwords](https://docs.djangoproject.com/en/2.2/topics/auth/passwords/#how-django-stores-passwords) for more information.
 
-## Grant scheme
+### Grant scheme
 
 Access is granted if and only if all of the following is true:
 
@@ -27,9 +29,11 @@ Access is granted if and only if all of the following is true:
 
 ## Caveats
 
-[API keys ≠ Security](https://nordicapis.com/why-api-keys-are-not-enough/): depending on your situation, you should probably not rely on API keys only to authenticate/authorize your clients.
+[API keys ≠ Security](https://nordicapis.com/why-api-keys-are-not-enough/): depending on your situation, you should probably not use API keys only to authorize your clients.
 
-**Using API keys shifts the responsability of Information Security on your clients**. This induces risks, especially if detaining an API key gives access to confidential information or write operations. For example, an attacker could impersonate clients if they let their API keys leak.
+Besides, you do NOT recommend using this package for authentication, i.e. retrieving user information from API keys.
+
+Inded, **using API keys shifts the responsability of Information Security on your clients**. This induces risks, especially if detaining an API key gives access to confidential information or write operations. For example, an attacker could impersonate clients if they let their API keys leak.
 
 As a best practice, you should apply the _Principle of Least Privilege_: allow only those who require resources to access those specific resources. In other words: **if your client needs to access an endpoint, add API permissions on that endpoint only** instead of the whole API.
 

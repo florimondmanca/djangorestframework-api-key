@@ -157,6 +157,9 @@ This package provides various customization APIs that allow you to extend its ba
 
 If the built-in `APIKey` model doesn't fit your needs, you can create your own by subclassing `AbstractAPIKey`. This is particularly useful if you need to **store extra information** or **link API keys to other models** using a `ForeignKey` or a `ManyToManyField`.
 
+!!! warning
+    Associating API keys to users, directly or indirectly, can present a security risk. See also: [Should I use API keys?](/#should-i-use-api-keys).
+ 
 #### Example
 
 Here's how you could link API keys to an imaginary `Organization` model:

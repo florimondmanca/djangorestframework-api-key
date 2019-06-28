@@ -29,10 +29,23 @@ API key permissions for the [Django REST Framework](https://www.django-rest-fram
 - 🔒 **As secure as possible**: API keys are treated with the same level of care than user passwords. They are hashed using the default password hasher before being stored in the database, and only visible at creation.
 - 🎨 **Customizable**: satisfy specific business requirements by building your own customized API key models, permission classes and admin panels. (Currently in public beta.)
 
-### Example use cases
+### Should I use API keys?
 
-- Using the built-in `APIKey` model, you can generate an API key and embed it in your frontend app server so that only it can access your API.
-- By customizing API key models and permissions, you can associate API keys to an entity (e.g. a user, person, organization…), and then build endpoints to allow them to manage their API keys.
+There are important security aspects you need to consider before switching to an API key access control scheme. We've listed some of these in [Security caveats](security.md#caveats), including serving your API over HTTPS.
+
+Besides, see [Why and when to use API keys](https://cloud.google.com/endpoints/docs/openapi/when-why-api-key#top_of_page) for hints on whether API keys can fit your use case.
+
+API keys are ideal in the following situations:
+
+- Blocking anonymous traffic.
+- Implementing API key-based [throttling](https://www.django-rest-framework.org/api-guide/throttling/). (Note that Django REST Framework already has may built-in utilities for this use case.)
+- Identifying usage patterns by logging request information along with the API key.
+
+They can also present enough security for authorizing internal services, such as your API server and an internal frontend application.
+
+> Please note that this package is NOT meant for authentication. You should NOT use this package  to identify individual users, either directly or indirectly.
+>
+> If you need server-to-server authentication, you may want to consider OAuth instead. Libraries such as [django-oauth-toolkit](https://django-oauth-toolkit.readthedocs.io/en/latest/index.html) can help.
 
 ## Quickstart
 
