@@ -275,16 +275,29 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#implementation-details" title="Implementation details" class="md-nav__link">
+    Implementation details
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#key-generation-scheme" title="Key generation scheme" class="md-nav__link">
     Key generation scheme
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#grant-scheme" title="Grant scheme" class="md-nav__link">
     Grant scheme
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -363,16 +376,29 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#implementation-details" title="Implementation details" class="md-nav__link">
+    Implementation details
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#key-generation-scheme" title="Key generation scheme" class="md-nav__link">
     Key generation scheme
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#grant-scheme" title="Grant scheme" class="md-nav__link">
     Grant scheme
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -403,7 +429,8 @@
                 
                 
                 <h1 id="security">Security<a class="headerlink" href="#security" title="Permanent link">&para;</a></h1>
-<h2 id="key-generation-scheme">Key generation scheme<a class="headerlink" href="#key-generation-scheme" title="Permanent link">&para;</a></h2>
+<h2 id="implementation-details">Implementation details<a class="headerlink" href="#implementation-details" title="Permanent link">&para;</a></h2>
+<h3 id="key-generation-scheme">Key generation scheme<a class="headerlink" href="#key-generation-scheme" title="Permanent link">&para;</a></h3>
 <p>An API key is composed of two items:</p>
 <ul>
 <li>A prefix <code>P</code>, which is a generated string of 8 characters.</li>
@@ -414,7 +441,7 @@
 <li>Only a hashed version is stored in the database. The hash is computed using the default password hasher. <sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></li>
 <li>The generated key is shown only once to the client upon API key creation.</li>
 </ul>
-<h2 id="grant-scheme">Grant scheme<a class="headerlink" href="#grant-scheme" title="Permanent link">&para;</a></h2>
+<h3 id="grant-scheme">Grant scheme<a class="headerlink" href="#grant-scheme" title="Permanent link">&para;</a></h3>
 <p>Access is granted if and only if all of the following is true:</p>
 <ol>
 <li>The configured API key header is present and correctly formatted. <sup id="fnref:3"><a class="footnote-ref" href="#fn:3">2</a></sup></li>
@@ -422,8 +449,9 @@
 <li>The hash of the given key matches that of the API key.</li>
 </ol>
 <h2 id="caveats">Caveats<a class="headerlink" href="#caveats" title="Permanent link">&para;</a></h2>
-<p><a href="https://nordicapis.com/why-api-keys-are-not-enough/">API keys ≠ Security</a>: depending on your situation, you should probably not rely on API keys only to authenticate/authorize your clients.</p>
-<p><strong>Using API keys shifts the responsability of Information Security on your clients</strong>. This induces risks, especially if detaining an API key gives access to confidential information or write operations. For example, an attacker could impersonate clients if they let their API keys leak.</p>
+<p><a href="https://nordicapis.com/why-api-keys-are-not-enough/">API keys ≠ Security</a>: depending on your situation, you should probably not use API keys only to authorize your clients.</p>
+<p>Besides, you do NOT recommend using this package for authentication, i.e. retrieving user information from API keys.</p>
+<p>Inded, <strong>using API keys shifts the responsability of Information Security on your clients</strong>. This induces risks, especially if detaining an API key gives access to confidential information or write operations. For example, an attacker could impersonate clients if they let their API keys leak.</p>
 <p>As a best practice, you should apply the <em>Principle of Least Privilege</em>: allow only those who require resources to access those specific resources. In other words: <strong>if your client needs to access an endpoint, add API permissions on that endpoint only</strong> instead of the whole API.</p>
 <p>Besides, it is highly recommended to serve the API over <strong>HTTPS</strong> to ensure the confidentiality of API keys passed in requests.</p>
 <p>Act responsibly!</p>

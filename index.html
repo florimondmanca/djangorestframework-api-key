@@ -262,8 +262,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#example-use-cases" title="Example use cases" class="md-nav__link">
-    Example use cases
+  <a href="#should-i-use-api-keys" title="Should I use API keys?" class="md-nav__link">
+    Should I use API keys?
   </a>
   
 </li>
@@ -385,8 +385,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#example-use-cases" title="Example use cases" class="md-nav__link">
-    Example use cases
+  <a href="#should-i-use-api-keys" title="Should I use API keys?" class="md-nav__link">
+    Should I use API keys?
   </a>
   
 </li>
@@ -457,15 +457,21 @@
 <li>🔒 <strong>As secure as possible</strong>: API keys are treated with the same level of care than user passwords. They are hashed using the default password hasher before being stored in the database, and only visible at creation.</li>
 <li>🎨 <strong>Customizable</strong>: satisfy specific business requirements by building your own customized API key models, permission classes and admin panels. (Currently in public beta.)</li>
 </ul>
-<div class="admonition info">
-<p class="admonition-title">Info</p>
-<p>There are important security aspects you need to consider before switching to an API key access control scheme. See <a href="security/#caveats">Security caveats</a>.</p>
-</div>
-<h3 id="example-use-cases">Example use cases<a class="headerlink" href="#example-use-cases" title="Permanent link">&para;</a></h3>
+<h3 id="should-i-use-api-keys">Should I use API keys?<a class="headerlink" href="#should-i-use-api-keys" title="Permanent link">&para;</a></h3>
+<p>There are important security aspects you need to consider before switching to an API key access control scheme. We've listed some of these in <a href="security/#caveats">Security caveats</a>, including serving your API over HTTPS.</p>
+<p>Besides, see <a href="https://cloud.google.com/endpoints/docs/openapi/when-why-api-key#top_of_page">Why and when to use API keys</a> for hints on whether API keys can fit your use case.</p>
+<p>API keys are ideal in the following situations:</p>
 <ul>
-<li>Using the built-in <code>APIKey</code> model, you can generate an API key and embed it in your frontend app server so that only it can access your API.</li>
-<li>By customizing API key models and permissions, you can associate API keys to an entity (e.g. a user, person, organization…), and then build endpoints to allow them to manage their API keys.</li>
+<li>Blocking anonymous traffic.</li>
+<li>Implementing API key-based <a href="https://www.django-rest-framework.org/api-guide/throttling/">throttling</a>. (Note that Django REST Framework already has may built-in utilities for this use case.)</li>
+<li>Identifying usage patterns by logging request information along with the API key.</li>
 </ul>
+<p>They can also present enough security for authorizing internal services, such as your API server and an internal frontend application.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Please note that this package is NOT meant for authentication. You should NOT use this package  to identify individual users, either directly or indirectly.</p>
+<p>If you need server-to-server authentication, you may want to consider OAuth instead. Libraries such as <a href="https://django-oauth-toolkit.readthedocs.io/en/latest/index.html">django-oauth-toolkit</a> can help.</p>
+</div>
 <h2 id="quickstart">Quickstart<a class="headerlink" href="#quickstart" title="Permanent link">&para;</a></h2>
 <p>Install the latest version with <code>pip</code>:</p>
 <div class="codehilite"><pre><span></span>pip install djangorestframework-api-key
