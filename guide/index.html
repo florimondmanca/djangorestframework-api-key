@@ -806,13 +806,6 @@
 <p>To prevent leaking API keys, you must only give the <code>key</code> <strong>to the client that triggered its generation</strong>. In particular, <strong>do not keep any trace of it on the server</strong>.</p>
 </div>
 <h2 id="customization">Customization<a class="headerlink" href="#customization" title="Permanent link">&para;</a></h2>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>This section documents functionality that is currently in public beta. To use it, install this package using:</p>
-<div class="codehilite"><pre><span></span>pip install <span class="s2">&quot;djangorestframework-api-key==1.3.0.b0&quot;</span>
-</pre></div>
-
-</div>
 <p>This package provides various customization APIs that allow you to extend its basic behavior.</p>
 <h3 id="api-key-models">API key models<a class="headerlink" href="#api-key-models" title="Permanent link">&para;</a></h3>
 <p>If the built-in <code>APIKey</code> model doesn't fit your needs, you can create your own by subclassing <code>AbstractAPIKey</code>. This is particularly useful if you need to <strong>store extra information</strong> or <strong>link API keys to other models</strong> using a <code>ForeignKey</code> or a <code>ManyToManyField</code>.</p>
