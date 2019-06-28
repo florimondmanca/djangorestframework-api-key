@@ -7,11 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Fixed
-
-- Explicitly use `utf-8` encoding in `setup.py`, which could previously lead to issues when installing on certain systems.
-
-## [v1.3.0.b0] - 2019-06-23
+## [v1.3.0] - 2019-06-28
 
 **NOTE**: this release contains migrations. In your Django project, run them using:
 
@@ -38,6 +34,7 @@ Improved customization via base classes:
 
 - The `id` field of `APIKey` is now non-`editable`.
 - `APIKeyModelAdmin` does not define `fieldsets` anymore. This allows subclasses to benefit from Django's automatic fieldsets.
+- Explicitly use `utf-8` encoding in `setup.py`, which could previously lead to issues when installing on certain systems.
 
 ## [v1.2.1] - 2019-06-03
 
@@ -146,8 +143,8 @@ Released: 2018-11-17
 - Generate, view and revoke API keys from the Django admin.
 - Authenticate requests using the `Api-Token` and `Api-Secret-Key` headers. Customizable via the `DRF_API_KEY_TOKEN_HEADER` and `DRF_API_KEY_SECRET_KEY_HEADER` settings.
 
-[unreleased]: https://github.com/florimondmanca/djangorestframework-api-key/compare/v1.2.1...HEAD
-[v1.3.0.b0]: https://github.com/florimondmanca/djangorestframework-api-key/compare/v1.2.1...v1.3.0.b0
+[unreleased]: https://github.com/florimondmanca/djangorestframework-api-key/compare/v1.3.0...HEAD
+[v1.3.0]: https://github.com/florimondmanca/djangorestframework-api-key/compare/v1.2.1...v1.3.0
 [v1.2.1]: https://github.com/florimondmanca/djangorestframework-api-key/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/florimondmanca/djangorestframework-api-key/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/florimondmanca/djangorestframework-api-key/compare/v1.0.0...v1.1.0
