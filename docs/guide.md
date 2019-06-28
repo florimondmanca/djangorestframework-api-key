@@ -10,7 +10,7 @@ Install from PyPI:
 pip install djangorestframework-api-key
 ```
 
-**Note**: `djangorestframework-api-key` requires Django REST Framework >= 3.8.
+**Note**: this package requires Python 3.5+, Django 2.0+ and Django REST Framework 3.8+.
 
 ### Project setup
 
@@ -196,7 +196,7 @@ python manage.py migrate
 ```
 
 !!! important
-    If `AbstractAPIKey` changes (e.g. because of an update to `djangorestframework-api-key`), you will need to **generate and apply migrations again** to account for these changes.
+    If `AbstractAPIKey` changes (e.g. because of an update to Django REST Framework API Key), you will need to **generate and apply migrations again** to account for these changes.
 
 #### Managers
 

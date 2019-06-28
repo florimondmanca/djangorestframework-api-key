@@ -1,5 +1,5 @@
 <div align="center">
-  <h1 style="margin-bottom: 0;">djangorestframework-api-key</h1>
+  <h1 style="margin-bottom: 0;">Django REST Framework API Key</h1>
   <p style="margin-top: 1em; margin-bottom: 2em; font-size: large;">
     API key permissions for
     <a href="https://www.django-rest-framework.org" alt="drf" target="_blank" rel="noreferrer">
@@ -27,7 +27,7 @@
 
 ## Introduction
 
-**`djangorestframework-api-key` is a powerful library for allowing server-side clients to safely use your API.** These clients are typically third-party backends and services (i.e. _machines_) which do not have a user account but still need to interact with your API in a secure way.
+**Django REST Framework API Key is a powerful library for allowing server-side clients to safely use your API.** These clients are typically third-party backends and services (i.e. _machines_) which do not have a user account but still need to interact with your API in a secure way.
 
 ### Features
 

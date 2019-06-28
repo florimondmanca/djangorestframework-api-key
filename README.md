@@ -1,4 +1,4 @@
-# djangorestframework-api-key
+# Django REST Framework API Key
 
 API key permissions for the [Django REST Framework](https://www.django-rest-framework.org).
 
@@ -21,7 +21,7 @@ API key permissions for the [Django REST Framework](https://www.django-rest-fram
 
 ## Introduction
 
-**`djangorestframework-api-key` is a powerful library for allowing server-side clients to safely use your API.** These clients are typically third-party backends and services (i.e. _machines_) which do not have a user account but still need to interact with your API in a secure way.
+**Django REST Framework API Key is a powerful library for allowing server-side clients to safely use your API.** These clients are typically third-party backends and services (i.e. _machines_) which do not have a user account but still need to interact with your API in a secure way.
 
 ### Features
 

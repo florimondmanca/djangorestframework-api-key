@@ -1,6 +1,6 @@
 # project
 
-Test project for `djangorestframework-api-key`.
+Test project for Django REST Framework API Key.
 
 ## Usage
 
