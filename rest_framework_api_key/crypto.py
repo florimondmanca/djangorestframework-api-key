@@ -7,6 +7,15 @@ if TYPE_CHECKING:
     from .models import APIKey
 
 
+def concatenate(left: str, right: str) -> str:
+    return "{}.{}".format(left, right)
+
+
+def split(concatenated: str) -> Tuple[str, str]:
+    left, _, right = concatenated.partition(".")
+    return left, right
+
+
 class KeyGenerator:
     def __init__(self, prefix_length: int = 8, secret_key_length: int = 32):
         self.prefix_length = prefix_length
@@ -18,16 +27,15 @@ class KeyGenerator:
     def get_secret_key(self) -> str:
         return get_random_string(self.secret_key_length)
 
-    @staticmethod
-    def concatenate(left: str, right: str) -> str:
-        return "{}.{}".format(left, right)
+    def hash(self, value: str) -> str:
+        return make_password(value)
 
-    def generate(self) -> Tuple[str, str]:
+    def generate(self) -> Tuple[str, str, str]:
         prefix = self.get_prefix()
         secret_key = self.get_secret_key()
-        key = self.concatenate(prefix, secret_key)
-        hashed_key = self.concatenate(prefix, make_password(key))
-        return key, hashed_key
+        key = concatenate(prefix, secret_key)
+        hashed_key = self.hash(key)
+        return key, prefix, hashed_key
 
     def verify(self, key: str, hashed_key: str) -> bool:
         return check_password(key, hashed_key)

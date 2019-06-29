@@ -7,8 +7,8 @@ from .models import APIKey
 
 class APIKeyModelAdmin(admin.ModelAdmin):
     list_display = (
-        "name",
         "prefix",
+        "name",
         "created",
         "expiry_date",
         "_has_expired",
