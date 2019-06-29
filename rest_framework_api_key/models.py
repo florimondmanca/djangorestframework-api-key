@@ -15,12 +15,8 @@ class BaseAPIKeyManager(models.Manager):
             key, prefix, hashed_key = self.key_generator.generate()
         except TypeError:  # Compatibility with < 1.4
             key, hashed_key = self.key_generator.generate()
-            pk = hashed_key
             prefix, hashed_key = split(hashed_key)
-        else:
-            pk = concatenate(prefix, hashed_key)
 
-        obj.id = pk
         obj.prefix = prefix
         obj.hashed_key = hashed_key
 
@@ -63,9 +59,6 @@ class APIKeyManager(BaseAPIKeyManager):
 class AbstractAPIKey(models.Model):
     objects = APIKeyManager()
 
-    id = models.CharField(
-        max_length=100, unique=True, primary_key=True, editable=False
-    )
     prefix = models.CharField(max_length=8, unique=True, editable=False)
     hashed_key = models.CharField(max_length=100, editable=False)
     created = models.DateTimeField(auto_now_add=True, db_index=True)
