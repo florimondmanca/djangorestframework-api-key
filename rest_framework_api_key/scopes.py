@@ -2,7 +2,7 @@ import typing
 
 ScopeDeclaration = typing.Tuple[str, str]
 
-DEFAULT_ACTIONS = ("read", "create", "updated", "delete")
+DEFAULT_ACTIONS = ("read", "create", "update", "delete")
 
 
 def get_all_scopes(opts: typing.Any) -> typing.List[ScopeDeclaration]:

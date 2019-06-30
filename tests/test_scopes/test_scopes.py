@@ -1,4 +1,5 @@
 import pytest
+from django.contrib.contenttypes.models import ContentType
 from django.db.utils import IntegrityError
 
 from rest_framework_api_key.models import APIKey, Scope
@@ -29,8 +30,22 @@ def test_default_scopes(api_key):
     assert api_key.get_scopes() == set()
 
 
-def test_create_scope(hero_read: Scope):
-    assert list(Scope.objects.all()) == [hero_read]
+def test_builtin_scopes_created(hero_content_type: ContentType):
+    scopes = list(Scope.objects.values_list("content_type", "code"))
+    expected_scopes = {
+        (hero_content_type.pk, "read"),
+        (hero_content_type.pk, "create"),
+        (hero_content_type.pk, "update"),
+        (hero_content_type.pk, "delete"),
+    }
+    assert expected_scopes.issubset(set(scopes))
+
+
+def test_create_scope(hero_content_type: ContentType):
+    hero_call = Scope.objects.create(
+        content_type=hero_content_type, code="call", name="Can call hero"
+    )
+    assert hero_call in Scope.objects.all()
 
 
 def test_duplicate_scope(hero_read: Scope):

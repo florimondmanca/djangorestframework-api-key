@@ -21,7 +21,7 @@ def test_scope_checks():
     expected_errors = [
         checks.Error(
             "The verbose_name of model 'events.Event' "
-            "must be at most 52 characters "
+            "must be at most 53 characters "
             "for its builtin scope names to be at most 64 characters.",
             obj=Event,
             id="rest_framework_api_key.E001",
