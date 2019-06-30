@@ -13,7 +13,7 @@ class BaseAPIKeyManager(models.Manager):
     def assign_key(self, obj: "AbstractAPIKey") -> str:
         try:
             key, prefix, hashed_key = self.key_generator.generate()
-        except TypeError:  # Compatibility with < 1.4
+        except ValueError:  # Compatibility with < 1.4
             key, hashed_key = self.key_generator.generate()
             pk = hashed_key
             prefix, hashed_key = split(hashed_key)
