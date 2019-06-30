@@ -13,6 +13,7 @@ if __name__ == "__main__":
             "django.contrib.contenttypes",
             APP,
             "tests.project.heroes",
+            "tests.project.events",
         ]
     )
     django.setup()

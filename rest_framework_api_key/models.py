@@ -8,6 +8,10 @@ from django.utils import timezone
 from .crypto import concatenate, KeyGenerator, split
 
 
+# Allow to use `api_key_scopes` in any model's `Meta`.
+models.options.DEFAULT_NAMES += ("api_key_scopes",)
+
+
 class ScopeManager(models.Manager):
     def get_from_label(self, label: str) -> "Scope":
         app_label, model, code = self.model.parse_label(label)

@@ -1,8 +1,8 @@
 import typing
 
 import pytest
-from django.http import HttpRequest
 from django.conf import settings
+from django.http import HttpRequest
 from django.test import override_settings
 
 from .compat import nullcontext
@@ -25,6 +25,7 @@ def pytest_configure():
                 "rest_framework",
                 "rest_framework_api_key",
                 "tests.project.heroes",
+                "tests.project.events",
             ],
             TEMPLATES=[
                 # Admin
