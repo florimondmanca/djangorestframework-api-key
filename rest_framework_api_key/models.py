@@ -1,10 +1,92 @@
-from typing import Tuple
+import typing
 
 from django.core.exceptions import ValidationError
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils import timezone
 
 from .crypto import concatenate, KeyGenerator, split
+
+
+class ScopeManager(models.Manager):
+    def get_from_label(self, label: str) -> "Scope":
+        try:
+            app_label, model, code = label.split(".")
+        except ValueError:
+            fmt = "{app_label}.{model}.{code}"
+            raise ValueError(
+                "'label' must be formatted as '{}', got '{}'".format(fmt, label)
+            )
+        content_type = ContentType.objects.get(app_label=app_label, model=model)
+        return self.get(content_type=content_type, code=code)
+
+
+class Scope(models.Model):
+    objects = ScopeManager()
+    content_type = models.ForeignKey(
+        ContentType, models.CASCADE, verbose_name="content type"
+    )  # type: ContentType
+    code = models.CharField(max_length=64)
+    description = models.TextField(blank=True)
+
+    class Meta:
+        unique_together = [("content_type", "code")]
+        ordering = ["content_type__app_label", "content_type__model", "code"]
+
+    def natural_key(self) -> typing.Tuple[str]:
+        # Used by Django serialization.
+        # See: https://docs.djangoproject.com/en/2.2/topics/serialization/#serialization-of-natural-keys
+        # NOTE: this implementation is mostly copied from Django's `Permission`.
+        return (
+            self.code,
+        ) + self.content_type.natural_key()  # pylint: disable=no-member
+
+    natural_key.dependencies = ["contenttypes.contenttype"]
+
+    def __str__(self):
+        return "{} | {}".format(self.content_type, self.code)
+
+
+def _get_scopes_field(
+    related_name: str, related_query_name: str
+) -> models.ManyToManyField:
+    # See: https://docs.djangoproject.com/en/2.2/topics/db/models/#be-careful-with-related-name-and-related-query-name
+    return models.ManyToManyField(
+        Scope,
+        verbose_name="scopes",
+        blank=True,
+        help_text="Specific scopes for this API key",
+        related_name=related_name,
+        related_query_name=related_query_name,
+    )
+
+
+class ScopesMixin(models.Model):
+    scopes = _get_scopes_field(
+        related_name="%(app_label)s_%(class)s_set",
+        related_query_name="%(app_label)s_%(class)s",
+    )  # type: models.Manager
+
+    def get_scopes(self) -> typing.Set[str]:
+        cache_name = "_scopes_cache"
+        if not hasattr(self, cache_name):
+            values = Scope.objects.values_list(
+                "content_type__app_label", "content_type__model", "code"
+            )
+            cache = {
+                "{}.{}.{}".format(ct, model, name) for ct, model, name in values
+            }
+            setattr(self, cache_name, cache)
+        return getattr(self, cache_name)
+
+    def has_scope(self, name: str) -> bool:
+        return name in self.get_scopes()
+
+    def has_scopes(self, names: typing.List[str]) -> bool:
+        return all(self.has_scope(name) for name in names)
+
+    class Meta:
+        abstract = True
 
 
 class BaseAPIKeyManager(models.Manager):
@@ -26,7 +108,7 @@ class BaseAPIKeyManager(models.Manager):
 
         return key
 
-    def create_key(self, **kwargs) -> Tuple["AbstractAPIKey", str]:
+    def create_key(self, **kwargs) -> typing.Tuple["AbstractAPIKey", str]:
         # Prevent from manually setting the primary key.
         kwargs.pop("id", None)
         obj = self.model(**kwargs)  # type: AbstractAPIKey
@@ -60,7 +142,7 @@ class APIKeyManager(BaseAPIKeyManager):
     pass
 
 
-class AbstractAPIKey(models.Model):
+class AbstractAPIKey(ScopesMixin, models.Model):
     objects = APIKeyManager()
 
     id = models.CharField(
@@ -135,4 +217,6 @@ class AbstractAPIKey(models.Model):
 
 
 class APIKey(AbstractAPIKey):
-    pass
+    scopes = _get_scopes_field(
+        related_name="apikey_set", related_query_name="apikey"
+    )  # type: models.Manager
