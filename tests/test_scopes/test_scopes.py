@@ -41,6 +41,10 @@ def test_builtin_scopes_created(hero_content_type: ContentType):
     assert expected_scopes.issubset(set(scopes))
 
 
+def test_custom_scopes_created(hero_content_type: ContentType):
+    Scope.objects.get(content_type=hero_content_type, code="retire")
+
+
 def test_create_scope(hero_content_type: ContentType):
     hero_call = Scope.objects.create(
         content_type=hero_content_type, code="call", name="Can call hero"

@@ -52,6 +52,9 @@ def pytest_configure():
                     "NAME": ":memory:",
                 }
             },
+            API_KEY_CUSTOM_SCOPES={
+                "heroes": {"hero": [("retire", "Can retire a hero")]}
+            },
         )
     )
 

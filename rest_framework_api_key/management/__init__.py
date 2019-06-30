@@ -10,11 +10,15 @@ from ..scopes import ScopeDeclaration, get_all_scopes
 
 def create_scopes(
     app_config,
-    interactive: bool = True,
-    verbosity: int = 2,
-    using: str = DEFAULT_DB_ALIAS,
-    apps: Apps = global_apps,
-    **kwargs,
+    interactive=True,
+    verbosity=2,
+    using=DEFAULT_DB_ALIAS,
+    apps=global_apps,
+    # HACK: trailing comma on `**kwargs` is not supported on 3.5,
+    # but Black would try to add one.
+    # fmt: off
+    **kwargs
+    # fmt: on
 ):
     if not app_config.models_module:
         return

@@ -74,6 +74,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Custom API key scopes
+API_KEY_CUSTOM_SCOPES = {"heroes": {"hero": [("retire", "Can retire a hero")]}}
 
 # Internationalization
 

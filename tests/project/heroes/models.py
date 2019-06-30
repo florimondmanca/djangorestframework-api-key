@@ -9,7 +9,6 @@ class Hero(models.Model):
 
     class Meta:
         verbose_name_plural = "heroes"
-        api_key_scopes = [("retire", "Can retire a hero")]
 
     def __str__(self):
         return self.name
