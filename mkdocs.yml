@@ -15,7 +15,7 @@ nav:
   - User Guide: guide.md
   - Security: security.md
   - Upgrade Guides:
-      - v1.4: upgrade/v1.4.md
+      - "1.4": upgrade/1.4.md
   - Contributing: https://github.com/florimondmanca/djangorestframework-api-key/tree/master/CONTRIBUTING.md
   - Changelog: https://github.com/florimondmanca/djangorestframework-api-key/tree/master/CHANGELOG.md
   - License: https://github.com/florimondmanca/djangorestframework-api-key/tree/master/LICENSE
