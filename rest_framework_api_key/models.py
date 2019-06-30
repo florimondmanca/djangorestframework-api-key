@@ -21,7 +21,7 @@ class Scope(models.Model):
         ContentType, models.CASCADE, verbose_name="content type"
     )  # type: ContentType
     code = models.CharField(max_length=64)
-    description = models.TextField(blank=True)
+    name = models.CharField(max_length=64)
 
     class Meta:
         unique_together = [("content_type", "code")]
