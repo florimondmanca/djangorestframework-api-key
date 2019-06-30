@@ -4,15 +4,26 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 
-from .crypto import KeyGenerator
+from .crypto import concatenate, KeyGenerator, split
 
 
 class BaseAPIKeyManager(models.Manager):
     key_generator = KeyGenerator()
 
     def assign_key(self, obj: "AbstractAPIKey") -> str:
-        key, hashed_key = self.key_generator.generate()
-        obj.id = hashed_key
+        try:
+            key, prefix, hashed_key = self.key_generator.generate()
+        except TypeError:  # Compatibility with < 1.4
+            key, hashed_key = self.key_generator.generate()
+            pk = hashed_key
+            prefix, hashed_key = split(hashed_key)
+        else:
+            pk = concatenate(prefix, hashed_key)
+
+        obj.id = pk
+        obj.prefix = prefix
+        obj.hashed_key = hashed_key
+
         return key
 
     def create_key(self, **kwargs) -> Tuple["AbstractAPIKey", str]:
@@ -32,10 +43,8 @@ class BaseAPIKeyManager(models.Manager):
         queryset = self.get_usable_keys()
 
         try:
-            api_key = queryset.get(
-                id__startswith=prefix
-            )  # type: AbstractAPIKey
-        except (self.model.DoesNotExist, self.model.MultipleObjectsReturned):
+            api_key = queryset.get(prefix=prefix)  # type: AbstractAPIKey
+        except self.model.DoesNotExist:
             return False
 
         if not api_key.is_valid(key):
@@ -57,6 +66,8 @@ class AbstractAPIKey(models.Model):
     id = models.CharField(
         max_length=100, unique=True, primary_key=True, editable=False
     )
+    prefix = models.CharField(max_length=8, unique=True, editable=False)
+    hashed_key = models.CharField(max_length=100, editable=False)
     created = models.DateTimeField(auto_now_add=True, db_index=True)
     name = models.CharField(
         max_length=50,
@@ -94,12 +105,6 @@ class AbstractAPIKey(models.Model):
         # Store the initial value of `revoked` to detect changes.
         self._initial_revoked = self.revoked
 
-    def _prefix(self) -> str:
-        return self.pk.partition(".")[0]
-
-    _prefix.short_description = "Prefix"
-    prefix = property(_prefix)
-
     def _has_expired(self) -> bool:
         if self.expiry_date is None:
             return False
@@ -110,8 +115,7 @@ class AbstractAPIKey(models.Model):
     has_expired = property(_has_expired)
 
     def is_valid(self, key: str) -> bool:
-        _, _, hashed_key = self.pk.partition(".")
-        return type(self).objects.key_generator.verify(key, hashed_key)
+        return type(self).objects.key_generator.verify(key, self.hashed_key)
 
     def clean(self):
         self._validate_revoked()

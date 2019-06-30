@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+**NOTE**: this release contains migrations. See [Upgrade to v1.4](https://florimondmanca.github.io/djangorestframework-api-key/upgrade/1.4/) for detailed instructions.
+
+### Added
+
+- The `prefix` and `hashed_key` are now stored in dedicated fields on the `APIKey` model.
+
 ## [v1.3.0] - 2019-06-28
 
 **NOTE**: this release contains migrations. In your Django project, run them using:

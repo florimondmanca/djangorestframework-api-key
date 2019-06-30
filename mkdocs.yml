@@ -14,6 +14,8 @@ nav:
   - Home: index.md
   - User Guide: guide.md
   - Security: security.md
+  - Upgrade Guides:
+      - "1.4": upgrade/1.4.md
   - Contributing: https://github.com/florimondmanca/djangorestframework-api-key/tree/master/CONTRIBUTING.md
   - Changelog: https://github.com/florimondmanca/djangorestframework-api-key/tree/master/CHANGELOG.md
   - License: https://github.com/florimondmanca/djangorestframework-api-key/tree/master/LICENSE
@@ -22,6 +24,8 @@ markdown_extensions:
   - admonition
   - footnotes
   - pymdownx.superfences
+  - pymdownx.snippets:
+      check_paths: true
   - codehilite:
       guess_lang: false
   - toc:
