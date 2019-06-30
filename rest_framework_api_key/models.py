@@ -10,13 +10,7 @@ from .crypto import concatenate, KeyGenerator, split
 
 class ScopeManager(models.Manager):
     def get_from_label(self, label: str) -> "Scope":
-        try:
-            app_label, model, code = label.split(".")
-        except ValueError:
-            fmt = "{app_label}.{model}.{code}"
-            raise ValueError(
-                "'label' must be formatted as '{}', got '{}'".format(fmt, label)
-            )
+        app_label, model, code = self.model.parse_label(label)
         content_type = ContentType.objects.get(app_label=app_label, model=model)
         return self.get(content_type=content_type, code=code)
 
@@ -33,6 +27,28 @@ class Scope(models.Model):
         unique_together = [("content_type", "code")]
         ordering = ["content_type__app_label", "content_type__model", "code"]
 
+    _LABEL_FORMAT = "{app_label}.{model}.{code}"
+
+    @property
+    def label(self) -> str:
+        return Scope._LABEL_FORMAT.format(
+            app_label=self.content_type.app_label,  # pylint: disable=no-member
+            model=self.content_type.model,
+            code=self.code,
+        )
+
+    @classmethod
+    def parse_label(cls, label: str) -> typing.Tuple[str, str, str]:
+        try:
+            app_label, model, code = label.split(".")
+        except ValueError:
+            raise ValueError(
+                "'label' must be formatted as '{}', got '{}'".format(
+                    cls._LABEL_FORMAT, label
+                )
+            )
+        return app_label, model, code
+
     def natural_key(self) -> typing.Tuple[str]:
         # Used by Django serialization.
         # See: https://docs.djangoproject.com/en/2.2/topics/serialization/#serialization-of-natural-keys
@@ -43,14 +59,13 @@ class Scope(models.Model):
 
     natural_key.dependencies = ["contenttypes.contenttype"]
 
-    def __str__(self):
-        return "{} | {}".format(self.content_type, self.code)
+    def __str__(self) -> str:
+        return self.label
 
 
 def _get_scopes_field(
     related_name: str, related_query_name: str
 ) -> models.ManyToManyField:
-    # See: https://docs.djangoproject.com/en/2.2/topics/db/models/#be-careful-with-related-name-and-related-query-name
     return models.ManyToManyField(
         Scope,
         verbose_name="scopes",
@@ -63,6 +78,7 @@ def _get_scopes_field(
 
 class ScopesMixin(models.Model):
     scopes = _get_scopes_field(
+        # See: https://docs.djangoproject.com/en/2.2/topics/db/models/#be-careful-with-related-name-and-related-query-name
         related_name="%(app_label)s_%(class)s_set",
         related_query_name="%(app_label)s_%(class)s",
     )  # type: models.Manager
@@ -70,11 +86,9 @@ class ScopesMixin(models.Model):
     def get_scopes(self) -> typing.Set[str]:
         cache_name = "_scopes_cache"
         if not hasattr(self, cache_name):
-            values = Scope.objects.values_list(
-                "content_type__app_label", "content_type__model", "code"
-            )
+            scopes = self.scopes.all()  # pylint: disable=no-member
             cache = {
-                "{}.{}.{}".format(ct, model, name) for ct, model, name in values
+                scope.label for scope in scopes.select_related("content_type")
             }
             setattr(self, cache_name, cache)
         return getattr(self, cache_name)
@@ -119,13 +133,14 @@ class BaseAPIKeyManager(models.Manager):
     def get_usable_keys(self) -> models.QuerySet:
         return self.filter(revoked=False)
 
-    def is_valid(self, key: str) -> bool:
+    def get_from_secret(self, key: str) -> "AbstractAPIKey":
         prefix, _, _ = key.partition(".")
-
         queryset = self.get_usable_keys()
+        return queryset.get(prefix=prefix)
 
+    def is_valid(self, key: str) -> bool:
         try:
-            api_key = queryset.get(prefix=prefix)  # type: AbstractAPIKey
+            api_key = self.get_from_secret(key)
         except self.model.DoesNotExist:
             return False
 

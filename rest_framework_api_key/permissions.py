@@ -44,11 +44,14 @@ class BaseHasAPIKey(permissions.BasePermission):
     def get_key(self, request: HttpRequest) -> typing.Optional[str]:
         return self.key_parser.get(request)
 
-    def has_permission(self, request: HttpRequest, view: typing.Any) -> bool:
+    def check(self, view: typing.Any) -> None:
         assert self.model is not None, (
             "%s must define `.model` with the API key model to use"
             % self.__class__.__name__
         )
+
+    def has_permission(self, request: HttpRequest, view: typing.Any) -> bool:
+        self.check(view)
         key = self.get_key(request)
         if not key:
             return False
@@ -60,5 +63,33 @@ class BaseHasAPIKey(permissions.BasePermission):
         return self.has_permission(request, view)
 
 
+class BaseHasAPIKeyWithScopes(BaseHasAPIKey):
+    def check(self, view: typing.Any) -> None:
+        super().check(view)
+        assert hasattr(view, "required_scopes"), (
+            "%s must define `.required_scopes`" % view.__class__.__name__
+        )
+
+    def has_permission(self, request: HttpRequest, view: typing.Any) -> bool:
+        if not super().has_permission(request, view):
+            return False
+
+        key = self.get_key(request)
+        api_key = self.model.objects.get_from_secret(
+            key
+        )  # type: AbstractAPIKey
+
+        return set(view.required_scopes).issubset(api_key.get_scopes())
+
+    def has_object_permission(
+        self, request: HttpRequest, view, obj: typing.Any
+    ) -> bool:
+        return self.has_permission(request, view)
+
+
 class HasAPIKey(BaseHasAPIKey):
+    model = APIKey
+
+
+class HasAPIKeyWithScopes(BaseHasAPIKeyWithScopes):
     model = APIKey

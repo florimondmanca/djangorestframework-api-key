@@ -1,10 +1,9 @@
 import pytest
-from django.contrib.contenttypes.models import ContentType
 from django.db.utils import IntegrityError
 
 from rest_framework_api_key.models import APIKey, Scope
 
-from .project.heroes.models import Hero, HeroAPIKey
+from ..project.heroes.models import Hero, HeroAPIKey
 
 pytestmark = pytest.mark.django_db
 
@@ -26,13 +25,6 @@ def fixture_api_key(request) -> APIKey:
     return factory()
 
 
-@pytest.fixture(name="hero_read")
-def fixture_hero_read() -> Scope:
-    ct = ContentType.objects.get(app_label="heroes", model="hero")
-    scope = Scope.objects.create(content_type=ct, code="read")
-    return scope
-
-
 def test_default_scopes(api_key):
     assert api_key.get_scopes() == set()
 
@@ -46,6 +38,14 @@ def test_duplicate_scope(hero_read: Scope):
         Scope.objects.create(
             content_type=hero_read.content_type, code=hero_read.code
         )
+
+
+def test_label(hero_read: Scope):
+    assert hero_read.label == "heroes.hero.read"
+
+
+def test_str(hero_read: Scope):
+    assert str(hero_read) == "heroes.hero.read"
 
 
 def test_get_from_label(hero_read: Scope):

@@ -57,16 +57,20 @@ def pytest_configure():
 
 @pytest.fixture
 def view_with_permissions():
-    from rest_framework.decorators import api_view, permission_classes
     from rest_framework.response import Response
+    from rest_framework.views import APIView
 
-    def create_view(*classes):
-        @api_view()
-        @permission_classes(classes)
-        def view(*args):
-            return Response()
+    def create_view(*classes, **attrs):
+        class View(APIView):
+            permission_classes = classes
 
-        return view
+            def get(self, _):
+                return Response()
+
+        for name, value in attrs.items():
+            setattr(View, name, value)
+
+        return View.as_view()
 
     return create_view
 
@@ -112,23 +116,32 @@ def fixture_build_create_request(key_header_config: dict):
         _MISSING = object()
 
         def create_request(
-            authenticated: bool = False, authorization: str = _MISSING, **kwargs
+            authenticated: bool = False,
+            authorization: str = _MISSING,
+            key: str = None,
+            key_modifier: typing.Callable[[str], str] = lambda key: key,
+            **kwargs
         ):
             headers = {}
 
-            if authorization is not None:
+            header = None
+            header_format = key_header_config["default"]
+            header_name = key_header_config["header"]
+
+            if key is not None:
+                header = header_format.format(key=key)
+            elif authorization is None:
+                header = None
+            else:
+                # Automatically create and attach an API key.
+                if authorization is not _MISSING:
+                    header_format = authorization
                 kwargs.setdefault("name", "test")
                 _, key = model.objects.create_key(**kwargs)
+                header = header_format.format(key=key_modifier(key))
 
-                if callable(authorization):
-                    authorization = authorization(key)
-
-                if authorization is _MISSING:
-                    authorization = key_header_config["default"]
-
-                headers[key_header_config["header"]] = authorization.format(
-                    key=key
-                )
+            if header is not None:
+                headers[header_name] = header
 
             request = request_factory.get("/test/", **headers)
 
