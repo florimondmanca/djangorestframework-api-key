@@ -2,7 +2,7 @@ import typing
 
 from django.contrib import admin, messages
 
-from .models import APIKey
+from .models import APIKey, Scope
 
 
 class APIKeyModelAdmin(admin.ModelAdmin):
@@ -41,6 +41,11 @@ class APIKeyModelAdmin(admin.ModelAdmin):
             obj.save()
 
 
+class ScopeModelAdmin(admin.ModelAdmin):
+    pass
+
+
 admin.site.register(APIKey, APIKeyModelAdmin)
+admin.site.register(Scope, ScopeModelAdmin)
 
 APIKeyAdmin = APIKeyModelAdmin  # Compatibility with <1.3
