@@ -2,17 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
      <loc>https://florimondmanca.github.io/djangorestframework-api-key/</loc>
-     <lastmod>2019-06-28</lastmod>
+     <lastmod>2019-07-16</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://florimondmanca.github.io/djangorestframework-api-key/guide/</loc>
-     <lastmod>2019-06-28</lastmod>
+     <lastmod>2019-07-16</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://florimondmanca.github.io/djangorestframework-api-key/security/</loc>
-     <lastmod>2019-06-28</lastmod>
+     <lastmod>2019-07-16</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://florimondmanca.github.io/djangorestframework-api-key/upgrade/1.4/</loc>
+     <lastmod>2019-07-16</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
