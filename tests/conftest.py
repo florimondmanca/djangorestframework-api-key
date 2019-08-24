@@ -46,10 +46,7 @@ def pytest_configure():
             ],
             ROOT_URLCONF="tests.project.project.urls",
             DATABASES={
-                "default": {
-                    "ENGINE": "django.db.backends.sqlite3",
-                    "NAME": ":memory:",
-                }
+                "default": {"ENGINE": "django.db.backends.sqlite3", "NAME": ":memory:"}
             },
         )
     )
@@ -126,9 +123,7 @@ def fixture_build_create_request(key_header_config: dict):
                 if authorization is _MISSING:
                     authorization = key_header_config["default"]
 
-                headers[key_header_config["header"]] = authorization.format(
-                    key=key
-                )
+                headers[key_header_config["header"]] = authorization.format(key=key)
 
             request = request_factory.get("/test/", **headers)
 

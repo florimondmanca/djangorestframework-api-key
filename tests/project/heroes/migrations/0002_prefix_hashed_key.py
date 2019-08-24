@@ -32,9 +32,7 @@ class Migration(migrations.Migration):
             name="prefix",
             field=models.CharField(max_length=8, unique=True, null=True),
         ),
-        migrations.RunPython(
-            populate_prefix_hashed_key, migrations.RunPython.noop
-        ),
+        migrations.RunPython(populate_prefix_hashed_key, migrations.RunPython.noop),
         migrations.AlterField(
             model_name=MODEL_NAME,
             name="hashed_key",

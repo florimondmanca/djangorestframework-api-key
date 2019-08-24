@@ -57,9 +57,7 @@ def test_has_expired(expiry_date, has_expired):
 
 def test_custom_api_key_model():
     hero = Hero.objects.create()
-    hero_api_key, generated_key = HeroAPIKey.objects.create_key(
-        name="test", hero=hero
-    )
+    hero_api_key, generated_key = HeroAPIKey.objects.create_key(name="test", hero=hero)
     assert hero_api_key.is_valid(generated_key)
     assert hero_api_key.hero.id == hero.id
     assert hero.api_keys.first() == hero_api_key

@@ -17,9 +17,7 @@ class APIKeyModelAdmin(admin.ModelAdmin):
     list_filter = ("created",)
     search_fields = ("name", "prefix")
 
-    def get_readonly_fields(
-        self, request, obj: APIKey = None
-    ) -> typing.Tuple[str]:
+    def get_readonly_fields(self, request, obj: APIKey = None) -> typing.Tuple[str]:
         fields = ("prefix",)
         if obj is not None and obj.revoked:
             fields = fields + ("name", "revoked", "expiry_date")

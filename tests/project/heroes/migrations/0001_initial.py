@@ -8,36 +8,79 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Hero',
+            name="Hero",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=64)),
-                ('retired', models.BooleanField(default=False)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=64)),
+                ("retired", models.BooleanField(default=False)),
             ],
-            options={
-                'verbose_name_plural': 'heroes',
-            },
+            options={"verbose_name_plural": "heroes"},
         ),
         migrations.CreateModel(
-            name='HeroAPIKey',
+            name="HeroAPIKey",
             fields=[
-                ('id', models.CharField(editable=False, max_length=100, primary_key=True, serialize=False, unique=True)),
-                ('created', models.DateTimeField(auto_now_add=True, db_index=True)),
-                ('name', models.CharField(default=None, help_text='A free-form name for the API key. Need not be unique. 50 characters max.', max_length=50)),
-                ('revoked', models.BooleanField(blank=True, default=False, help_text='If the API key is revoked, clients cannot use it anymore. (This cannot be undone.)')),
-                ('expiry_date', models.DateTimeField(blank=True, help_text='Once API key expires, clients cannot use it anymore.', null=True, verbose_name='Expires')),
-                ('hero', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='api_keys', to='heroes.Hero')),
+                (
+                    "id",
+                    models.CharField(
+                        editable=False,
+                        max_length=100,
+                        primary_key=True,
+                        serialize=False,
+                        unique=True,
+                    ),
+                ),
+                ("created", models.DateTimeField(auto_now_add=True, db_index=True)),
+                (
+                    "name",
+                    models.CharField(
+                        default=None,
+                        help_text="A free-form name for the API key. Need not be unique. 50 characters max.",
+                        max_length=50,
+                    ),
+                ),
+                (
+                    "revoked",
+                    models.BooleanField(
+                        blank=True,
+                        default=False,
+                        help_text="If the API key is revoked, clients cannot use it anymore. (This cannot be undone.)",
+                    ),
+                ),
+                (
+                    "expiry_date",
+                    models.DateTimeField(
+                        blank=True,
+                        help_text="Once API key expires, clients cannot use it anymore.",
+                        null=True,
+                        verbose_name="Expires",
+                    ),
+                ),
+                (
+                    "hero",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="api_keys",
+                        to="heroes.Hero",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Hero API key',
-                'verbose_name_plural': 'Hero API keys',
-                'ordering': ('-created',),
-                'abstract': False,
+                "verbose_name": "Hero API key",
+                "verbose_name_plural": "Hero API keys",
+                "ordering": ("-created",),
+                "abstract": False,
             },
         ),
     ]

@@ -16,9 +16,7 @@ class KeyParser:
 
         return self.get_from_authorization(request)
 
-    def get_from_authorization(
-        self, request: HttpRequest
-    ) -> typing.Optional[str]:
+    def get_from_authorization(self, request: HttpRequest) -> typing.Optional[str]:
         authorization = request.META.get("HTTP_AUTHORIZATION")
 
         if not authorization:
@@ -31,9 +29,7 @@ class KeyParser:
 
         return key
 
-    def get_from_header(
-        self, request: HttpRequest, name: str
-    ) -> typing.Optional[str]:
+    def get_from_header(self, request: HttpRequest, name: str) -> typing.Optional[str]:
         return request.META.get(name) or None
 
 

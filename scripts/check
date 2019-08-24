@@ -1,0 +1,4 @@
+#!/bin/sh -e
+set -x
+
+black --check --target-version=py35 rest_framework_api_key tests

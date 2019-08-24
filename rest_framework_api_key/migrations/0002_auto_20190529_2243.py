@@ -5,24 +5,35 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('rest_framework_api_key', '0001_initial'),
-    ]
+    dependencies = [("rest_framework_api_key", "0001_initial")]
 
     operations = [
         migrations.AddField(
-            model_name='apikey',
-            name='expiry_date',
-            field=models.DateTimeField(blank=True, help_text='Once API key expires, clients cannot use it anymore.', null=True, verbose_name='Expires'),
+            model_name="apikey",
+            name="expiry_date",
+            field=models.DateTimeField(
+                blank=True,
+                help_text="Once API key expires, clients cannot use it anymore.",
+                null=True,
+                verbose_name="Expires",
+            ),
         ),
         migrations.AlterField(
-            model_name='apikey',
-            name='name',
-            field=models.CharField(default=None, help_text='A free-form name for the API key. Need not be unique. 50 characters max.', max_length=50),
+            model_name="apikey",
+            name="name",
+            field=models.CharField(
+                default=None,
+                help_text="A free-form name for the API key. Need not be unique. 50 characters max.",
+                max_length=50,
+            ),
         ),
         migrations.AlterField(
-            model_name='apikey',
-            name='revoked',
-            field=models.BooleanField(blank=True, default=False, help_text='If the API key is revoked, clients cannot use it anymore. (This cannot be undone.)'),
+            model_name="apikey",
+            name="revoked",
+            field=models.BooleanField(
+                blank=True,
+                default=False,
+                help_text="If the API key is revoked, clients cannot use it anymore. (This cannot be undone.)",
+            ),
         ),
     ]
