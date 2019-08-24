@@ -13,13 +13,14 @@ Here are a few ways in which you can help:
 ### Install
 
 1. Fork the repository.
-2. Clone it on your machine.
-3. Setup a virtual environment:
+1. Clone it on your machine.
+1. [Install poetry](https://github.com/sdispater/poetry#installation).
+1. Install dependencies:
 
 ```bash
 python -m venv venv
 . venv/bin/activate
-pip install -r requirements.txt
+poetry install
 ```
 
 ### Tests
@@ -27,7 +28,7 @@ pip install -r requirements.txt
 Run the tests using:
 
 ```bash
-$ pytest
+pytest
 ```
 
 ### Generating migrations

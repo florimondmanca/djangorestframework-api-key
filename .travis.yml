@@ -14,23 +14,20 @@ env:
   - DJANGO_VERSION=2.2.*
 
 install:
-  - pip install -U pip
-  - pip install -r requirements.txt
-  - pip install django[argon2,bcrypt]==$DJANGO_VERSION
+  - pip install poetry
+  - poetry install
 
 script:
-  - pytest
+  - poetry run pytest
 
 before_deploy:
-  # PyPI deploy fails if there are unstaged changes
-  # Reset any unstaged changes (such as updates to Pipfile or Pipfile.lock)
-  - git checkout -- .
+  - peotry config http-basic.pypi $PYPI_USERNAME $PYPI_PASSWORD
+  - poetry build
 
 deploy:
-  provider: pypi
-  distributions: "sdist bdist_wheel"
-  username: $PYPI_USERNAME
-  password: $PYPI_PASSWORD
+  provider: script
+  script: poetry publish
+  skip_cleanup: true
   on:
     tags: true
     # deploy only once
