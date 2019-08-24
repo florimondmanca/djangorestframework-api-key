@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Now ships with type annotations ([PEP 561](https://www.python.org/dev/peps/pep-0561/)).
+
 ## [v1.4.0] - 2019-07-16
 
 **NOTE**: this release contains migrations. See [Upgrade to v1.4](https://florimondmanca.github.io/djangorestframework-api-key/upgrade/1.4/) for detailed instructions.
