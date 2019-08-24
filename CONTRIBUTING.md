@@ -41,6 +41,12 @@ $ python scripts/makemigrations.py
 
 ## Notes to maintainers
 
+### Scripts
+
+- `test`: run test suite.
+- `lint`: run linters and auto-formatters.
+- `check`: check code style.
+
 ### CI/CD
 
 Travis CI is in use to automatically:

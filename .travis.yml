@@ -1,7 +1,4 @@
 language: python
-
-cache: pip
-
 dist: xenial
 
 python:
@@ -13,12 +10,19 @@ env:
   - DJANGO_VERSION=2.1.*
   - DJANGO_VERSION=2.2.*
 
+jobs:
+  include:
+    - name: Check
+      python: "3.6"
+      install: pip install -U black
+      script: scripts/check
+
 install:
   - pip install poetry
   - poetry install
 
 script:
-  - poetry run pytest
+  - scripts/test
 
 before_deploy:
   - peotry config http-basic.pypi $PYPI_USERNAME $PYPI_PASSWORD

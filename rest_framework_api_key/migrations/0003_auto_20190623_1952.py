@@ -5,14 +5,18 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('rest_framework_api_key', '0002_auto_20190529_2243'),
-    ]
+    dependencies = [("rest_framework_api_key", "0002_auto_20190529_2243")]
 
     operations = [
         migrations.AlterField(
-            model_name='apikey',
-            name='id',
-            field=models.CharField(editable=False, max_length=100, primary_key=True, serialize=False, unique=True),
-        ),
+            model_name="apikey",
+            name="id",
+            field=models.CharField(
+                editable=False,
+                max_length=100,
+                primary_key=True,
+                serialize=False,
+                unique=True,
+            ),
+        )
     ]

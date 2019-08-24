@@ -21,9 +21,7 @@ class HeroAPIKeyManager(BaseAPIKeyManager):
 
 class HeroAPIKey(AbstractAPIKey):
     objects = HeroAPIKeyManager()
-    hero = models.ForeignKey(
-        Hero, on_delete=models.CASCADE, related_name="api_keys"
-    )
+    hero = models.ForeignKey(Hero, on_delete=models.CASCADE, related_name="api_keys")
 
     class Meta(AbstractAPIKey.Meta):
         verbose_name = "Hero API key"

@@ -74,9 +74,7 @@ TOMORROW = NOW + timedelta(days=1)
 TWO_DAYS_AGO = NOW - timedelta(days=2)
 
 
-@pytest.mark.parametrize(
-    "expiry_date, ok", [(TOMORROW, True), (TWO_DAYS_AGO, False)]
-)
+@pytest.mark.parametrize("expiry_date, ok", [(TOMORROW, True), (TWO_DAYS_AGO, False)])
 def test_expiry_date(create_request, view, expiry_date, ok):
     request = create_request(expiry_date=expiry_date)
     response = view(request)
