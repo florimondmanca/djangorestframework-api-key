@@ -1,4 +1,0 @@
--e .
-djangorestframework~=3.8
-pytest
-pytest-django

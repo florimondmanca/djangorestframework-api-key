@@ -18,6 +18,19 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/florimondmanca/djangorestframework-api-key",
     packages=setuptools.find_packages(),
+    extras_require={
+        "dev": [
+            "django[argon2,bcrypt]>=2.0, <2.3",
+            "djangorestframework>=3.8, <4.0",
+            "pytest",
+            "pytest-django",
+            "mkdocs",
+            "mkdocs-material",
+            "pymdown-extensions",
+            "pylint",
+            "bumpversion",
+        ]
+    },
     license="MIT",
     classifiers=[
         "Topic :: Software Development :: Libraries :: Python Modules",

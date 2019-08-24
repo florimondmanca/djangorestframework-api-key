@@ -8,16 +8,19 @@ Here are a few ways in which you can help:
 - Have a feature you'd like to see implemented? Please open a [Feature Request](https://github.com/florimondmanca/djangorestframework-api-key/issues/new?template=feature_request.md).
 - For any other contribution, please open a [discussion](https://github.com/florimondmanca/djangorestframework-api-key/issues/new?template=discussion.md).
 
-**NOTE**: for **non-trivial changes** we *highly* encourage you to **open an issue** first. This will allow maintainers and contributors to confirm that the problem you are trying to solve is well-posed, in the scope of the project, and/or can't be solved with existing features.
+**NOTE**: for **non-trivial changes** we _highly_ encourage you to **open an issue** first. This will allow maintainers and contributors to confirm that the problem you are trying to solve is well-posed, in the scope of the project, and/or can't be solved with existing features.
 
 ### Install
 
-Installing locally requires [Pipenv](https://github.com/pypa/pipenv) and Python 3.7.
+1. Fork the repository.
+2. Clone it on your machine.
+3. Setup a virtual environment:
 
-1. Fork the repo
-2. Clone it on your local
-3. Install dependencies with Pipenv: `$ pipenv install --dev`
-4. Activate using `$ pipenv shell`
+```bash
+python -m venv venv
+. venv/bin/activate
+pip install -r requirements.txt
+```
 
 ### Tests
 
