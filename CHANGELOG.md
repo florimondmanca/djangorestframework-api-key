@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v1.4.1] - 2019-08-24
+
 ### Added
 
 - Now ships with type annotations ([PEP 561](https://www.python.org/dev/peps/pep-0561/)).
@@ -155,7 +157,8 @@ Released: 2018-11-17
 - Generate, view and revoke API keys from the Django admin.
 - Authenticate requests using the `Api-Token` and `Api-Secret-Key` headers. Customizable via the `DRF_API_KEY_TOKEN_HEADER` and `DRF_API_KEY_SECRET_KEY_HEADER` settings.
 
-[unreleased]: https://github.com/florimondmanca/djangorestframework-api-key/compare/v1.4.0...HEAD
+[unreleased]: https://github.com/florimondmanca/djangorestframework-api-key/compare/v1.4.1...HEAD
+[v1.4.1]: https://github.com/florimondmanca/djangorestframework-api-key/compare/v1.4.0...v1.4.1
 [v1.4.0]: https://github.com/florimondmanca/djangorestframework-api-key/compare/v1.3.0...v1.4.0
 [v1.3.0]: https://github.com/florimondmanca/djangorestframework-api-key/compare/v1.2.1...v1.3.0
 [v1.2.1]: https://github.com/florimondmanca/djangorestframework-api-key/compare/v1.2.0...v1.2.1

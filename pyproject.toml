@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "djangorestframework-api-key"
-version = "1.4.0"
+version = "1.4.1"
 description = "API key permissions for the Django REST Framework"
 authors = [
   "florimondmanca <florimond.manca@gmail.com>"
