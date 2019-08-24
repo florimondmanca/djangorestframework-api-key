@@ -1,7 +1,4 @@
-#!/bin/bash
-
-# Stop if any command fails.
-set -e
+#!/bin/bash -e
 
 ARGS="$@"
 CHANGELOG="CHANGELOG.md"
@@ -14,7 +11,7 @@ CURRENT_VERSION=$(get current_version)
 NEW_VERSION=$(get new_version)
 
 bumpversion "$@" --no-tag --no-commit
-python scripts/changelog_bump.py "$CHANGELOG" "v$NEW_VERSION"
+python scripts/bump_changelog.py "$CHANGELOG" "v$NEW_VERSION"
 
 git add -A
 git commit -m "Bump version: $CURRENT_VERSION → $NEW_VERSION"

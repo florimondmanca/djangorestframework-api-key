@@ -25,7 +25,7 @@ script:
   - scripts/test
 
 before_deploy:
-  - peotry config http-basic.pypi $PYPI_USERNAME $PYPI_PASSWORD
+  - poetry config http-basic.pypi $PYPI_USERNAME $PYPI_PASSWORD
   - poetry build
 
 deploy:
@@ -36,4 +36,4 @@ deploy:
     tags: true
     # deploy only once
     python: "3.7"
-    condition: "$DJANGO_VERSION = 2.2"
+    condition: "$DJANGO_VERSION = 2.2.*"

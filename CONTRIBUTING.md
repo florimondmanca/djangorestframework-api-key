@@ -46,27 +46,12 @@ $ python scripts/makemigrations.py
 - `test`: run test suite.
 - `lint`: run linters and auto-formatters.
 - `check`: check code style.
-
-### CI/CD
-
-Travis CI is in use to automatically:
-
-- Test the package on supported versions of Python and Django.
-- Release _tagged commits_ to PyPI.
-
-See `.travis.yml` for further details.
+- `bump (patch | minor | major)`: bump package version (extra options are forwared to [bumpversion](https://pypi.org/project/bumpversion/)).
 
 ### Releasing
 
-When ready to release a new version, use [bumpversion](https://pypi.org/project/bumpversion/) to update the package's version:
-
-```bash
-$ bumpversion (patch | minor | major)
-```
-
-This will create a new commit and tag that commit with the new version. See [.bumpversion.cfg](.bumpversion.cfg) for more info.
-
-Then, push the tagged commit to remote:
+- Update the package version using the `bump` script.
+- Push the tagged commit to remote:
 
 ```bash
 $ git push --tags
