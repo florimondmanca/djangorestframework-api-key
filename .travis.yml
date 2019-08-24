@@ -14,7 +14,7 @@ jobs:
   include:
     - name: Check
       python: "3.6"
-      install: pip install -U black
+      install: pip install -U black mypy
       script: scripts/check
 
 install:
