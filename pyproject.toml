@@ -9,6 +9,10 @@ readme = "README.md"
 repository = "https://github.com/florimondmanca/djangorestframework-api-key"
 homepage = "https://florimondmanca.github.io/djangorestframework-api-key/"
 documentation = "https://florimondmanca.github.io/djangorestframework-api-key/"
+packages = [
+  { include = "rest_framework_api_key" }
+]
+include = ["rest_framework_api_key/py.typed"]
 license = "MIT"
 classifiers=[
   "Development Status :: 4 - Beta",

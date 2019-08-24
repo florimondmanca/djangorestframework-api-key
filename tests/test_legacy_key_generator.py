@@ -11,7 +11,7 @@ pytestmark = pytest.mark.django_db
 class LegacyKeyGenerator(KeyGenerator):
     """Pre-1.4 key generator."""
 
-    def generate(self) -> Tuple[str, str]:
+    def generate(self) -> Tuple[str, str]:  # type: ignore
         prefix = self.get_prefix()
         secret_key = self.get_secret_key()
         key = concatenate(prefix, secret_key)

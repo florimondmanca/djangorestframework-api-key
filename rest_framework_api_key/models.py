@@ -14,7 +14,7 @@ class BaseAPIKeyManager(models.Manager):
         try:
             key, prefix, hashed_key = self.key_generator.generate()
         except ValueError:  # Compatibility with < 1.4
-            key, hashed_key = self.key_generator.generate()
+            key, hashed_key = self.key_generator.generate()  # type: ignore
             pk = hashed_key
             prefix, hashed_key = split(hashed_key)
         else:
@@ -108,8 +108,8 @@ class AbstractAPIKey(models.Model):
             return False
         return self.expiry_date < timezone.now()
 
-    _has_expired.short_description = "Has expired"
-    _has_expired.boolean = True
+    _has_expired.short_description = "Has expired"  # type: ignore
+    _has_expired.boolean = True  # type: ignore
     has_expired = property(_has_expired)
 
     def is_valid(self, key: str) -> bool:

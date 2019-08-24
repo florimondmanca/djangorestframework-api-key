@@ -1,4 +1,2 @@
 #!/bin/sh -e
-set -x
-
 poetry run pytest
