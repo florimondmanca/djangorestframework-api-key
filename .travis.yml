@@ -8,8 +8,8 @@ branches:
     - master
 
 python:
-  - "3.5"
-  - "3.7"
+  - 3.6
+  - 3.8
 
 env:
   - DJANGO_VERSION=2.0.*
@@ -25,10 +25,15 @@ jobs:
   include:
     - stage: Check
       python: 3.7
+      install: scripts/install
       script: scripts/check
     - stage: Docs
       python: 3.7
+      install: scripts/install
       script: scripts/docs
+
+install:
+  - scripts/install
 
 script:
   - scripts/test

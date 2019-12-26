@@ -3,16 +3,27 @@
 # Use the Python executable provided from the `-p` option, or a default.
 [[ $1 = "-p" ]] && PYTHON=$2 || PYTHON="python"
 
-export PREFIX="venv/bin/"
+export PREFIX=""
+if [ -z $CI ]; then
+  $PYTHON -m venv venv
+  export PREFIX="venv/bin/"
+fi
 
 set -x
 
-$PYTHON -m venv venv
 ${PREFIX}python -m pip install -U pip
 ${PREFIX}python -m pip install -r requirements.txt
+
+if [ ! -z $DJANGO_VERSION ]; then
+  ${PREFIX}python -m pip install django==$DJANGO_VERSION
+fi
 
 set +x
 
 echo
-echo "Success! You can now activate your virtual environment using:"
-echo "source ${PREFIX}activate"
+echo "Success!"
+
+if [ -z $CI ]; then
+  echo "You can now activate your virtual environment using:"
+  echo "source ${PREFIX}activate"
+fi
