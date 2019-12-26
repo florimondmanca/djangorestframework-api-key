@@ -8,8 +8,8 @@ branches:
     - master
 
 python:
-  - "3.5"
-  - "3.7"
+  - 3.5
+  - 3.8
 
 env:
   - DJANGO_VERSION=2.0.*
