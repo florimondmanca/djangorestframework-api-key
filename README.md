@@ -6,6 +6,9 @@ API key permissions for the [Django REST Framework](https://www.django-rest-fram
   <a href="https://travis-ci.org/florimondmanca/djangorestframework-api-key">
       <img src="https://img.shields.io/travis/florimondmanca/djangorestframework-api-key.svg" alt="build status"/>
   </a>
+  <a href="https://codecov.io/gh/florimondmanca/djangorestframework-api-key">
+      <img src="https://codecov.io/gh/florimondmanca/djangorestframework-api-key/branch/master/graph/badge.svg" alt="coverage">
+  </a>
   <a href="https://pypi.org/project/djangorestframework-api-key">
       <img src="https://badge.fury.io/py/djangorestframework-api-key.svg" alt="package version"/>
   </a>
