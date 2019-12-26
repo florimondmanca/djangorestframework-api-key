@@ -2,18 +2,20 @@ import typing
 
 import pytest
 from django.conf import settings
-from django.contrib.auth.base_user import AbstractBaseUser
 from django.http import HttpRequest
 from django.test import override_settings
 
 from .compat import nullcontext
 
+if typing.TYPE_CHECKING:
+    from django.contrib.auth.base_user import AbstractBaseUser
+
 
 def pytest_configure() -> None:
     settings.configure(
-        **dict(
-            SECRET_KEY="abcd",
-            INSTALLED_APPS=[
+        **{
+            "SECRET_KEY": "abcd",
+            "INSTALLED_APPS": [
                 # Mandatory
                 "django.contrib.contenttypes",
                 # Permissions
@@ -27,7 +29,7 @@ def pytest_configure() -> None:
                 "rest_framework_api_key",
                 "test_project.heroes",
             ],
-            TEMPLATES=[
+            "TEMPLATES": [
                 # Admin
                 {
                     "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -39,17 +41,17 @@ def pytest_configure() -> None:
                     },
                 }
             ],
-            MIDDLEWARE=[
+            "MIDDLEWARE": [
                 # Admin
                 "django.contrib.messages.middleware.MessageMiddleware",
                 "django.contrib.sessions.middleware.SessionMiddleware",
                 "django.contrib.auth.middleware.AuthenticationMiddleware",
             ],
-            ROOT_URLCONF="test_project.project.urls",
-            DATABASES={
+            "ROOT_URLCONF": "test_project.project.urls",
+            "DATABASES": {
                 "default": {"ENGINE": "django.db.backends.sqlite3", "NAME": ":memory:"}
             },
-        )
+        }
     )
 
 
@@ -69,7 +71,7 @@ def view_with_permissions() -> typing.Callable:
     return create_view
 
 
-def _create_user() -> AbstractBaseUser:
+def _create_user() -> "AbstractBaseUser":
     from django.contrib.auth import get_user_model
 
     User = get_user_model()

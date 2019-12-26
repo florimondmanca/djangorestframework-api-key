@@ -108,7 +108,7 @@ def test_object_permission(create_request: typing.Callable) -> None:
         ) -> bool:
             return False
 
-    class View(generics.GenericAPIView):
+    class ExampleView(generics.GenericAPIView):
         # See: https://github.com/typeddjango/djangorestframework-stubs/issues/37
         permission_classes = [HasAPIKey | DenyObject]  # type: ignore
 
@@ -116,7 +116,7 @@ def test_object_permission(create_request: typing.Callable) -> None:
             self.check_object_permissions(request, object())
             return Response()
 
-    view = View.as_view()
+    view = ExampleView.as_view()
 
     request = create_request(authorization=None)
     response = view(request)
