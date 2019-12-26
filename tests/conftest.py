@@ -24,7 +24,7 @@ def pytest_configure():
                 # Project
                 "rest_framework",
                 "rest_framework_api_key",
-                "tests.project.heroes",
+                "test_project.heroes",
             ],
             TEMPLATES=[
                 # Admin
@@ -44,7 +44,7 @@ def pytest_configure():
                 "django.contrib.sessions.middleware.SessionMiddleware",
                 "django.contrib.auth.middleware.AuthenticationMiddleware",
             ],
-            ROOT_URLCONF="tests.project.project.urls",
+            ROOT_URLCONF="test_project.project.urls",
             DATABASES={
                 "default": {"ENGINE": "django.db.backends.sqlite3", "NAME": ":memory:"}
             },
