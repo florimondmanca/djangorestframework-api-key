@@ -1,4 +1,4 @@
-from typing import Tuple
+import typing
 
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -26,7 +26,7 @@ class BaseAPIKeyManager(models.Manager):
 
         return key
 
-    def create_key(self, **kwargs) -> Tuple["AbstractAPIKey", str]:
+    def create_key(self, **kwargs: typing.Any) -> typing.Tuple["AbstractAPIKey", str]:
         # Prevent from manually setting the primary key.
         kwargs.pop("id", None)
         obj = self.model(**kwargs)  # type: AbstractAPIKey
@@ -98,7 +98,7 @@ class AbstractAPIKey(models.Model):
         verbose_name = "API key"
         verbose_name_plural = "API keys"
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: typing.Any, **kwargs: typing.Any):
         super().__init__(*args, **kwargs)
         # Store the initial value of `revoked` to detect changes.
         self._initial_revoked = self.revoked
@@ -115,14 +115,14 @@ class AbstractAPIKey(models.Model):
     def is_valid(self, key: str) -> bool:
         return type(self).objects.key_generator.verify(key, self.hashed_key)
 
-    def clean(self):
+    def clean(self) -> None:
         self._validate_revoked()
 
-    def save(self, *args, **kwargs):
+    def save(self, *args: typing.Any, **kwargs: typing.Any) -> None:
         self._validate_revoked()
         super().save(*args, **kwargs)
 
-    def _validate_revoked(self):
+    def _validate_revoked(self) -> None:
         if self._initial_revoked and not self.revoked:
             raise ValidationError(
                 "The API key has been revoked, which cannot be undone."
