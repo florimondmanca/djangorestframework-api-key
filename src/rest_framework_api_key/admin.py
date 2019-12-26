@@ -1,11 +1,14 @@
 import typing
 
 from django.contrib import admin, messages
+from django.db import models
+from django.http.request import HttpRequest
 
 from .models import APIKey
 
 
 class APIKeyModelAdmin(admin.ModelAdmin):
+    model: typing.Type[APIKey]
     list_display = (
         "prefix",
         "name",
@@ -18,14 +21,24 @@ class APIKeyModelAdmin(admin.ModelAdmin):
     search_fields = ("name", "prefix")
 
     def get_readonly_fields(
-        self, request, obj: APIKey = None
+        self, request: HttpRequest, obj: models.Model = None
     ) -> typing.Tuple[str, ...]:
-        fields = ("prefix",)  # type: typing.Tuple[str, ...]
+        obj = typing.cast(APIKey, obj)
+        fields: typing.Tuple[str, ...]
+
+        fields = ("prefix",)
         if obj is not None and obj.revoked:
             fields = fields + ("name", "revoked", "expiry_date")
+
         return fields
 
-    def save_model(self, request, obj: APIKey, form=None, change: bool = False):
+    def save_model(
+        self,
+        request: HttpRequest,
+        obj: APIKey,
+        form: typing.Any = None,
+        change: bool = False,
+    ) -> None:
         created = not obj.pk
 
         if created:

@@ -38,7 +38,7 @@ def fixture_req(rf: RequestFactory):
     ],
 )
 def test_create(req, model, model_admin, build_api_key):
-    admin = model_admin(model, site)  # type: ModelAdmin
+    admin = model_admin(model, site)
     api_key = build_api_key(model)
 
     assert not api_key.pk

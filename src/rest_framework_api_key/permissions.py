@@ -6,9 +6,6 @@ from rest_framework import permissions
 
 from .models import AbstractAPIKey, APIKey
 
-if typing.TYPE_CHECKING:
-    from django.db import models
-
 
 class KeyParser:
     def get(self, request: HttpRequest) -> typing.Optional[str]:
@@ -37,7 +34,7 @@ class KeyParser:
 
 
 class BaseHasAPIKey(permissions.BasePermission):
-    model = None  # type: typing.Type[models.Model]
+    model: typing.Optional[typing.Type[APIKey]] = None
     key_parser = KeyParser()
 
     def get_key(self, request: HttpRequest) -> typing.Optional[str]:
