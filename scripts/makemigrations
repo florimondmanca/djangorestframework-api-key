@@ -1,3 +1,4 @@
+#!/env/bin/python
 """A stand-alone equivalent of `python manage.py makemigrations`."""
 
 import django

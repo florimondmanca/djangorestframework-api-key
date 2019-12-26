@@ -1,3 +1,16 @@
 #!/bin/sh -e
-black --check --target-version=py35 rest_framework_api_key tests
-mypy
+
+export PREFIX=""
+if [ -d 'venv' ] ; then
+    export PREFIX="venv/bin/"
+fi
+export SOURCE_FILES="src/rest_framework_api_key"
+
+set -x
+
+if command -v "${PREFIX}black" &>/dev/null ; then
+    # Black isn't installed on 3.5.
+    ${PREFIX}black --check --diff --target-version=py36 $SOURCE_FILES
+fi
+${PREFIX}flake8 $SOURCE_FILES
+${PREFIX}isort --check --diff --project=djangorestframework-api-key --recursive $SOURCE_FILES

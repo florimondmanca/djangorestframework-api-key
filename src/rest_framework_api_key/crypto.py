@@ -1,10 +1,7 @@
-from typing import TYPE_CHECKING, Tuple
+from typing import Tuple
 
 from django.contrib.auth.hashers import check_password, make_password
 from django.utils.crypto import get_random_string
-
-if TYPE_CHECKING:
-    from .models import APIKey
 
 
 def concatenate(left: str, right: str) -> str:

@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 
-from .crypto import concatenate, KeyGenerator, split
+from .crypto import KeyGenerator, concatenate, split
 
 
 class BaseAPIKeyManager(models.Manager):

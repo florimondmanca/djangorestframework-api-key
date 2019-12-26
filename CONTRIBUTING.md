@@ -1,6 +1,6 @@
 # Contributing
 
-All contributions are welcome! :wave:
+Thanks for your interest in contributing to this project!
 
 Here are a few ways in which you can help:
 
@@ -10,17 +10,14 @@ Here are a few ways in which you can help:
 
 **NOTE**: for **non-trivial changes** we _highly_ encourage you to **open an issue** first. This will allow maintainers and contributors to confirm that the problem you are trying to solve is well-posed, in the scope of the project, and/or can't be solved with existing features.
 
-### Install
+### Installation
 
 1. Fork the repository.
 1. Clone it on your machine.
-1. [Install poetry](https://github.com/sdispater/poetry#installation).
 1. Install dependencies:
 
 ```bash
-python -m venv venv
-. venv/bin/activate
-poetry install
+scripts/install
 ```
 
 ### Tests
@@ -28,7 +25,21 @@ poetry install
 Run the tests using:
 
 ```bash
-pytest
+scripts/test
+```
+
+### Code style
+
+Run code auto-formatting with:
+
+```bash
+scripts/lint
+```
+
+Run code style checks using:
+
+```bash
+scripts/check
 ```
 
 ### Generating migrations
@@ -36,23 +47,30 @@ pytest
 This package includes migrations. To update them in case of changes without setting up a Django project, run:
 
 ```bash
-$ python scripts/makemigrations.py
+scripts/makemigrations
+```
+
+### Documentation
+
+Serve the docs site locally (with hot-reload) using:
+
+```bash
+scripts/serve
+```
+
+Build the documentation using:
+
+```bash
+scripts/docs
 ```
 
 ## Notes to maintainers
 
-### Scripts
-
-- `test`: run test suite.
-- `lint`: run linters and auto-formatters.
-- `check`: check code style.
-- `bump (patch | minor | major)`: bump package version (extra options are forwared to [bumpversion](https://pypi.org/project/bumpversion/)).
-
 ### Releasing
 
-- Update the package version using the `bump` script.
-- Push the tagged commit to remote:
-
-```bash
-$ git push --tags
-```
+- Create a PR with the following:
+  - Bump the package version by editing `__version__.py`.
+  - Update the changelog with any relevant PRs merged since the last version: bug fixes, new features, changes, deprecations, removals.
+- Merge the PR.
+- Run `$ scripts/publish` on `master`.
+- Tag the commit and push the tag to the remote.
