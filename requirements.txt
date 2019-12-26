@@ -1,6 +1,6 @@
 -e .
 
-django[argon2,bcrypt]==2.2.*
+django[argon2,bcrypt]==3.0.*
 djangorestframework==3.10.*
 
 autoflake
