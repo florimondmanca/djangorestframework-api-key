@@ -14,7 +14,10 @@ class BaseAPIKeyManager(models.Manager):
         try:
             key, prefix, hashed_key = self.key_generator.generate()
         except ValueError:  # Compatibility with < 1.4
-            key, hashed_key = self.key_generator.generate()  # type: ignore
+            generate = typing.cast(
+                typing.Callable[[], typing.Tuple[str, str]], self.key_generator.generate
+            )
+            key, hashed_key = generate()
             pk = hashed_key
             prefix, hashed_key = split(hashed_key)
         else:
@@ -29,7 +32,7 @@ class BaseAPIKeyManager(models.Manager):
     def create_key(self, **kwargs: typing.Any) -> typing.Tuple["AbstractAPIKey", str]:
         # Prevent from manually setting the primary key.
         kwargs.pop("id", None)
-        obj = self.model(**kwargs)  # type: AbstractAPIKey
+        obj = self.model(**kwargs)
         key = self.assign_key(obj)
         obj.save()
         return obj, key
@@ -43,7 +46,7 @@ class BaseAPIKeyManager(models.Manager):
         queryset = self.get_usable_keys()
 
         try:
-            api_key = queryset.get(prefix=prefix)  # type: AbstractAPIKey
+            api_key = queryset.get(prefix=prefix)
         except self.model.DoesNotExist:
             return False
 

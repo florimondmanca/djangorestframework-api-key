@@ -7,8 +7,6 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = []  # type: ignore
-
     operations = [
         migrations.CreateModel(
             name="APIKey",
