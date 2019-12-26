@@ -33,11 +33,7 @@ class APIKeyModelAdmin(admin.ModelAdmin):
         return fields
 
     def save_model(
-        self,
-        request: HttpRequest,
-        obj: APIKey,
-        form: typing.Any = None,
-        change: bool = False,
+        self, request: HttpRequest, obj: APIKey, form: typing.Any, change: bool = False,
     ) -> None:
         created = not obj.pk
 

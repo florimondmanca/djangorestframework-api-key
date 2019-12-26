@@ -1,11 +1,11 @@
+import typing
+
 import pytest
-from django.contrib.admin import ModelAdmin, site
-from django.contrib.auth import login
-from django.contrib.auth.middleware import AuthenticationMiddleware
-from django.contrib.auth.models import User
+from django.contrib.admin import site, ModelAdmin
 from django.contrib.messages import get_messages
 from django.contrib.messages.middleware import MessageMiddleware
 from django.contrib.sessions.middleware import SessionMiddleware
+from django.http import HttpRequest
 from django.test import RequestFactory
 
 from rest_framework_api_key.admin import APIKeyModelAdmin
@@ -16,7 +16,7 @@ from test_project.heroes.models import Hero, HeroAPIKey
 
 
 @pytest.fixture(name="req")
-def fixture_req(rf: RequestFactory):
+def fixture_req(rf: RequestFactory) -> HttpRequest:
     messages = MessageMiddleware()
     sessions = SessionMiddleware()
     request = rf.post("/")
@@ -37,12 +37,17 @@ def fixture_req(rf: RequestFactory):
         ),
     ],
 )
-def test_create(req, model, model_admin, build_api_key):
+def test_create(
+    req: HttpRequest,
+    model: type,
+    model_admin: typing.Type[ModelAdmin],
+    build_api_key: typing.Callable,
+) -> None:
     admin = model_admin(model, site)
     api_key = build_api_key(model)
 
     assert not api_key.pk
-    admin.save_model(req, obj=api_key)
+    admin.save_model(req, obj=api_key, form=None, change=False)
     assert api_key.pk
 
     messages = get_messages(req)
