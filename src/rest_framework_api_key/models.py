@@ -6,11 +6,13 @@ from django.utils import timezone
 
 from .crypto import KeyGenerator, concatenate, split
 
+T = typing.TypeVar("T", bound="AbstractAPIKey")
 
-class BaseAPIKeyManager(models.Manager):
+
+class BaseAPIKeyManager(models.Manager[T]):
     key_generator = KeyGenerator()
 
-    def assign_key(self, obj: "AbstractAPIKey") -> str:
+    def assign_key(self, obj: T) -> str:
         try:
             key, prefix, hashed_key = self.key_generator.generate()
         except ValueError:  # Compatibility with < 1.4
@@ -29,7 +31,7 @@ class BaseAPIKeyManager(models.Manager):
 
         return key
 
-    def create_key(self, **kwargs: typing.Any) -> typing.Tuple["AbstractAPIKey", str]:
+    def create_key(self, **kwargs: typing.Any) -> typing.Tuple[T, str]:
         # Prevent from manually setting the primary key.
         kwargs.pop("id", None)
         obj = self.model(**kwargs)
@@ -37,7 +39,7 @@ class BaseAPIKeyManager(models.Manager):
         obj.save()
         return obj, key
 
-    def get_usable_keys(self) -> models.QuerySet:
+    def get_usable_keys(self) -> models.QuerySet[T]:
         return self.filter(revoked=False)
 
     def is_valid(self, key: str) -> bool:
@@ -64,7 +66,7 @@ class APIKeyManager(BaseAPIKeyManager):
 
 
 class AbstractAPIKey(models.Model):
-    objects = APIKeyManager()
+    objects: BaseAPIKeyManager = APIKeyManager()
 
     id = models.CharField(max_length=100, unique=True, primary_key=True, editable=False)
     prefix = models.CharField(max_length=8, unique=True, editable=False)
