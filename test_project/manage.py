@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 import os
 import sys
+import pathlib
 
 if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project.settings")
+    sys.path.append(str(pathlib.Path(__file__).parent.parent))
+
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "test_project.project.settings")
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

@@ -4,28 +4,21 @@ Test project for Django REST Framework API Key.
 
 ## Usage
 
-- Install dependencies:
-
-```bash
-pip install django djangorestframework
-pip install -e ../
-```
-
 - Run migrations (creates an SQLite database):
 
 ```bash
-python manage.py migrate
+python test_project/manage.py migrate
 ```
 
 - Create a superuser to access the admin site:
 
 ```bash
-python manage.py createsuperuser
+python test_project/manage.py createsuperuser
 # Enter user information as instructed
 ```
 
 - Start the server:
 
 ```bash
-python manage.py runserver
+python test_project/manage.py runserver
 ```

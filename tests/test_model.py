@@ -5,8 +5,8 @@ from django.core.exceptions import ValidationError
 from django.db.utils import IntegrityError
 from rest_framework_api_key.models import APIKey
 
+from test_project.heroes.models import HeroAPIKey, Hero
 from .dateutils import NOW, TOMORROW, YESTERDAY
-from .project.heroes.models import HeroAPIKey, Hero
 
 pytestmark = pytest.mark.django_db
 

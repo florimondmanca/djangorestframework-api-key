@@ -11,8 +11,8 @@ from django.test import RequestFactory
 from rest_framework_api_key.admin import APIKeyModelAdmin
 from rest_framework_api_key.models import APIKey
 
-from .project.heroes.admin import HeroAPIKeyModelAdmin
-from .project.heroes.models import Hero, HeroAPIKey
+from test_project.heroes.admin import HeroAPIKeyModelAdmin
+from test_project.heroes.models import Hero, HeroAPIKey
 
 
 @pytest.fixture(name="req")
