@@ -1,9 +1,9 @@
 import typing
 
 import pytest
+from django.conf import settings
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.http import HttpRequest
-from django.conf import settings
 from django.test import override_settings
 
 from .compat import nullcontext

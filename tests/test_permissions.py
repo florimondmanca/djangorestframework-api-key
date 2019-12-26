@@ -1,10 +1,10 @@
-import typing
 import datetime as dt
+import typing
 
 import pytest
 from django.conf.global_settings import PASSWORD_HASHERS
-from django.views import View
 from django.test import override_settings
+from django.views import View
 from rest_framework import generics, permissions
 from rest_framework.request import Request
 from rest_framework.response import Response

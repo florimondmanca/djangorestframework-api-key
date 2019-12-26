@@ -4,11 +4,11 @@ export PREFIX=""
 if [ -d 'venv' ] ; then
     export PREFIX="venv/bin/"
 fi
-export SOURCE_FILES="src/rest_framework_api_key"
+export SOURCE_FILES="src/rest_framework_api_key tests"
 
 set -x
 
 ${PREFIX}autoflake --in-place --recursive $SOURCE_FILES
-${PREFIX}seed-isort-config --application-directories=$SOURCE_FILES
+${PREFIX}seed-isort-config --application-directories="$SOURCE_FILES"
 ${PREFIX}isort --project=rest_framework_api_key --recursive --apply $SOURCE_FILES
 ${PREFIX}black --target-version=py36 $SOURCE_FILES

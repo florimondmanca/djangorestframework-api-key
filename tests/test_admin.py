@@ -1,18 +1,17 @@
 import typing
 
 import pytest
-from django.contrib.admin import site, ModelAdmin
+from django.contrib.admin import ModelAdmin, site
 from django.contrib.messages import get_messages
 from django.contrib.messages.middleware import MessageMiddleware
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.http import HttpRequest
 from django.test import RequestFactory
+from test_project.heroes.admin import HeroAPIKeyModelAdmin
+from test_project.heroes.models import Hero, HeroAPIKey
 
 from rest_framework_api_key.admin import APIKeyModelAdmin
 from rest_framework_api_key.models import APIKey
-
-from test_project.heroes.admin import HeroAPIKeyModelAdmin
-from test_project.heroes.models import Hero, HeroAPIKey
 
 
 @pytest.fixture(name="req")

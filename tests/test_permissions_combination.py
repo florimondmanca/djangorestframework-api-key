@@ -1,9 +1,9 @@
 import typing
 
 import pytest
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
 
 from rest_framework_api_key.permissions import HasAPIKey
 

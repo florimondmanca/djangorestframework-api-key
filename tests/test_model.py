@@ -5,9 +5,10 @@ import typing
 import pytest
 from django.core.exceptions import ValidationError
 from django.db.utils import IntegrityError
+from test_project.heroes.models import Hero, HeroAPIKey
+
 from rest_framework_api_key.models import APIKey
 
-from test_project.heroes.models import HeroAPIKey, Hero
 from .dateutils import NOW, TOMORROW, YESTERDAY
 
 pytestmark = pytest.mark.django_db
