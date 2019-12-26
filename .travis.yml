@@ -8,7 +8,7 @@ branches:
     - master
 
 python:
-  - 3.5
+  - 3.6
   - 3.8
 
 env:
