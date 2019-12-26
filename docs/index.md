@@ -59,8 +59,11 @@ They can also present enough security for authorizing internal services, such as
 Install the latest version with `pip`:
 
 ```bash
-pip install djangorestframework-api-key
+pip install "djangorestframework-api-key==1.*"
 ```
+
+!!! important
+    It is highly recommended to **pin your dependency** to the latest major version (as depicted above), as breaking changes may and will happen between major releases.
 
 Add the app to your `INSTALLED_APPS`:
 

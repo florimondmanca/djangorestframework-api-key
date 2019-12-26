@@ -24,7 +24,7 @@ API key permissions for the [Django REST Framework](https://www.django-rest-fram
 
 ## Introduction
 
-**Django REST Framework API Key is a powerful library for allowing server-side clients to safely use your API.** These clients are typically third-party backends and services (i.e. _machines_) which do not have a user account but still need to interact with your API in a secure way.
+**Django REST Framework API Key is a library for allowing server-side clients to safely use your API.** These clients are typically third-party backends and services (i.e. _machines_) which do not have a user account but still need to interact with your API in a secure way.
 
 ### Features
 
@@ -55,8 +55,10 @@ They can also present enough security for authorizing internal services, such as
 Install the latest version with `pip`:
 
 ```bash
-pip install djangorestframework-api-key
+pip install "djangorestframework-api-key==1.*"
 ```
+
+_**Note**: It is highly recommended to **pin your dependency** to the latest major version (as depicted above), as breaking changes may and will happen between major releases._
 
 Add the app to your `INSTALLED_APPS`:
 
