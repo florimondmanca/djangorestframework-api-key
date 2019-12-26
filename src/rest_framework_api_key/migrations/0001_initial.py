@@ -26,7 +26,9 @@ class Migration(migrations.Migration):
                     models.BooleanField(
                         blank=True,
                         default=False,
-                        help_text="If the API key is revoked, clients cannot use it anymore.",
+                        help_text=(
+                            "If the API key is revoked, clients cannot use it anymore."
+                        ),
                     ),
                 ),
             ],

@@ -1,5 +1,11 @@
-language: python
 dist: xenial
+language: python
+
+cache: pip
+
+branches:
+  only:
+    - master
 
 python:
   - "3.5"
@@ -10,30 +16,25 @@ env:
   - DJANGO_VERSION=2.1.*
   - DJANGO_VERSION=2.2.*
 
+stages:
+  - Check
+  - Docs
+  - Test
+
 jobs:
   include:
-    - name: Check
-      python: "3.6"
-      install: pip install -U black mypy
+    - stage: Check
+      python: 3.7
       script: scripts/check
-
-install:
-  - pip install poetry
-  - poetry install
+    - stage: Docs
+      python: 3.7
+      script: scripts/docs
 
 script:
   - scripts/test
 
-before_deploy:
-  - poetry config http-basic.pypi $PYPI_USERNAME $PYPI_PASSWORD
-  - poetry build
-
-deploy:
-  provider: script
-  script: poetry publish
-  skip_cleanup: true
-  on:
-    tags: true
-    # deploy only once
-    python: "3.7"
-    condition: "$DJANGO_VERSION = 2.2.*"
+after_script:
+  - if [ -f .coverage ]; then
+    python -m pip install codecov;
+    codecov --required;
+    fi
