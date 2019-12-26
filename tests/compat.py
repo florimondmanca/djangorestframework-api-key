@@ -9,4 +9,4 @@ if sys.version_info < (3, 7):
 
 
 else:
-    from contextlib import nullcontext  # pylint: disable=unused-import
+    from contextlib import nullcontext  # noqa: F401
