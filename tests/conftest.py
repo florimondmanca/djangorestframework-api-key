@@ -2,16 +2,18 @@ import typing
 
 import pytest
 from django.conf import settings
-from django.contrib.auth.base_user import AbstractBaseUser
 from django.http import HttpRequest
 from django.test import override_settings
 
 from .compat import nullcontext
 
+if typing.TYPE_CHECKING:
+    from django.contrib.auth.base_user import AbstractBaseUser
+
 
 def pytest_configure() -> None:
     settings.configure(
-        {
+        **{
             "SECRET_KEY": "abcd",
             "INSTALLED_APPS": [
                 # Mandatory
@@ -69,7 +71,7 @@ def view_with_permissions() -> typing.Callable:
     return create_view
 
 
-def _create_user() -> AbstractBaseUser:
+def _create_user() -> "AbstractBaseUser":
     from django.contrib.auth import get_user_model
 
     User = get_user_model()
