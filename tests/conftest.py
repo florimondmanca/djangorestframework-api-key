@@ -1,18 +1,21 @@
 import typing
 
 import pytest
-from django.http import HttpRequest
 from django.conf import settings
+from django.http import HttpRequest
 from django.test import override_settings
 
 from .compat import nullcontext
 
+if typing.TYPE_CHECKING:
+    from django.contrib.auth.base_user import AbstractBaseUser
 
-def pytest_configure():
+
+def pytest_configure() -> None:
     settings.configure(
-        **dict(
-            SECRET_KEY="abcd",
-            INSTALLED_APPS=[
+        **{
+            "SECRET_KEY": "abcd",
+            "INSTALLED_APPS": [
                 # Mandatory
                 "django.contrib.contenttypes",
                 # Permissions
@@ -26,7 +29,7 @@ def pytest_configure():
                 "rest_framework_api_key",
                 "test_project.heroes",
             ],
-            TEMPLATES=[
+            "TEMPLATES": [
                 # Admin
                 {
                     "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -38,29 +41,29 @@ def pytest_configure():
                     },
                 }
             ],
-            MIDDLEWARE=[
+            "MIDDLEWARE": [
                 # Admin
                 "django.contrib.messages.middleware.MessageMiddleware",
                 "django.contrib.sessions.middleware.SessionMiddleware",
                 "django.contrib.auth.middleware.AuthenticationMiddleware",
             ],
-            ROOT_URLCONF="test_project.project.urls",
-            DATABASES={
+            "ROOT_URLCONF": "test_project.project.urls",
+            "DATABASES": {
                 "default": {"ENGINE": "django.db.backends.sqlite3", "NAME": ":memory:"}
             },
-        )
+        }
     )
 
 
 @pytest.fixture
-def view_with_permissions():
+def view_with_permissions() -> typing.Callable:
     from rest_framework.decorators import api_view, permission_classes
     from rest_framework.response import Response
 
-    def create_view(*classes):
+    def create_view(*classes: type) -> typing.Callable:
         @api_view()
         @permission_classes(classes)
-        def view(*args):
+        def view(*args: typing.Any) -> Response:
             return Response()
 
         return view
@@ -68,7 +71,7 @@ def view_with_permissions():
     return create_view
 
 
-def _create_user():
+def _create_user() -> "AbstractBaseUser":
     from django.contrib.auth import get_user_model
 
     User = get_user_model()
@@ -86,11 +89,12 @@ def _create_user():
         },
     ],
 )
-def fixture_key_header_config(request) -> dict:
-    config = request.param
+def fixture_key_header_config(request: typing.Any) -> typing.Iterator[dict]:
+    config: dict = request.param
 
+    ctx: typing.ContextManager[None]
     if config.get("set_custom_header_setting"):
-        ctx = override_settings(API_KEY_CUSTOM_HEADER=config["header"])
+        ctx = override_settings(API_KEY_CUSTOM_HEADER=config["header"])  # type: ignore
     else:
         ctx = nullcontext()
 
@@ -99,19 +103,21 @@ def fixture_key_header_config(request) -> dict:
 
 
 @pytest.fixture(name="build_create_request")
-def fixture_build_create_request(key_header_config: dict):
+def fixture_build_create_request(key_header_config: dict) -> typing.Callable:
     from rest_framework.test import APIRequestFactory, force_authenticate
     from rest_framework_api_key.models import AbstractAPIKey
 
-    def build_create_request(model: typing.Type[AbstractAPIKey]):
+    def build_create_request(model: typing.Type[AbstractAPIKey]) -> typing.Callable:
         request_factory = APIRequestFactory()
 
         _MISSING = object()
 
         def create_request(
-            authenticated: bool = False, authorization: str = _MISSING, **kwargs
-        ):
+            authenticated: bool = False, **kwargs: typing.Any,
+        ) -> HttpRequest:
             headers = {}
+
+            authorization = kwargs.pop("authorization", _MISSING)
 
             if authorization is not None:
                 kwargs.setdefault("name", "test")
@@ -139,7 +145,7 @@ def fixture_build_create_request(key_header_config: dict):
 
 
 @pytest.fixture(name="create_request")
-def fixture_create_request(build_create_request) -> HttpRequest:
+def fixture_create_request(build_create_request: typing.Callable) -> typing.Callable:
     from rest_framework_api_key.models import APIKey
 
     return build_create_request(APIKey)
