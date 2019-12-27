@@ -4,7 +4,13 @@ export PREFIX=""
 if [ -d 'venv' ] ; then
     export PREFIX="venv/bin/"
 fi
-export SOURCE_FILES="src/rest_framework_api_key"
+
+export TEST_SOURCE_FILES=$(tr "\n" " " << EOF
+tests/conftest.py
+EOF
+)
+
+export SOURCE_FILES="src/rest_framework_api_key $TEST_SOURCE_FILES"
 
 set -x
 
