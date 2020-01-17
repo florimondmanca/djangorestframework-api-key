@@ -61,3 +61,25 @@ def test_custom_api_key_model():
     assert hero_api_key.is_valid(generated_key)
     assert hero_api_key.hero.id == hero.id
     assert hero.api_keys.first() == hero_api_key
+
+
+@pytest.mark.django_db
+def test_api_key_manager_get_from_key():
+    api_key, generated_key = APIKey.objects.create_key(name="test")
+    retrieved_key = APIKey.objects.get_from_key(generated_key)
+    assert retrieved_key == api_key
+
+
+@pytest.mark.django_db
+def test_api_key_manager_get_from_key_missing_key():
+    with pytest.raises(APIKey.DoesNotExist):
+        APIKey.objects.get_from_key("foobar")
+
+
+@pytest.mark.django_db
+def test_api_key_manager_get_from_key_invalid_key():
+    api_key, generated_key = APIKey.objects.create_key(name="test")
+    prefix, _, _ = generated_key.partition(".")
+    invalid_key = f"{prefix}.foobar"
+    with pytest.raises(ValidationError):
+        APIKey.objects.get_from_key(invalid_key)

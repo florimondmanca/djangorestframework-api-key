@@ -142,6 +142,16 @@ API keys can be created, viewed and revoked programmatically by manipulating the
 !!! danger
     To prevent leaking API keys, you must only give the `key` **to the client that triggered its generation**. In particular, **do not keep any trace of it on the server**.
 
+- To retrieve an `APIKey` instance based on its generated key (which is not stored in the database) use the `.get_from_key()` method on the `APIKey` objects manager instead of `.get()`:
+
+```python
+>>> from rest_framework_api_key.models import APIKey
+>>> # Generated keys follow this format
+>>> generated_key = "zx6UGvip.XakvjxQJUSRCHIEdMUDtwZtEnb4YLHaL"
+>>> api_key = APIKey.objects.get_from_key(generated_key)
+>>> # Proceed with the `api_key` object...
+```
+
 ## Customization
 
 This package provides various customization APIs that allow you to extend its basic behavior.

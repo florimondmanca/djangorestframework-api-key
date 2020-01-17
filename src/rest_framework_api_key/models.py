@@ -40,17 +40,19 @@ class BaseAPIKeyManager(models.Manager):
     def get_usable_keys(self) -> models.QuerySet:
         return self.filter(revoked=False)
 
-    def is_valid(self, key: str) -> bool:
+    def get_from_key(self, key: str) -> "AbstractAPIKey":
         prefix, _, _ = key.partition(".")
-
         queryset = self.get_usable_keys()
-
-        try:
-            api_key = queryset.get(prefix=prefix)
-        except self.model.DoesNotExist:
-            return False
-
+        api_key = queryset.get(prefix=prefix)
         if not api_key.is_valid(key):
+            raise ValidationError("Key is not valid.")
+        else:
+            return api_key
+
+    def is_valid(self, key: str) -> bool:
+        try:
+            api_key = self.get_from_key(key)
+        except (self.model.DoesNotExist, ValidationError):
             return False
 
         if api_key.has_expired:
