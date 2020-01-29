@@ -43,12 +43,14 @@ class BaseAPIKeyManager(models.Manager):
     def get_from_key(self, key: str) -> "AbstractAPIKey":
         prefix, _, _ = key.partition(".")
         queryset = self.get_usable_keys()
+
         try:
             api_key = queryset.get(prefix=prefix)
         except self.model.DoesNotExist:
             raise  # For the sake of being explicit.
+
         if not api_key.is_valid(key):
-            raise ValidationError("Key is not valid.")
+            raise self.model.DoesNotExist("Key is not valid.")
         else:
             return api_key
 

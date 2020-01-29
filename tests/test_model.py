@@ -81,5 +81,5 @@ def test_api_key_manager_get_from_key_invalid_key():
     api_key, generated_key = APIKey.objects.create_key(name="test")
     prefix, _, _ = generated_key.partition(".")
     invalid_key = f"{prefix}.foobar"
-    with pytest.raises(ValidationError):
+    with pytest.raises(APIKey.DoesNotExist):
         APIKey.objects.get_from_key(invalid_key)
