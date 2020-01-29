@@ -142,14 +142,23 @@ API keys can be created, viewed and revoked programmatically by manipulating the
 !!! danger
     To prevent leaking API keys, you must only give the `key` **to the client that triggered its generation**. In particular, **do not keep any trace of it on the server**.
 
-- To retrieve an `APIKey` instance based on its generated key (which is not stored in the database) use the `.get_from_key()` method on the `APIKey` objects manager instead of `.get()`:
+- To retrieve an `APIKey` instance based on its generated key (which is not stored in the database) use the `.get_from_key()` method on the `APIKey` objects manager instead of `.get()`. This is useful if you'd like to access an `APIKey` object from a view protected by a `HasAPIKey` permission.
 
 ```python
->>> from rest_framework_api_key.models import APIKey
->>> # Generated keys follow this format
->>> generated_key = "zx6UGvip.XakvjxQJUSRCHIEdMUDtwZtEnb4YLHaL"
->>> api_key = APIKey.objects.get_from_key(generated_key)
->>> # Proceed with the `api_key` object...
+from rest_framework.views import APIView
+from rest_framework_api_key.models import APIKey
+from rest_framework_api_key.permissions import HasAPIKey
+
+from .models import Project
+
+class ProjectListView(APIView):
+    permission_classes = [HasAPIKey]
+
+    def get(self, request):
+        """Retrieve a project based on the request API key."""
+        key = request.META["HTTP_AUTHORIZATION"]
+        api_key = APIKey.objects.get_from_key(key)
+        project = Project.objects.get(api_key=api_key)
 ```
 
 ## Customization
