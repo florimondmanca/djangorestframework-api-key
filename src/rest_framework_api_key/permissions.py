@@ -37,8 +37,9 @@ class BaseHasAPIKey(permissions.BasePermission):
     model: typing.Optional[typing.Type[APIKey]] = None
     key_parser = KeyParser()
 
-    def get_key(self, request: HttpRequest) -> typing.Optional[str]:
-        return self.key_parser.get(request)
+    @classmethod
+    def get_key(cls, request: HttpRequest) -> typing.Optional[str]:
+        return cls.key_parser.get(request)
 
     def has_permission(self, request: HttpRequest, view: typing.Any) -> bool:
         assert self.model is not None, (
