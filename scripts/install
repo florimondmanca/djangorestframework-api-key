@@ -7,6 +7,8 @@ fi
 
 source scripts/env
 
+set -x
+
 ${PREFIX}python -m pip install -U pip
 ${PREFIX}python -m pip install -r requirements.txt
 
