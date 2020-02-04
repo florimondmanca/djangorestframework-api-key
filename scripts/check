@@ -1,6 +1,6 @@
 #!/bin/sh -e
 
-source scripts/env
+. scripts/env
 
 export TEST_SOURCE_FILES=$(tr "\n" " " << EOF
 tests/conftest.py

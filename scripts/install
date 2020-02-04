@@ -5,7 +5,7 @@ if [ -z $CI ] ; then
   python -m venv venv
 fi
 
-source scripts/env
+. scripts/env
 
 set -x
 
