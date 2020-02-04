@@ -6,7 +6,17 @@
 export PREFIX=""
 if [ -z $CI ]; then
   $PYTHON -m venv venv
-  export PREFIX="venv/bin/"
+fi
+
+
+if [[ "$OSTYPE" == "cygwin" ]]; then
+	# POSIX compatibility layer and Linux environment emulation for Windows
+	export PREFIX="venv/Scripts/"
+elif [[ "$OSTYPE" == "msys" ]]; then
+	# Lightweight shell and GNU utilities compiled for Windows (part of MinGW)
+	export PREFIX="venv/Scripts/"
+else
+	export PREFIX="venv/bin/"
 fi
 
 set -x
