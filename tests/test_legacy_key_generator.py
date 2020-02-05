@@ -19,15 +19,12 @@ class LegacyKeyGenerator(KeyGenerator):
         return key, hashed_key
 
 
-@pytest.fixture(name="manager")
-def fixture_manager():
+def test_manager_with_legacy_key_generator() -> None:
     class Manager(BaseAPIKeyManager):
         key_generator = LegacyKeyGenerator()
 
     manager = Manager()
     manager.model = APIKey
-    return manager
 
-
-def test_manager_with_legacy_key_generator(manager):
-    manager.create_key(name="test")
+    api_key, generated_key = manager.create_key(name="test")
+    assert api_key.is_valid(generated_key)
