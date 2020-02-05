@@ -1,11 +1,9 @@
 #!/bin/sh -e
 
+. scripts/env
+
 export PACKAGE="rest_framework_api_key"
 export VERSION=`cat src/${PACKAGE}/__version__.py | grep __version__ | sed "s/__version__ = //" | sed "s/'//g"`
-export PREFIX=""
-if [ -d 'venv' ] ; then
-    export PREFIX="venv/bin/"
-fi
 
 if ! command -v "${PREFIX}twine" &>/dev/null ; then
     echo "Unable to find the 'twine' command."

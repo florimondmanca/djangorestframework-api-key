@@ -31,6 +31,16 @@ jobs:
       python: 3.7
       install: scripts/install
       script: scripts/docs
+    - stage: Test
+      os: windows
+      language: shell
+      python: 3.8
+      env: PATH=/c/Python38:/c/Python38/Scripts:$PATH
+      before_install:
+        - choco install python --version 3.8
+        - python -m pip install --upgrade pip
+      install: scripts/install
+      script: scripts/test
 
 install:
   - scripts/install

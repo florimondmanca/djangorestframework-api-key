@@ -1,13 +1,11 @@
 #!/bin/sh -e
 
-# Use the Python executable provided from the `-p` option, or a default.
-[[ $1 = "-p" ]] && PYTHON=$2 || PYTHON="python"
-
-export PREFIX=""
-if [ -z $CI ]; then
-  $PYTHON -m venv venv
-  export PREFIX="venv/bin/"
+if [ -z $CI ] ; then
+  echo "Creating virtual environment in 'venv/'..."
+  python -m venv venv
 fi
+
+. scripts/env
 
 set -x
 
