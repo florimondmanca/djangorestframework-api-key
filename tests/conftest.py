@@ -55,22 +55,6 @@ def pytest_configure() -> None:
     )
 
 
-@pytest.fixture
-def view_with_permissions() -> typing.Callable:
-    from rest_framework.decorators import api_view, permission_classes
-    from rest_framework.response import Response
-
-    def create_view(*classes: type) -> typing.Callable:
-        @api_view()
-        @permission_classes(classes)
-        def view(*args: typing.Any) -> Response:
-            return Response()
-
-        return view
-
-    return create_view
-
-
 def _create_user() -> "AbstractBaseUser":
     from django.contrib.auth import get_user_model
 
