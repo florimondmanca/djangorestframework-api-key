@@ -1,12 +1,10 @@
 import pytest
-from django.contrib.admin import ModelAdmin, site
-from django.contrib.auth import login
-from django.contrib.auth.middleware import AuthenticationMiddleware
-from django.contrib.auth.models import User
+from django.contrib.admin import site
 from django.contrib.messages import get_messages
 from django.contrib.messages.middleware import MessageMiddleware
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.test import RequestFactory
+from django.http.request import HttpRequest
 
 from rest_framework_api_key.admin import APIKeyModelAdmin
 from rest_framework_api_key.models import APIKey
@@ -15,35 +13,45 @@ from test_project.heroes.admin import HeroAPIKeyModelAdmin
 from test_project.heroes.models import Hero, HeroAPIKey
 
 
-@pytest.fixture(name="req")
-def fixture_req(rf: RequestFactory):
-    messages = MessageMiddleware()
-    sessions = SessionMiddleware()
+def build_admin_request(rf: RequestFactory) -> HttpRequest:
     request = rf.post("/")
+
+    # NOTE: all middleware must be instantiated before
+    # any middleware can process the request.
+    sessions = SessionMiddleware()
+    messages = MessageMiddleware()
+
     sessions.process_request(request)
     messages.process_request(request)
+
     return request
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize(
-    "model, model_admin, build_api_key",
-    [
-        (APIKey, APIKeyModelAdmin, lambda m: m(name="test")),
-        (
-            HeroAPIKey,
-            HeroAPIKeyModelAdmin,
-            lambda m: m(name="test", hero=Hero.objects.create()),
-        ),
-    ],
-)
-def test_create(req, model, model_admin, build_api_key):
-    admin = model_admin(model, site)
-    api_key = build_api_key(model)
+def test_admin_create_api_key(rf: RequestFactory) -> None:
+    request = build_admin_request(rf)
+
+    admin = APIKeyModelAdmin(APIKey, site)
+    api_key = APIKey(name="test")
 
     assert not api_key.pk
-    admin.save_model(req, obj=api_key)
+    admin.save_model(request, obj=api_key)
     assert api_key.pk
 
-    messages = get_messages(req)
+    messages = get_messages(request)
+    assert len(messages) == 1
+
+
+@pytest.mark.django_db
+def test_admin_create_custom_api_key(rf: RequestFactory) -> None:
+    request = build_admin_request(rf)
+
+    admin = HeroAPIKeyModelAdmin(HeroAPIKey, site)
+    api_key = HeroAPIKey(name="test", hero=Hero.objects.create())
+
+    assert not api_key.pk
+    admin.save_model(request, obj=api_key)
+    assert api_key.pk
+
+    messages = get_messages(request)
     assert len(messages) == 1
