@@ -5,15 +5,15 @@ from django.conf.global_settings import PASSWORD_HASHERS
 from django.test import override_settings
 from rest_framework import generics, permissions
 from rest_framework.response import Response
-
+from .utils import create_view_with_permissions
 from rest_framework_api_key.permissions import HasAPIKey
 
 pytestmark = pytest.mark.django_db
 
 
 @pytest.fixture(name="view")
-def fixture_view(view_with_permissions):
-    return view_with_permissions(HasAPIKey)
+def fixture_view():
+    return create_view_with_permissions(HasAPIKey)
 
 
 def test_if_valid_api_key_then_permission_granted(create_request, view):

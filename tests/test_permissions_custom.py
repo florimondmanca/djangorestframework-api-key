@@ -2,13 +2,14 @@ import pytest
 
 from test_project.heroes.models import HeroAPIKey, Hero
 from test_project.heroes.permissions import HasHeroAPIKey
+from .utils import create_view_with_permissions
 
 pytestmark = pytest.mark.django_db
 
 
 @pytest.fixture(name="view")
-def fixture_view(view_with_permissions):
-    return view_with_permissions(HasHeroAPIKey)
+def fixture_view():
+    return create_view_with_permissions(HasHeroAPIKey)
 
 
 @pytest.fixture(name="create_hero_request")
