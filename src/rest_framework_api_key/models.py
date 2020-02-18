@@ -57,7 +57,7 @@ class BaseAPIKeyManager(models.Manager):
     def is_valid(self, key: str) -> bool:
         try:
             api_key = self.get_from_key(key)
-        except (self.model.DoesNotExist, ValidationError):
+        except self.model.DoesNotExist:
             return False
 
         if api_key.has_expired:
