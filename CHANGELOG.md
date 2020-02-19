@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Add a new method to the `APIKey` object manager, `BaseAPIKeyManager.get_from_key()`, to allow for retrieving `APIKey` objects based on generated keys.
+
 ## [v1.4.1] - 2019-08-24
 
 ### Added
