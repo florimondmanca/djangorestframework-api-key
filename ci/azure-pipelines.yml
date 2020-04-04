@@ -1,0 +1,68 @@
+trigger:
+  - master
+
+pr:
+  - master
+
+variables:
+  CI: true
+  PIP_CACHE_DIR: $(Pipeline.Workspace)/.cache/pip
+
+jobs:
+  - job: Check
+    steps:
+      - template: templates/install.yml
+        parameters:
+          pythonVersion: "3.8"
+      - bash: scripts/check
+        displayName: "Run checks"
+
+  - job: Docs
+    steps:
+      - template: templates/install.yml
+        parameters:
+          pythonVersion: "3.8"
+      - bash: scripts/docs
+        displayName: "Build docs"
+
+  - job: Linux
+    strategy:
+      matrix:
+        py3.6-dj2.0:
+          pythonVersion: "3.6"
+          djangoVersion: "2.0.*"
+        py3.7-dj2.2:
+          pythonVersion: "3.7"
+          djangoVersion: "2.2.*"
+        py3.8-dj3.0:
+          pythonVersion: "3.8"
+          djangoVersion: "3.0.*"
+          uploadCoverage: true
+
+    steps:
+      - template: templates/install.yml
+        parameters:
+          pythonVersion: $(pythonVersion)
+          djangoVersion: $(djangoVersion)
+      - bash: scripts/test
+        displayName: "Run tests"
+      - bash: |
+          if [ -f .coverage ]; then
+            python -m pip install codecov;
+            codecov --required;
+          fi
+        condition: eq(variables['uploadCoverage'], true)
+        env:
+          CODECOV_TOKEN: $(codecovToken)
+        displayName: "Upload coverage"
+
+  - job: Windows
+    pool:
+      vmImage: "vs2017-win2016"
+    steps:
+      - template: templates/install.yml
+        parameters:
+          pythonVersion: "3.7"
+          djangoVersion: "3.0.*"
+      - bash: scripts/test
+        displayName: "Run tests"

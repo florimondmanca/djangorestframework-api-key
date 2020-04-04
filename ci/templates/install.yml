@@ -1,0 +1,26 @@
+parameters:
+  - name: pythonVersion
+    type: string
+  - name: djangoVersion
+    type: string
+    default: ""
+
+steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: "${{ parameters.pythonVersion }}"
+    displayName: "Use Python ${{ parameters.pythonVersion }}"
+
+  - task: Cache@2
+    inputs:
+      key: "pip | $(Agent.OS) | requirements.txt"
+      restoreKeys: |
+        pip | $(Agent.OS)
+        pip
+      path: $(PIP_CACHE_DIR)
+
+  - bash: scripts/install
+    ${{ if parameters.djangoVersion }}:
+      env:
+        DJANGO_VERSION: ${{ parameters.djangoVersion }}
+    displayName: "Install dependencies"
