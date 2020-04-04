@@ -1,5 +1,8 @@
 import typing
+from pathlib import Path
 
+import dj_database_url
+import dotenv
 import pytest
 from django.conf import settings
 from django.http import HttpRequest
@@ -12,6 +15,8 @@ if typing.TYPE_CHECKING:
 
 
 def pytest_configure() -> None:
+    dotenv.read_dotenv(str(Path(__file__).parent.parent / ".env"))
+
     settings.configure(
         **{
             "SECRET_KEY": "abcd",
@@ -49,7 +54,7 @@ def pytest_configure() -> None:
             ],
             "ROOT_URLCONF": "test_project.project.urls",
             "DATABASES": {
-                "default": {"ENGINE": "django.db.backends.sqlite3", "NAME": ":memory:"}
+                "default": dj_database_url.config(default="sqlite://:memory:")
             },
         }
     )

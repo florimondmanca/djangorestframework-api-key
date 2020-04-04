@@ -1,5 +1,7 @@
 import os
 
+import dj_database_url
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = "*(q7fo7duyzqhv$qmiym5#z%w^qqh67a9rqk$jr4n1))nvnql^"
 DEBUG = True
@@ -53,12 +55,7 @@ WSGI_APPLICATION = "project.wsgi.application"
 
 # Database
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
-    }
-}
+DATABASES = {"default": dj_database_url.config(default="sqlite://db.sqlite3")}
 
 
 # Password validation
