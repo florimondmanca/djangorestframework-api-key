@@ -11,3 +11,5 @@ ${PREFIX}black --check --diff --target-version=py36 $SOURCE_FILES
 ${PREFIX}flake8 $SOURCE_FILES
 ${PREFIX}mypy $TYPED_SOURCE_FILES
 ${PREFIX}isort --check --diff --project=djangorestframework-api-key --recursive $SOURCE_FILES
+
+scripts/makemigrations --check
