@@ -2,14 +2,13 @@
 
 . scripts/env
 
-export TYPED_SOURCE_FILES="src/rest_framework_api_key tests/conftest.py"
-export SOURCE_FILES="$TYPED_SOURCE_FILES test_project/"
+export SOURCE_FILES="src/rest_framework_api_key tests/conftest.py test_project/"
 
 set -x
 
 ${PREFIX}black --check --diff --target-version=py36 $SOURCE_FILES
 ${PREFIX}flake8 $SOURCE_FILES
-${PREFIX}mypy $TYPED_SOURCE_FILES
+${PREFIX}mypy $SOURCE_FILES
 ${PREFIX}isort --check --diff --project=djangorestframework-api-key --recursive $SOURCE_FILES
 
 scripts/makemigrations --check

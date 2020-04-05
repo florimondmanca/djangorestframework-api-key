@@ -5,12 +5,13 @@ from django.db import models
 from django.utils import timezone
 
 from .crypto import KeyGenerator, concatenate, split
+from .types import K
 
 
-class BaseAPIKeyManager(models.Manager):
+class BaseAPIKeyManager(typing.Generic[K], models.Manager):
     key_generator = KeyGenerator()
 
-    def assign_key(self, obj: "AbstractAPIKey") -> str:
+    def assign_key(self, obj: "K") -> str:
         try:
             key, prefix, hashed_key = self.key_generator.generate()
         except ValueError:  # Compatibility with < 1.4
@@ -29,7 +30,7 @@ class BaseAPIKeyManager(models.Manager):
 
         return key
 
-    def create_key(self, **kwargs: typing.Any) -> typing.Tuple["AbstractAPIKey", str]:
+    def create_key(self, **kwargs: typing.Any) -> typing.Tuple[K, str]:
         # Prevent from manually setting the primary key.
         kwargs.pop("id", None)
         obj = self.model(**kwargs)
@@ -37,10 +38,10 @@ class BaseAPIKeyManager(models.Manager):
         obj.save()
         return obj, key
 
-    def get_usable_keys(self) -> models.QuerySet:
+    def get_usable_keys(self) -> "models.QuerySet[K]":
         return self.filter(revoked=False)
 
-    def get_from_key(self, key: str) -> "AbstractAPIKey":
+    def get_from_key(self, key: str) -> K:
         prefix, _, _ = key.partition(".")
         queryset = self.get_usable_keys()
 
@@ -66,12 +67,12 @@ class BaseAPIKeyManager(models.Manager):
         return True
 
 
-class APIKeyManager(BaseAPIKeyManager):
+class APIKeyManager(BaseAPIKeyManager["APIKey"]):
     pass
 
 
 class AbstractAPIKey(models.Model):
-    objects = APIKeyManager()
+    objects: BaseAPIKeyManager  # Must be specified when subclassing.
 
     id = models.CharField(max_length=100, unique=True, primary_key=True, editable=False)
     prefix = models.CharField(max_length=8, unique=True, editable=False)
@@ -143,4 +144,4 @@ class AbstractAPIKey(models.Model):
 
 
 class APIKey(AbstractAPIKey):
-    pass
+    objects = APIKeyManager()

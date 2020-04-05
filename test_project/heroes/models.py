@@ -1,6 +1,10 @@
+import typing
+
 from django.db import models
 
 from rest_framework_api_key.models import AbstractAPIKey, BaseAPIKeyManager
+
+T = typing.TypeVar("T")
 
 
 class Hero(models.Model):
@@ -11,12 +15,12 @@ class Hero(models.Model):
     class Meta:
         verbose_name_plural = "heroes"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
-class HeroAPIKeyManager(BaseAPIKeyManager):
-    def get_usable_keys(self):
+class HeroAPIKeyManager(BaseAPIKeyManager["HeroAPIKey"]):
+    def get_usable_keys(self) -> "models.QuerySet[HeroAPIKey]":
         return super().get_usable_keys().filter(hero__retired=False)
 
 

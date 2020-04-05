@@ -5,6 +5,7 @@ from django.http import HttpRequest
 from rest_framework import permissions
 
 from .models import AbstractAPIKey, APIKey
+from .types import K
 
 
 class KeyParser:
@@ -33,8 +34,8 @@ class KeyParser:
         return request.META.get(name) or None
 
 
-class BaseHasAPIKey(permissions.BasePermission):
-    model: typing.Optional[typing.Type[APIKey]] = None
+class BaseHasAPIKey(typing.Generic[K], permissions.BasePermission):
+    model: typing.Optional[typing.Type[K]] = None
     key_parser = KeyParser()
 
     def get_key(self, request: HttpRequest) -> typing.Optional[str]:
@@ -56,5 +57,5 @@ class BaseHasAPIKey(permissions.BasePermission):
         return self.has_permission(request, view)
 
 
-class HasAPIKey(BaseHasAPIKey):
+class HasAPIKey(BaseHasAPIKey[APIKey]):
     model = APIKey

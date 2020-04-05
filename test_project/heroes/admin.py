@@ -6,7 +6,7 @@ from .models import Hero, HeroAPIKey
 
 
 @admin.register(HeroAPIKey)
-class HeroAPIKeyModelAdmin(APIKeyModelAdmin):
+class HeroAPIKeyModelAdmin(APIKeyModelAdmin[HeroAPIKey]):
     pass
 
 

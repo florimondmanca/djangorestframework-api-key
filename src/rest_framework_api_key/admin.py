@@ -4,11 +4,12 @@ from django.contrib import admin, messages
 from django.db import models
 from django.http.request import HttpRequest
 
-from .models import AbstractAPIKey, APIKey
+from .models import APIKey
+from .types import K
 
 
-class APIKeyModelAdmin(admin.ModelAdmin):
-    model: typing.Type[AbstractAPIKey]
+class APIKeyModelAdmin(typing.Generic[K], admin.ModelAdmin):
+    model: typing.Type[K]
     list_display = (
         "prefix",
         "name",
@@ -23,7 +24,8 @@ class APIKeyModelAdmin(admin.ModelAdmin):
     def get_readonly_fields(
         self, request: HttpRequest, obj: models.Model = None
     ) -> typing.Tuple[str, ...]:
-        obj = typing.cast(AbstractAPIKey, obj)
+        obj = typing.cast(K, obj)  # Must preserve base signature.
+
         fields: typing.Tuple[str, ...]
 
         fields = ("prefix",)
@@ -35,7 +37,7 @@ class APIKeyModelAdmin(admin.ModelAdmin):
     def save_model(
         self,
         request: HttpRequest,
-        obj: AbstractAPIKey,
+        obj: K,
         form: typing.Any = None,
         change: bool = False,
     ) -> None:
