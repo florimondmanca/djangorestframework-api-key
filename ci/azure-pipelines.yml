@@ -33,7 +33,7 @@ jobs:
       - template: templates/install.yml
         parameters:
           pythonVersion: "3.8"
-      - bash: scripts/docs
+      - bash: scripts/docs build
         displayName: "Build docs"
 
   - job: Linux
