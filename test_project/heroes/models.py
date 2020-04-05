@@ -31,3 +31,8 @@ class HeroAPIKey(AbstractAPIKey):
     class Meta(AbstractAPIKey.Meta):
         verbose_name = "Hero API key"
         verbose_name_plural = "Hero API keys"
+
+
+# A straight subclass to verify that defining `.objects` is not required.
+class MyAPIKey(AbstractAPIKey):
+    pass

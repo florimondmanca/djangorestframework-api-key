@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.db.utils import IntegrityError
 from rest_framework_api_key.models import APIKey
 
-from test_project.heroes.models import HeroAPIKey, Hero
+from test_project.heroes.models import MyAPIKey, HeroAPIKey, Hero
 from .dateutils import NOW, TOMORROW, YESTERDAY
 
 pytestmark = pytest.mark.django_db
@@ -61,6 +61,11 @@ def test_custom_api_key_model():
     assert hero_api_key.is_valid(generated_key)
     assert hero_api_key.hero.id == hero.id
     assert hero.api_keys.first() == hero_api_key
+
+
+def test_custom_api_key_model_objects() -> None:
+    api_key, generated_key = MyAPIKey.objects.create_key(name="test")
+    assert api_key.is_valid(generated_key)
 
 
 @pytest.mark.django_db

@@ -72,7 +72,9 @@ class APIKeyManager(BaseAPIKeyManager["APIKey"]):
 
 
 class AbstractAPIKey(models.Model):
-    objects: BaseAPIKeyManager  # Must be specified when subclassing.
+    # Unfortunately django-stubs mypy plugin makes this fail by generating
+    # a unique class name for `type(objects)`...
+    objects: BaseAPIKeyManager = BaseAPIKeyManager()
 
     id = models.CharField(max_length=100, unique=True, primary_key=True, editable=False)
     prefix = models.CharField(max_length=8, unique=True, editable=False)
