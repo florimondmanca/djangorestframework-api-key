@@ -7,21 +7,20 @@
     </a>
   </p>
   <div>
-    <a href="https://travis-ci.org/florimondmanca/djangorestframework-api-key" target="_blank" rel="noreferrer">
-      <img src="https://img.shields.io/travis/florimondmanca/djangorestframework-api-key.svg" alt="build status"/>
+    <a href="https://dev.azure.com/florimondmanca/public/_build/latest?definitionId=7&branchName=master" target="_blank" rel="noreferrer">
+      <img src="https://dev.azure.com/florimondmanca/public/_apis/build/status/florimondmanca.djangorestframework-api-key?branchName=master" alt="build status"/>
+    </a>
+    <a href="https://codecov.io/gh/florimondmanca/djangorestframework-api-key">
+      <img src="https://codecov.io/gh/florimondmanca/djangorestframework-api-key/branch/master/graph/badge.svg" alt="coverage">
     </a>
     <a href="https://pypi.org/project/djangorestframework-api-key" target="_blank" rel="noreferrer">
       <img src="https://badge.fury.io/py/djangorestframework-api-key.svg" alt="package version"/>
-    </a>
-    <a href="https://github.com/ambv/black" target="_blank" rel="noreferrer">
-      <img src="https://img.shields.io/badge/code_style-black-000000.svg" alt="code style">
     </a>
   </div>
   <div>
     <img src="https://img.shields.io/pypi/pyversions/djangorestframework-api-key.svg" alt="python versions"/>
     <img src="https://img.shields.io/pypi/djversions/djangorestframework-api-key.svg?colorB=44b78b" alt="django versions"/>
     <img src="https://img.shields.io/badge/drf-3.8+-7f2d2d.svg" alt="drf versions"/>
-    <img src="https://img.shields.io/pypi/l/djangorestframework-api-key.svg" alt="license"/>
   </div>
 </div>
 
@@ -50,7 +49,7 @@ API keys are ideal in the following situations:
 They can also present enough security for authorizing internal services, such as your API server and an internal frontend application.
 
 !!! warning
-    Please note that this package is NOT meant for authentication. You should NOT use this package  to identify individual users, either directly or indirectly.
+Please note that this package is NOT meant for authentication. You should NOT use this package to identify individual users, either directly or indirectly.
 
     If you need server-to-server authentication, you may want to consider OAuth instead. Libraries such as [django-oauth-toolkit](https://django-oauth-toolkit.readthedocs.io/en/latest/index.html) can help.
 
@@ -63,7 +62,7 @@ pip install "djangorestframework-api-key==1.*"
 ```
 
 !!! important
-    It is highly recommended to **pin your dependency** to the latest major version (as depicted above), as breaking changes may and will happen between major releases.
+It is highly recommended to **pin your dependency** to the latest major version (as depicted above), as breaking changes may and will happen between major releases.
 
 Add the app to your `INSTALLED_APPS`:
 
