@@ -49,7 +49,7 @@ API keys are ideal in the following situations:
 They can also present enough security for authorizing internal services, such as your API server and an internal frontend application.
 
 !!! warning
-Please note that this package is NOT meant for authentication. You should NOT use this package to identify individual users, either directly or indirectly.
+    Please note that this package is NOT meant for authentication. You should NOT use this package to identify individual users, either directly or indirectly.
 
     If you need server-to-server authentication, you may want to consider OAuth instead. Libraries such as [django-oauth-toolkit](https://django-oauth-toolkit.readthedocs.io/en/latest/index.html) can help.
 
@@ -62,7 +62,7 @@ pip install "djangorestframework-api-key==1.*"
 ```
 
 !!! important
-It is highly recommended to **pin your dependency** to the latest major version (as depicted above), as breaking changes may and will happen between major releases.
+    It is highly recommended to **pin your dependency** to the latest major version (as depicted above), as breaking changes may and will happen between major releases.
 
 Add the app to your `INSTALLED_APPS`:
 
