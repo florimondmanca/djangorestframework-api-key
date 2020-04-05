@@ -5,6 +5,8 @@ djangorestframework==3.10.*
 
 autoflake
 black
+dj-database-url
+django-dotenv
 django-stubs
 djangorestframework-stubs
 flake8

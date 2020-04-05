@@ -3,8 +3,14 @@ import os
 import sys
 import pathlib
 
+import dotenv
+
+root = pathlib.Path(__file__).parent.parent
+
 if __name__ == "__main__":
-    sys.path.append(str(pathlib.Path(__file__).parent.parent))
+    dotenv.read_dotenv(str(root / ".env"))
+
+    sys.path.append(str(root))
 
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "test_project.project.settings")
     try:
