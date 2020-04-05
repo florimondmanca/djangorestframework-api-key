@@ -1,14 +1,19 @@
 -e .
 
+# Django environment.
 django[argon2,bcrypt]==3.0.*
 djangorestframework==3.10.*
-
-autoflake
-black
 dj-database-url
 django-dotenv
 django-stubs
 djangorestframework-stubs
+
+# PostgreSQL testing.
+psycopg2-binary
+
+# Tooling.
+autoflake
+black
 flake8
 flake8-bugbear
 flake8-comprehensions

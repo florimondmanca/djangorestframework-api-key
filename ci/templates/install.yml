@@ -20,7 +20,7 @@ steps:
       path: $(PIP_CACHE_DIR)
 
   - bash: scripts/install
-    ${{ if parameters.djangoVersion }}:
-      env:
+    env:
+      ${{ if parameters.djangoVersion }}:
         DJANGO_VERSION: ${{ parameters.djangoVersion }}
     displayName: "Install dependencies"

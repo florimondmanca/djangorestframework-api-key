@@ -4,6 +4,17 @@ trigger:
 pr:
   - master
 
+resources:
+  containers:
+    - container: pg11
+      image: postgres:11
+      ports:
+        - 5432:5432
+      env:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_DB: default
+
 variables:
   CI: true
   PIP_CACHE_DIR: $(Pipeline.Workspace)/.cache/pip
@@ -65,4 +76,17 @@ jobs:
           pythonVersion: "3.7"
           djangoVersion: "3.0.*"
       - bash: scripts/test
+        displayName: "Run tests"
+
+  - job: Postgres
+    services:
+      postgres: pg11
+    steps:
+      - template: templates/install.yml
+        parameters:
+          pythonVersion: "3.7"
+          djangoVersion: "3.0.*"
+      - bash: scripts/test
+        env:
+          DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/default"
         displayName: "Run tests"
