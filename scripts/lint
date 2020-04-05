@@ -2,12 +2,7 @@
 
 . scripts/env
 
-export TEST_SOURCE_FILES=$(tr "\n" " " << EOF
-tests/conftest.py
-EOF
-)
-
-export SOURCE_FILES="src/rest_framework_api_key $TEST_SOURCE_FILES"
+export SOURCE_FILES="src/rest_framework_api_key test_project tests/conftest.py"
 
 set -x
 
