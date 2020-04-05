@@ -4,11 +4,19 @@ from django.contrib import admin, messages
 from django.db import models
 from django.http.request import HttpRequest
 
+from .compat import generic_meta
 from .models import APIKey
 from .types import K
 
+# Python 3.6 fix.
+APIKeyModelAdminMeta: typing.Any = generic_meta(
+    "APIKeyModelAdminMeta", type(admin.ModelAdmin)
+)
 
-class APIKeyModelAdmin(typing.Generic[K], admin.ModelAdmin):
+
+class APIKeyModelAdmin(
+    typing.Generic[K], admin.ModelAdmin, metaclass=APIKeyModelAdminMeta
+):
     model: typing.Type[K]
     list_display = (
         "prefix",

@@ -4,6 +4,7 @@ from django.conf import settings
 from django.http import HttpRequest
 from rest_framework import permissions
 
+from .compat import generic_meta
 from .models import AbstractAPIKey, APIKey
 from .types import K
 
@@ -34,7 +35,15 @@ class KeyParser:
         return request.META.get(name) or None
 
 
-class BaseHasAPIKey(typing.Generic[K], permissions.BasePermission):
+# Python 3.6 fix.
+BaseHasAPIKeyMeta: typing.Any = generic_meta(
+    "BaseHasAPIKeyMeta", type(permissions.BasePermission)
+)
+
+
+class BaseHasAPIKey(
+    typing.Generic[K], permissions.BasePermission, metaclass=BaseHasAPIKeyMeta
+):
     model: typing.Optional[typing.Type[K]] = None
     key_parser = KeyParser()
 
