@@ -7,7 +7,7 @@ MODEL_NAME = "heroapikey"
 DEPENDENCIES = [(APP_NAME, "0001_initial")]
 
 
-def populate_prefix_hashed_key(apps, schema_editor):
+def populate_prefix_hashed_key(apps, schema_editor):  # type: ignore
     model = apps.get_model(APP_NAME, MODEL_NAME)
 
     for api_key in model.objects.all():

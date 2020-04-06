@@ -5,8 +5,6 @@ django[argon2,bcrypt]==3.0.*
 djangorestframework==3.10.*
 dj-database-url
 django-dotenv
-django-stubs
-djangorestframework-stubs
 
 # PostgreSQL testing.
 psycopg2-binary

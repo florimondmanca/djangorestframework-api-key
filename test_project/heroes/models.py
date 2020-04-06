@@ -11,12 +11,12 @@ class Hero(models.Model):
     class Meta:
         verbose_name_plural = "heroes"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
 class HeroAPIKeyManager(BaseAPIKeyManager):
-    def get_usable_keys(self):
+    def get_usable_keys(self) -> models.QuerySet:
         return super().get_usable_keys().filter(hero__retired=False)
 
 
