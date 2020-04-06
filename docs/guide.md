@@ -349,3 +349,9 @@ If you want to replace the key generation algorithm entirely, you can create you
     Likewise, if `.verify()` must accept anything else than the `key` and `hashed_key`, you'll need to override `.is_valid()` on your custom API key model.
     
     See [models.py](https://github.com/florimondmanca/djangorestframework-api-key/blob/master/rest_framework_api_key/models.py) for the source code of `BaseAPIKeyManager`.
+
+## Typing support
+
+This package provides type information starting with version 2.0, making it suitable for usage with type checkers such as `mypy`.
+
+For the best experience, you may want to install packages such as [`django-stubs`](https://github.com/typeddjango/django-stubs) and [`djangorestframework-stubs`](https://github.com/typeddjango/djangorestframework-stubs). Note however that a seamless integration with these packages is not guaranteed yet.
