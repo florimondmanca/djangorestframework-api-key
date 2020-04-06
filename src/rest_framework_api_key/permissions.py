@@ -34,7 +34,7 @@ class KeyParser:
 
 
 class BaseHasAPIKey(permissions.BasePermission):
-    model: typing.Optional[typing.Type[APIKey]] = None
+    model: typing.Optional[typing.Type[AbstractAPIKey]] = None
     key_parser = KeyParser()
 
     def get_key(self, request: HttpRequest) -> typing.Optional[str]:

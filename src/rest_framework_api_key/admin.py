@@ -9,6 +9,7 @@ from .models import AbstractAPIKey, APIKey
 
 class APIKeyModelAdmin(admin.ModelAdmin):
     model: typing.Type[AbstractAPIKey]
+
     list_display = (
         "prefix",
         "name",
