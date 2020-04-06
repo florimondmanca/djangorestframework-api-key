@@ -352,6 +352,6 @@ If you want to replace the key generation algorithm entirely, you can create you
 
 ## Typing support
 
-As of version 2.0, this package provides type information, making it suitable for usage with type checkers such as `mypy`.
+This package provides type information starting with version 2.0, making it suitable for usage with type checkers such as `mypy`.
 
-For the best experience, you may want to install packages such as [`django-stubs`](https://github.com/typeddjango/django-stubs) and [`djangorestframework-stubs`](https://github.com/typeddjango/djangorestframework-stubs). Note however that a seamless integration with these packages is not guaranteed at this point.
+For the best experience, you may want to install packages such as [`django-stubs`](https://github.com/typeddjango/django-stubs) and [`djangorestframework-stubs`](https://github.com/typeddjango/djangorestframework-stubs). Note however that a seamless integration with these packages is not guaranteed yet.
