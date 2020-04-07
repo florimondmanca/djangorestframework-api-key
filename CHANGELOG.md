@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.0 - 2020-04-07
+
+**NOTE**: this release drops compatibility with certain Python and Django versions, but contains no other breaking changes. See [Upgrade to 2.0](https://florimondmanca.github.io/djangorestframework-api-key/upgrade/2.0/) for detailed migration steps.
+
+### Removed
+
+- Dropped support for Django 2.0 and Django 2.1. (Pull #126)
+- Dropped support for Python 3.5. (Pull #84)
+
+### Added
+
+- Add support for Django 3.0. (Pull #82)
+- Add support for Python 3.8. (Pull #81)
+- Add `BaseAPIKeyManager.get_from_key()` to allow retrieving API keys from views. (Pull #93)
+- Add type annotations, and partial support for `django-stubs` and `djangorestframework-stubs`. (Pull #88, Pull #122)
+
 ## 1.4.1 - 2019-08-24
 
 ### Added

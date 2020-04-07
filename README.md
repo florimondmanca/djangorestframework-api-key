@@ -49,10 +49,10 @@ They can also present enough security for authorizing internal services, such as
 
 ## Quickstart
 
-Install the latest version with `pip`:
+Install with `pip`:
 
 ```bash
-pip install "djangorestframework-api-key==1.*"
+pip install "djangorestframework-api-key==2.*"
 ```
 
 _**Note**: It is highly recommended to **pin your dependency** to the latest major version (as depicted above), as breaking changes may and will happen between major releases._
