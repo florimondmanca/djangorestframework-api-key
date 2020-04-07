@@ -39,9 +39,9 @@ jobs:
   - job: Linux
     strategy:
       matrix:
-        py3.6-dj2.0:
+        py3.6-dj2.2:
           pythonVersion: "3.6"
-          djangoVersion: "2.0.*"
+          djangoVersion: "2.2.*"
         py3.7-dj2.2:
           pythonVersion: "3.7"
           djangoVersion: "2.2.*"
