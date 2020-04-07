@@ -11,7 +11,7 @@
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
       
-        <link rel="canonical" href="https://florimondmanca.github.io/djangorestframework-api-key/">
+        <link rel="canonical" href="https://florimondmanca.github.io/djangorestframework-api-key/upgrade/2.0/">
       
       
       
@@ -33,18 +33,18 @@
       
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
-      <link rel="shortcut icon" href="assets/images/favicon.png">
+      <link rel="shortcut icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.1, mkdocs-material-4.6.3">
     
     
       
-        <title>Django REST Framework API Key</title>
+        <title>2.0 - Django REST Framework API Key</title>
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/application.adb8469c.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application.adb8469c.css">
       
-        <link rel="stylesheet" href="assets/stylesheets/application-palette.a8b3c06d.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/application-palette.a8b3c06d.css">
       
       
         
@@ -53,7 +53,7 @@
       
     
     
-      <script src="assets/javascripts/modernizr.86422ebf.js"></script>
+      <script src="../../assets/javascripts/modernizr.86422ebf.js"></script>
     
     
       
@@ -62,7 +62,7 @@
         <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
       
     
-    <link rel="stylesheet" href="assets/fonts/material-icons.css">
+    <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
     
     
     
@@ -87,7 +87,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#introduction" tabindex="0" class="md-skip">
+      <a href="#upgrading-to-20" tabindex="0" class="md-skip">
         Skip to content
       </a>
     
@@ -113,7 +113,7 @@
             </span>
             <span class="md-header-nav__topic">
               
-                Home
+                2.0
               
             </span>
           
@@ -222,72 +222,11 @@
       
       
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-    
-    
-      <label class="md-nav__link md-nav__link--active" for="__toc">
-        Home
-      </label>
-    
-    <a href="." title="Home" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../.." title="Home" class="md-nav__link">
       Home
     </a>
-    
-      
-<nav class="md-nav md-nav--secondary">
-  
-  
-  
-    <label class="md-nav__title" for="__toc">Table of contents</label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#introduction" class="md-nav__link">
-    Introduction
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#features" class="md-nav__link">
-    Features
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#should-i-use-api-keys" class="md-nav__link">
-    Should I use API keys?
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#quickstart" class="md-nav__link">
-    Quickstart
-  </a>
-  
-</li>
-      
-      
-      
-      
-      
-    </ul>
-  
-</nav>
-    
   </li>
 
     
@@ -297,7 +236,7 @@
 
 
   <li class="md-nav__item">
-    <a href="guide/" title="User Guide" class="md-nav__link">
+    <a href="../../guide/" title="User Guide" class="md-nav__link">
       User Guide
     </a>
   </li>
@@ -309,7 +248,7 @@
 
 
   <li class="md-nav__item">
-    <a href="security/" title="Security" class="md-nav__link">
+    <a href="../../security/" title="Security" class="md-nav__link">
       Security
     </a>
   </li>
@@ -319,10 +258,12 @@
       
       
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4" checked>
     
     <label class="md-nav__link" for="nav-4">
       Upgrade Guides
@@ -338,11 +279,76 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="upgrade/2.0/" title="2.0" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        2.0
+      </label>
+    
+    <a href="./" title="2.0" class="md-nav__link md-nav__link--active">
       2.0
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#steps" class="md-nav__link">
+    Steps
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-upgrade-your-python-to-36" class="md-nav__link">
+    1. Upgrade your Python to 3.6+
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-upgrade-your-django-to-22" class="md-nav__link">
+    2. Upgrade your Django to 2.2+
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
   </li>
 
         
@@ -352,7 +358,7 @@
 
 
   <li class="md-nav__item">
-    <a href="upgrade/1.4/" title="1.4" class="md-nav__link">
+    <a href="../1.4/" title="1.4" class="md-nav__link">
       1.4
     </a>
   </li>
@@ -364,7 +370,7 @@
 
 
   <li class="md-nav__item">
-    <a href="upgrade/1.0/" title="1.0" class="md-nav__link">
+    <a href="../1.0/" title="1.0" class="md-nav__link">
       1.0
     </a>
   </li>
@@ -425,6 +431,8 @@
 <nav class="md-nav md-nav--secondary">
   
   
+    
+  
   
     <label class="md-nav__title" for="__toc">Table of contents</label>
     <ul class="md-nav__list" data-md-scrollfix>
@@ -434,32 +442,32 @@
     Introduction
   </a>
   
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#steps" class="md-nav__link">
+    Steps
+  </a>
+  
     <nav class="md-nav">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#features" class="md-nav__link">
-    Features
+  <a href="#1-upgrade-your-python-to-36" class="md-nav__link">
+    1. Upgrade your Python to 3.6+
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#should-i-use-api-keys" class="md-nav__link">
-    Should I use API keys?
+  <a href="#2-upgrade-your-django-to-22" class="md-nav__link">
+    2. Upgrade your Django to 2.2+
   </a>
   
 </li>
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#quickstart" class="md-nav__link">
-    Quickstart
-  </a>
   
 </li>
       
@@ -479,82 +487,20 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/florimondmanca/djangorestframework-api-key/edit/master/docs/index.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                  <a href="https://github.com/florimondmanca/djangorestframework-api-key/edit/master/docs/upgrade/2.0.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
-                <div align="center">
-  <h1 style="margin-bottom: 0;">Django REST Framework API Key</h1>
-  <p style="margin-top: 1em; margin-bottom: 2em; font-size: large;">
-    API key permissions for
-    <a href="https://www.django-rest-framework.org" alt="drf" target="_blank" rel="noreferrer">
-      Django REST Framework
-    </a>
-  </p>
-  <div>
-    <a href="https://dev.azure.com/florimondmanca/public/_build/latest?definitionId=7&branchName=master" target="_blank" rel="noreferrer">
-      <img src="https://dev.azure.com/florimondmanca/public/_apis/build/status/florimondmanca.djangorestframework-api-key?branchName=master" alt="build status"/>
-    </a>
-    <a href="https://codecov.io/gh/florimondmanca/djangorestframework-api-key">
-      <img src="https://codecov.io/gh/florimondmanca/djangorestframework-api-key/branch/master/graph/badge.svg" alt="coverage">
-    </a>
-    <a href="https://pypi.org/project/djangorestframework-api-key" target="_blank" rel="noreferrer">
-      <img src="https://badge.fury.io/py/djangorestframework-api-key.svg" alt="package version"/>
-    </a>
-  </div>
-  <div>
-    <img src="https://img.shields.io/pypi/pyversions/djangorestframework-api-key.svg" alt="python versions"/>
-    <img src="https://img.shields.io/pypi/djversions/djangorestframework-api-key.svg?colorB=44b78b" alt="django versions"/>
-    <img src="https://img.shields.io/badge/drf-3.8+-7f2d2d.svg" alt="drf versions"/>
-  </div>
-</div>
-
+                <h1 id="upgrading-to-20">Upgrading to 2.0<a class="headerlink" href="#upgrading-to-20" title="Permanent link">&para;</a></h1>
 <h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
-<p><strong>Django REST Framework API Key is a powerful library for allowing server-side clients to safely use your API.</strong> These clients are typically third-party backends and services (i.e. <em>machines</em>) which do not have a user account but still need to interact with your API in a secure way.</p>
-<h3 id="features">Features<a class="headerlink" href="#features" title="Permanent link">&para;</a></h3>
-<ul>
-<li>✌️ <strong>Simple to use</strong>: create, view and revoke API keys via the admin site, or use built-in helpers to create API keys programmatically.</li>
-<li>🔒 <strong>As secure as possible</strong>: API keys are treated with the same level of care than user passwords. They are hashed using the default password hasher before being stored in the database, and only visible at creation.</li>
-<li>🎨 <strong>Customizable</strong>: satisfy specific business requirements by building your own customized API key models, permission classes and admin panels.</li>
-</ul>
-<h3 id="should-i-use-api-keys">Should I use API keys?<a class="headerlink" href="#should-i-use-api-keys" title="Permanent link">&para;</a></h3>
-<p>There are important security aspects you need to consider before switching to an API key access control scheme. We've listed some of these in <a href="security/#caveats">Security caveats</a>, including serving your API over HTTPS.</p>
-<p>Besides, see <a href="https://cloud.google.com/endpoints/docs/openapi/when-why-api-key#top_of_page">Why and when to use API keys</a> for hints on whether API keys can fit your use case.</p>
-<p>API keys are ideal in the following situations:</p>
-<ul>
-<li>Blocking anonymous traffic.</li>
-<li>Implementing API key-based <a href="https://www.django-rest-framework.org/api-guide/throttling/">throttling</a>. (Note that Django REST Framework already has may built-in utilities for this use case.)</li>
-<li>Identifying usage patterns by logging request information along with the API key.</li>
-</ul>
-<p>They can also present enough security for authorizing internal services, such as your API server and an internal frontend application.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Please note that this package is NOT meant for authentication. You should NOT use this package to identify individual users, either directly or indirectly.</p>
-<p>If you need server-to-server authentication, you may want to consider OAuth instead. Libraries such as <a href="https://django-oauth-toolkit.readthedocs.io/en/latest/index.html">django-oauth-toolkit</a> can help.</p>
-</div>
-<h2 id="quickstart">Quickstart<a class="headerlink" href="#quickstart" title="Permanent link">&para;</a></h2>
-<p>Install with <code>pip</code>:</p>
-<div class="codehilite"><pre><span></span><code>pip install <span class="s2">&quot;djangorestframework-api-key==2.*&quot;</span>
-</code></pre></div>
-
-<div class="admonition important">
-<p class="admonition-title">Important</p>
-<p>It is highly recommended to <strong>pin your dependency</strong> to the latest major version (as depicted above), as breaking changes may and will happen between major releases.</p>
-</div>
-<p>Add the app to your <code>INSTALLED_APPS</code>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># settings.py</span>
-
-<span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">[</span>
-  <span class="c1"># ...</span>
-  <span class="s2">&quot;rest_framework&quot;</span><span class="p">,</span>
-  <span class="s2">&quot;rest_framework_api_key&quot;</span><span class="p">,</span>
-<span class="p">]</span>
-</code></pre></div>
-
-<p>Run the included migrations:</p>
-<div class="codehilite"><pre><span></span><code>python manage.py migrate
-</code></pre></div>
-
-<p>To learn how to configure permissions and manage API keys, head to the <a href="guide/">User Guide</a>.</p>
+<p>This document lists the steps necessary to upgrade from 1.4.x to 2.0.</p>
+<p>The full list of changes can be found in the <a href="https://github.com/florimondmanca/djangorestframework-api-key/blob/master/CHANGELOG.md">Changelog</a>.</p>
+<h2 id="steps">Steps<a class="headerlink" href="#steps" title="Permanent link">&para;</a></h2>
+<h3 id="1-upgrade-your-python-to-36">1. Upgrade your Python to 3.6+<a class="headerlink" href="#1-upgrade-your-python-to-36" title="Permanent link">&para;</a></h3>
+<p>The 2.0 release dropped support for Python 3.5.</p>
+<p>Before upgrading, make sure you are running on Python 3.6 or above.</p>
+<h3 id="2-upgrade-your-django-to-22">2. Upgrade your Django to 2.2+<a class="headerlink" href="#2-upgrade-your-django-to-22" title="Permanent link">&para;</a></h3>
+<p>To 2.0 release dropped official support for Django 2.0 and Django 2.1, which have both reached EOL (see <a href="https://www.djangoproject.com/download/#supported-versions">Django: Supported Versions</a>). Django 2.2 is still supported, and support for Django 3.0 was added.</p>
+<p>While we there are no internal changes due to this change, you should make sure you are running on Django 2.2 or above before upgrading.</p>
                 
                   
                 
@@ -576,14 +522,28 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
+          <a href="../../security/" title="Security" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Security
+              </span>
+            </div>
+          </a>
         
-          <a href="guide/" title="User Guide" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+        
+          <a href="../1.4/" title="1.4" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                User Guide
+                1.4
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
@@ -615,9 +575,9 @@
       
     </div>
     
-      <script src="assets/javascripts/application.c33a9706.js"></script>
+      <script src="../../assets/javascripts/application.c33a9706.js"></script>
       
-      <script>app.initialize({version:"1.1",url:{base:"."}})</script>
+      <script>app.initialize({version:"1.1",url:{base:"../.."}})</script>
       
     
   </body>
