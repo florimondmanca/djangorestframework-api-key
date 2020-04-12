@@ -5,6 +5,12 @@ pr:
   - master
 
 resources:
+  repositories:
+    - repository: templates
+      type: github
+      endpoint: github
+      name: florimondmanca/azure-pipelines-templates
+      ref: refs/heads/master
   containers:
     - container: pg11
       image: postgres:11
@@ -20,73 +26,39 @@ variables:
   PIP_CACHE_DIR: $(Pipeline.Workspace)/.cache/pip
 
 jobs:
-  - job: Check
-    steps:
-      - template: templates/install.yml
-        parameters:
-          pythonVersion: "3.8"
-      - bash: scripts/check
-        displayName: "Run checks"
+  - template: job--python-check.yml@templates
+    parameters:
+      pythonVersion: "3.8"
 
   - job: Docs
     steps:
-      - template: templates/install.yml
+      - template: step--python-install.yml@templates
         parameters:
           pythonVersion: "3.8"
       - bash: scripts/docs build
         displayName: "Build docs"
 
-  - job: Linux
-    strategy:
-      matrix:
-        py3.6-dj2.2:
-          pythonVersion: "3.6"
-          djangoVersion: "2.2.*"
-        py3.7-dj2.2:
-          pythonVersion: "3.7"
-          djangoVersion: "2.2.*"
-        py3.8-dj3.0:
-          pythonVersion: "3.8"
-          djangoVersion: "3.0.*"
-          uploadCoverage: true
+  - template: job--python-test.yml@templates
+    parameters:
+      jobs:
+        py36_dj22:
+          variables:
+            DJANGO_VERSION: "2.2.*"
 
-    steps:
-      - template: templates/install.yml
-        parameters:
-          pythonVersion: $(pythonVersion)
-          djangoVersion: $(djangoVersion)
-      - bash: scripts/test
-        displayName: "Run tests"
-      - bash: |
-          if [ -f .coverage ]; then
-            python -m pip install codecov;
-            codecov --required;
-          fi
-        condition: eq(variables['uploadCoverage'], true)
-        env:
-          CODECOV_TOKEN: $(codecovToken)
-        displayName: "Upload coverage"
+        py37_dj30:
+          variables:
+            DJANGO_VERSION: "3.0.*"
 
-  - job: Windows
-    pool:
-      vmImage: "vs2017-win2016"
-    steps:
-      - template: templates/install.yml
-        parameters:
-          pythonVersion: "3.7"
-          djangoVersion: "3.0.*"
-      - bash: scripts/test
-        displayName: "Run tests"
+        py38_dj30:
+          coverage: true
+          variables:
+            DJANGO_VERSION: "3.0.*"
 
-  - job: Postgres
-    services:
-      postgres: pg11
-    steps:
-      - template: templates/install.yml
-        parameters:
-          pythonVersion: "3.7"
-          djangoVersion: "3.0.*"
-      - bash: scripts/test
-        env:
-          DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/default"
-        displayName: "Run tests"
+        py38_windows:
+          os: windows
+
+        py38_postgres:
+          services:
+            postgres: pg11
+          variables:
+            DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/default"
