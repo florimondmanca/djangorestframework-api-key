@@ -286,7 +286,7 @@ class HasOrganizationAPIKey(BaseHasAPIKey):
 You can then use `HasOrganizationAPIKey` as described in [Setting permissions](#setting-permissions).
 
 !!! tip
-    If you need to customize `.has_permission()` or `.has_object_permission()`, feel free to read the [source code](https://github.com/florimondmanca/djangorestframework-api-key/blob/master/rest_framework_api_key/permissions.py).
+    If you need to customize `.has_permission()` or `.has_object_permission()`, feel free to read the [source code](https://github.com/florimondmanca/djangorestframework-api-key/blob/master/src/rest_framework_api_key/permissions.py).
 
 #### API key parsing
 
@@ -341,14 +341,14 @@ class OrganizationAPIKey(AbstractAPIKey):
     # ...
 ```
 
-If you want to replace the key generation algorithm entirely, you can create your own `KeyGenerator` class. It must implement the `.generate()` and `.verify()` methods. At this point, it's probably best to read the [source code](https://github.com/florimondmanca/djangorestframework-api-key/blob/master/rest_framework_api_key/crypto.py) for the built-in `KeyGenerator`.
+If you want to replace the key generation algorithm entirely, you can create your own `KeyGenerator` class. It must implement the `.generate()` and `.verify()` methods. At this point, it's probably best to read the [source code](https://github.com/florimondmanca/djangorestframework-api-key/blob/master/src/rest_framework_api_key/crypto.py) for the built-in `KeyGenerator`.
 
 !!! check
     If the signature of your `.generate()` method is different from the built-in one, you'll need to override `.assign_key()` in your custom API key manager as well.
     
     Likewise, if `.verify()` must accept anything else than the `key` and `hashed_key`, you'll need to override `.is_valid()` on your custom API key model.
     
-    See [models.py](https://github.com/florimondmanca/djangorestframework-api-key/blob/master/rest_framework_api_key/models.py) for the source code of `BaseAPIKeyManager`.
+    See [models.py](https://github.com/florimondmanca/djangorestframework-api-key/blob/master/src/rest_framework_api_key/models.py) for the source code of `BaseAPIKeyManager`.
 
 ## Typing support
 
