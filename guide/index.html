@@ -998,7 +998,7 @@ python manage.py migrate
 <p>You can then use <code>HasOrganizationAPIKey</code> as described in <a href="#setting-permissions">Setting permissions</a>.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>If you need to customize <code>.has_permission()</code> or <code>.has_object_permission()</code>, feel free to read the <a href="https://github.com/florimondmanca/djangorestframework-api-key/blob/master/rest_framework_api_key/permissions.py">source code</a>.</p>
+<p>If you need to customize <code>.has_permission()</code> or <code>.has_object_permission()</code>, feel free to read the <a href="https://github.com/florimondmanca/djangorestframework-api-key/blob/master/src/rest_framework_api_key/permissions.py">source code</a>.</p>
 </div>
 <h4 id="api-key-parsing">API key parsing<a class="headerlink" href="#api-key-parsing" title="Permanent link">&para;</a></h4>
 <p>By default, API key permission classes retrieve the API key from the <code>Authorization</code> header or a custom header, as described in <a href="#making-authorized-requests">Making authorized requests</a>.</p>
@@ -1041,12 +1041,12 @@ python manage.py migrate
     <span class="c1"># ...</span>
 </code></pre></div>
 
-<p>If you want to replace the key generation algorithm entirely, you can create your own <code>KeyGenerator</code> class. It must implement the <code>.generate()</code> and <code>.verify()</code> methods. At this point, it's probably best to read the <a href="https://github.com/florimondmanca/djangorestframework-api-key/blob/master/rest_framework_api_key/crypto.py">source code</a> for the built-in <code>KeyGenerator</code>.</p>
+<p>If you want to replace the key generation algorithm entirely, you can create your own <code>KeyGenerator</code> class. It must implement the <code>.generate()</code> and <code>.verify()</code> methods. At this point, it's probably best to read the <a href="https://github.com/florimondmanca/djangorestframework-api-key/blob/master/src/rest_framework_api_key/crypto.py">source code</a> for the built-in <code>KeyGenerator</code>.</p>
 <div class="admonition check">
 <p class="admonition-title">Check</p>
 <p>If the signature of your <code>.generate()</code> method is different from the built-in one, you'll need to override <code>.assign_key()</code> in your custom API key manager as well.</p>
 <p>Likewise, if <code>.verify()</code> must accept anything else than the <code>key</code> and <code>hashed_key</code>, you'll need to override <code>.is_valid()</code> on your custom API key model.</p>
-<p>See <a href="https://github.com/florimondmanca/djangorestframework-api-key/blob/master/rest_framework_api_key/models.py">models.py</a> for the source code of <code>BaseAPIKeyManager</code>.</p>
+<p>See <a href="https://github.com/florimondmanca/djangorestframework-api-key/blob/master/src/rest_framework_api_key/models.py">models.py</a> for the source code of <code>BaseAPIKeyManager</code>.</p>
 </div>
 <h2 id="typing-support">Typing support<a class="headerlink" href="#typing-support" title="Permanent link">&para;</a></h2>
 <p>This package provides type information starting with version 2.0, making it suitable for usage with type checkers such as <code>mypy</code>.</p>
