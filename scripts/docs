@@ -2,19 +2,6 @@
 
 . scripts/env
 
-COMMAND=$1
-USAGE="USAGE: scripts/docs (build|serve)"
-
-if [ ! $COMMAND ]; then
-  echo $USAGE
-  exit 1
-fi
-
-if [ "$COMMAND" != "build" ] && [ "$COMMAND" != "serve" ]; then
-  echo $USAGE
-  exit 1
-fi
-
 set -x
 
-${PREFIX}mkdocs $COMMAND
+${PREFIX}mkdocs "$@"
