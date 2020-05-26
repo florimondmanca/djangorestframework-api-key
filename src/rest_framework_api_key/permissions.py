@@ -14,6 +14,11 @@ class KeyParser:
         if custom_header is not None:
             return self.get_from_header(request, custom_header)
 
+        query_params = self.get_from_query_params(request)
+
+        if query_params is not None:
+            return query_params
+
         return self.get_from_authorization(request)
 
     def get_from_authorization(self, request: HttpRequest) -> typing.Optional[str]:
@@ -31,6 +36,9 @@ class KeyParser:
 
     def get_from_header(self, request: HttpRequest, name: str) -> typing.Optional[str]:
         return request.META.get(name) or None
+
+    def get_from_query_params(self, request: HttpRequest) -> typing.Optional[str]:
+        return request.GET.get('key') or None
 
 
 class BaseHasAPIKey(permissions.BasePermission):
