@@ -1,6 +1,6 @@
 site_name: Django REST Framework API Key
 site_url: https://florimondmanca.github.io/djangorestframework-api-key
-copyright: © 2018-present Florimond Manca
+copyright: © 2018-2020 Florimond Manca
 theme:
   name: "material"
   palette:
