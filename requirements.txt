@@ -15,7 +15,7 @@ black
 flake8
 flake8-bugbear
 flake8-comprehensions
-isort
+isort==5.*
 mkdocs==1.*
 mkdocs-material==4.*
 pymdown-extensions==6.*
