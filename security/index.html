@@ -511,7 +511,7 @@
 <h2 id="caveats">Caveats<a class="headerlink" href="#caveats" title="Permanent link">&para;</a></h2>
 <p><a href="https://nordicapis.com/why-api-keys-are-not-enough/">API keys ≠ Security</a>: depending on your situation, you should probably not use API keys only to authorize your clients.</p>
 <p>Besides, you do NOT recommend using this package for authentication, i.e. retrieving user information from API keys.</p>
-<p>Inded, <strong>using API keys shifts the responsability of Information Security on your clients</strong>. This induces risks, especially if detaining an API key gives access to confidential information or write operations. For example, an attacker could impersonate clients if they let their API keys leak.</p>
+<p>Indeed, <strong>using API keys shifts the responsability of Information Security on your clients</strong>. This induces risks, especially if detaining an API key gives access to confidential information or write operations. For example, an attacker could impersonate clients if they let their API keys leak.</p>
 <p>As a best practice, you should apply the <em>Principle of Least Privilege</em>: allow only those who require resources to access those specific resources. In other words: <strong>if your client needs to access an endpoint, add API permissions on that endpoint only</strong> instead of the whole API.</p>
 <p>Besides, it is highly recommended to serve the API over <strong>HTTPS</strong> to ensure the confidentiality of API keys passed in requests.</p>
 <p>Act responsibly!</p>
