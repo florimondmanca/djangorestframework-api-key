@@ -156,7 +156,7 @@ class ProjectListView(APIView):
 
     def get(self, request):
         """Retrieve a project based on the request API key."""
-        key = request.META["HTTP_AUTHORIZATION"]
+        key = request.META["HTTP_AUTHORIZATION"].split()[1]
         api_key = APIKey.objects.get_from_key(key)
         project = Project.objects.get(api_key=api_key)
 ```
