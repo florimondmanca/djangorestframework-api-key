@@ -30,7 +30,18 @@ class KeyParser:
         return key
 
     def get_from_header(self, request: HttpRequest, name: str) -> typing.Optional[str]:
-        return request.META.get(name) or None
+        authorization =  request.META.get(name) or None
+        
+        if not authorization:
+            return None
+
+        try:
+            _, key = authorization.split("Api-Key ")
+        except ValueError:
+            key = None
+
+        return key
+        
 
 
 class BaseHasAPIKey(permissions.BasePermission):
