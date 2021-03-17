@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url>
      <loc>https://florimondmanca.github.io/djangorestframework-api-key/</loc>
-     <lastmod>2020-10-16</lastmod>
+     <lastmod>2021-03-17</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://florimondmanca.github.io/djangorestframework-api-key/guide/</loc>
-     <lastmod>2020-10-16</lastmod>
+     <lastmod>2021-03-17</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://florimondmanca.github.io/djangorestframework-api-key/security/</loc>
-     <lastmod>2020-10-16</lastmod>
+     <lastmod>2021-03-17</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://florimondmanca.github.io/djangorestframework-api-key/upgrade/2.0/</loc>
-     <lastmod>2020-10-16</lastmod>
+     <lastmod>2021-03-17</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://florimondmanca.github.io/djangorestframework-api-key/upgrade/1.4/</loc>
-     <lastmod>2020-10-16</lastmod>
+     <lastmod>2021-03-17</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://florimondmanca.github.io/djangorestframework-api-key/upgrade/1.0/</loc>
-     <lastmod>2020-10-16</lastmod>
+     <lastmod>2021-03-17</lastmod>
      <changefreq>daily</changefreq>
     </url>
 </urlset>
