@@ -80,10 +80,10 @@ See also [Setting the permission policy](http://www.django-rest-framework.org/ap
 By default, clients must pass their API key via the `Authorization` header. It must be formatted as follows:
 
 ```
-Authorization: Api-Key ********
+Authorization: Api-Key <API_KEY>
 ```
 
-where `********` refers to the generated API key.
+where `<API_KEY>` refers to the full generated API key (see [Creating and managing API keys](#creating-and-managing-api-keys) below).
 
 To know under which conditions access is granted, please see [Grant scheme](security.md#grant-scheme).
 
@@ -103,10 +103,10 @@ API_KEY_CUSTOM_HEADER = "HTTP_X_API_KEY"
 then clients must make authorized requests using:
 
 ```
-X-Api-Key: ********
+X-Api-Key: <API_KEY>
 ```
 
-where `********` refers to the generated API key.
+where `<API_KEY>` refers to the full generated API key.
 
 Please refer to [HttpRequest.META](https://docs.djangoproject.com/en/2.2/ref/request-response/#django.http.HttpRequest.META) for more information on headers in Django.
 
@@ -115,6 +115,9 @@ Please refer to [HttpRequest.META](https://docs.djangoproject.com/en/2.2/ref/req
 #### Admin site
 
 When it is installed, `djangorestframework-api-key` adds an "API Key Permissions" section to the Django admin site where you can create, view and revoke API keys.
+
+!!! note
+    Upon creating an API key from the admin, the full API key is shown only once in a success message banner. **This is what should be passed in authorization headers.** After creation, only the prefix of the API key is shown in the admin site, mostly for identification purposes. If you lose the full API key, you'll need to regenerate a new one.
 
 #### Programmatic usage
 
