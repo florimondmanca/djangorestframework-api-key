@@ -43,7 +43,7 @@ Besides, see [Why and when to use API keys](https://cloud.google.com/endpoints/d
 API keys are ideal in the following situations:
 
 - Blocking anonymous traffic.
-- Implementing API key-based [throttling](https://www.django-rest-framework.org/api-guide/throttling/). (Note that Django REST Framework already has may built-in utilities for this use case.)
+- Implementing API key-based [throttling](https://www.django-rest-framework.org/api-guide/throttling/). (Note that Django REST Framework already has many built-in utilities for this use case.)
 - Identifying usage patterns by logging request information along with the API key.
 
 They can also present enough security for authorizing internal services, such as your API server and an internal frontend application.
