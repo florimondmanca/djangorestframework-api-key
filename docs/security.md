@@ -9,7 +9,7 @@ An API key is composed of two items:
 - A prefix `P`, which is a generated string of 8 characters.
 - A secret key `SK`, which is a generated string of 32 characters.
 
-The generated key that clients use to [make authorized requests](#making-authorized-requests) is `GK = P.SK`. It is treated with the same level of care than passwords:
+The generated key that clients use to [make authorized requests](#making-authorized-requests) is `GK = P.SK`. It is treated with the same level of care as passwords:
 
 - Only a hashed version is stored in the database. The hash is computed using the default password hasher. [^1]
 - The generated key is shown only once to the client upon API key creation.
@@ -31,7 +31,7 @@ Access is granted if and only if all of the following is true:
 
 [API keys ≠ Security](https://nordicapis.com/why-api-keys-are-not-enough/): depending on your situation, you should probably not use API keys only to authorize your clients.
 
-Besides, you do NOT recommend using this package for authentication, i.e. retrieving user information from API keys.
+Besides, it is NOT recommended to use this package for authentication, i.e. retrieving user information from API keys.
 
 Indeed, **using API keys shifts the responsability of Information Security on your clients**. This induces risks, especially if detaining an API key gives access to confidential information or write operations. For example, an attacker could impersonate clients if they let their API keys leak.
 
