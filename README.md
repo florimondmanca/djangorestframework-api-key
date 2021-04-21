@@ -31,7 +31,7 @@ API key permissions for the [Django REST Framework](https://www.django-rest-fram
 
 ### Should I use API keys?
 
-There are important security aspects you need to consider before switching to an API key access control scheme. We've listed some of these in [Security caveats](security.md#caveats), including serving your API over HTTPS.
+There are important security aspects you need to consider before switching to an API key access control scheme. We've listed some of these in [Security caveats](docs/security.md#caveats), including serving your API over HTTPS.
 
 Besides, see [Why and when to use API keys](https://cloud.google.com/endpoints/docs/openapi/when-why-api-key#top_of_page) for hints on whether API keys can fit your use case.
 
