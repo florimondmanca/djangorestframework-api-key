@@ -90,6 +90,7 @@ def fixture_key_header_config(request: typing.Any) -> typing.Iterator[dict]:
     with ctx:
         yield config
 
+
 @pytest.fixture(name="build_create_request")
 def fixture_build_create_request(key_header_config: dict) -> typing.Callable:
     from rest_framework.test import APIRequestFactory, force_authenticate
