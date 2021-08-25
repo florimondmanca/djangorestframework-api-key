@@ -110,6 +110,27 @@ where `<API_KEY>` refers to the full generated API key.
 
 Please refer to [HttpRequest.META](https://docs.djangoproject.com/en/2.2/ref/request-response/#django.http.HttpRequest.META) for more information on headers in Django.
 
+#### Custom keyword
+
+You can set the `API_KEY_CUSTOM_KEYWORD` setting to a non-`None` value to require clients to pass their API key with a custom keyword instead of the `Api-Key` keyword.
+
+This is useful if are writing your API for an application the requires a certain keyword, like `Bearer`. 
+
+For example, if you set:
+
+```python
+# settings.py
+API_KEY_CUSTOM_KEYWORD = "Bearer"
+```
+
+then clients must make authorized requests using:
+
+```
+Authorization: Bearer <API_KEY>
+```
+
+where `<API_KEY>` refers to the full generated API key.
+
 ### Creating and managing API keys
 
 #### Admin site
