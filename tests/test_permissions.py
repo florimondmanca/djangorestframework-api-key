@@ -64,17 +64,6 @@ def test_if_invalid_api_key_then_permission_denied(
     response = view(request)
     assert response.status_code == 403
 
-# def test_if_custom_custom_api_keyword_permission_granted(
-#     create_request, view, key_header_config
-# ):
-#     keyword = "Bad-Keyword"
-#     def get_authorization(key):
-#         return key_header_config["default"].format(key=key).replace("Api-Key", keyword)
-
-#     request = create_request(authorization=get_authorization)
-#     response = view(request)
-#     assert response.status_code == 403
-
 def test_if_custom_api_keyword_permission_granted(
     create_request, view, key_header_config
 ):
@@ -86,17 +75,6 @@ def test_if_custom_api_keyword_permission_granted(
         request = create_request(authorization=get_authorization)
         response = view(request)
         assert response.status_code == 200
-
-def test_if_missing_custom_api_keyword_setting_permission_denied(
-    create_request, view, key_header_config
-):
-    keyword = "Bearer"
-    def get_authorization(key):
-        return key_header_config["default"].format(key=key).replace("Api-Key", keyword)
-
-    request = create_request(authorization=get_authorization)
-    response = view(request)
-    assert response.status_code == 403
 
 def test_if_revoked_then_permission_denied(create_request, view):
     request = create_request(revoked=True)
