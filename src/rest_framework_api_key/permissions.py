@@ -18,12 +18,13 @@ class KeyParser:
 
     def get_from_authorization(self, request: HttpRequest) -> typing.Optional[str]:
         authorization = request.META.get("HTTP_AUTHORIZATION")
+        custom_keyword = getattr(settings, "API_KEY_CUSTOM_KEYWORD", "Api-Key")
 
         if not authorization:
             return None
 
         try:
-            _, key = authorization.split("Api-Key ")
+            _, key = authorization.split("{} ".format(custom_keyword))
         except ValueError:
             key = None
 
