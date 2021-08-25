@@ -90,33 +90,6 @@ def fixture_key_header_config(request: typing.Any) -> typing.Iterator[dict]:
     with ctx:
         yield config
 
-
-@pytest.fixture(
-    name="key_word_config",
-    params=[
-        {
-            "keyword": "Api-Key",
-        },
-        {
-            "keyword": "Bearer",
-            "default": "Api-Key",
-            "set_custom_keyword_setting": True,
-        },
-    ],
-)
-def fixture_key_word_config(request: typing.Any) -> typing.Iterator[dict]:
-    config: dict = request.param
-
-    ctx: typing.ContextManager[None]
-    if config.get("set_custom_keyword_setting"):
-        ctx = override_settings(API_KEY_CUSTOM_KEYWORD=config["keyword"])
-    else:
-        ctx = nullcontext()
-
-    with ctx:
-        yield config
-
-
 @pytest.fixture(name="build_create_request")
 def fixture_build_create_request(key_header_config: dict) -> typing.Callable:
     from rest_framework.test import APIRequestFactory, force_authenticate
