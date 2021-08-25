@@ -108,7 +108,7 @@ def fixture_key_word_config(request: typing.Any) -> typing.Iterator[dict]:
     config: dict = request.param
 
     ctx: typing.ContextManager[None]
-    if config.get("set_custom_header_setting"):
+    if config.get("set_custom_keyword_setting"):
         ctx = override_settings(API_KEY_CUSTOM_KEYWORD=config["keyword"])
     else:
         ctx = nullcontext()
