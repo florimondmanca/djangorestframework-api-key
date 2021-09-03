@@ -89,7 +89,7 @@ To know under which conditions access is granted, please see [Grant scheme](secu
 
 #### Custom keyword
 
- If you want to use a different keyword in the header, such as `Bearer`, simply subclass `BearerKeyParser` set the `keyword` class variable. Next subclass `HasAPIKey` set the `key_parser` class variable to use your new subclass.
+ If you want to use a different keyword in the header, such as `Bearer`, simply subclass `KeyParser` set the `keyword` class variable. Next subclass `BaseHasAPIKey` set the `key_parser` class variable to use your new subclass.
 
 This is useful if are writing your API for an application the requires a certain keyword, like `Bearer`. 
 
