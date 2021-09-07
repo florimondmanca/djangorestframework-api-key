@@ -87,33 +87,7 @@ where `<API_KEY>` refers to the full generated API key (see [Creating and managi
 
 To know under which conditions access is granted, please see [Grant scheme](security.md#grant-scheme).
 
-#### Custom keyword
-
- If you want to use a different keyword in the header, such as `Bearer`, simply subclass `KeyParser` set the `keyword` class variable. Next subclass `BaseHasAPIKey` set the `key_parser` class variable to use your new subclass.
-
-This is useful if are writing your API for an application the requires a certain keyword, like `Bearer`. 
-
-For example:
-
-```python
-# settings.py
-from rest_framework_api_key.permissions import BaseHasAPIKey, KeyParser
-
-class BearerKeyParser(KeyParser):
-    keyword = "Bearer"
-
-
-class HasAPIKey(BaseHasAPIKey):
-    key_parser = BearerKeyParser()
-```
-
-then clients must make authorized requests using:
-
-```
-Authorization: Bearer <API_KEY>
-```
-
-where `<API_KEY>` refers to the full generated API key.
+If wanting to also customize the keyword used for parsing the Api-Key, please see [API key Custom Keyword](guide.md#api-key-custom-keyword)
 
 #### Custom header
 
@@ -346,6 +320,43 @@ class HasOrganizationAPIKey(BaseHasAPIKey):
     # ...
     key_parser = CookieKeyParser()
 ```
+
+#### API key Custom Keyword
+Another default is to retrieve the key following the `Api-Key` keyword. 
+
+Example:
+
+
+```
+Authorization: Api-Key <API_KEY>
+```
+
+If you want to use a different keyword in the header, such as `Bearer`, simply subclass `KeyParser` set the `keyword` class variable. Next subclass `BaseHasAPIKey` set the `key_parser` class variable to use your new subclass.
+
+This is useful if are writing your API for an application the requires a certain keyword, like `Bearer`.
+
+Example:
+
+```python
+# settings.py
+from rest_framework_api_key.permissions import BaseHasAPIKey, KeyParser
+
+class BearerKeyParser(KeyParser):
+    keyword = "Bearer"
+
+
+class HasAPIKey(BaseHasAPIKey):
+    model = APIKey # or your custom model
+    key_parser = BearerKeyParser()
+```
+
+Clients must now make authorized requests using:
+
+```
+Authorization: Bearer <API_KEY>
+```
+
+where `<API_KEY>` refers to the full generated API key.
 
 ### Key generation
 
