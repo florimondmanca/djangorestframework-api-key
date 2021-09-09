@@ -297,18 +297,44 @@ You can then use `HasOrganizationAPIKey` as described in [Setting permissions](#
 
 By default, API key permission classes retrieve the API key from the `Authorization` header or a custom header, as described in [Making authorized requests](#making-authorized-requests).
 
-You can override this behavior by redefining the `.get_key()` method on your custom permission class. It accepts the [HttpRequest](https://docs.djangoproject.com/en/2.2/ref/request-response/#httprequest-objects) object as unique argument and should return the API key as an `str` if one was found, or `None` otherwise.
+You can customize of override this behavior in several ways.
+
+If you are building an API for an application you do not control that requires a specific header keyword, e.g. a client that sends API keys using the `Bearer` keyword as follows:
+
+```
+Authorization: Bearer <API_KEY>
+```
+
+Then you can subclass `KeyParser` with a custom `keyword`, and attach it to a custom permission class, like so:
+
+```python
+# settings.py
+from rest_framework_api_key.models import HasAPIKey
+from rest_framework_api_key.permissions import BaseHasAPIKey, KeyParser
+
+class BearerKeyParser(KeyParser):
+    keyword = "Bearer"
+
+class HasAPIKey(BaseHasAPIKey):
+    model = APIKey  # Or a custom model
+    key_parser = BearerKeyParser()
+```
+
+You can also override the default header-based parsing completely.
+
+To do so, redefine the `.get_key()` method on your custom permission class. This method accepts the [HttpRequest](https://docs.djangoproject.com/en/2.2/ref/request-response/#httprequest-objects) object as unique argument and should return the API key as an `str` if one was found, or `None` otherwise.
 
 For example, here's how you could retrieve the API key from a cookie:
 
 ```python
-class HasOrganizationAPIKey(BaseHasAPIKey):
-    # ...
+class HasAPIKey(BaseHasAPIKey):
+    model = APIKey  # Or a custom model
+
     def get_key(self, request):
         return request.COOKIES.get("api_key")
 ```
 
-If your custom key parsing algorithm is complex, you may want to define it as a separate component. To do so, build a class which implements the `.get()` method with the same signature as `.get_key()`, and set it as the `.key_parser`:
+If your custom key parsing algorithm is more complex, you may want to define it as a separate component. To do so, build a key parser class, which must implement the `.get()` method with the same signature as `.get_key()`, then set it as the `.key_parser`, as follows:
 
 ```python
 class CookieKeyParser:
@@ -316,47 +342,10 @@ class CookieKeyParser:
         cookie_name = getattr(settings, "API_KEY_COOKIE_NAME", "api_key")
         return request.COOKIES.get(cookie_name)
 
-class HasOrganizationAPIKey(BaseHasAPIKey):
-    # ...
+class HasAPIKey(BaseHasAPIKey):
+    model = APIKey  # Or a custom model
     key_parser = CookieKeyParser()
 ```
-
-#### API key Custom Keyword
-Another default is to retrieve the key following the `Api-Key` keyword. 
-
-Example:
-
-
-```
-Authorization: Api-Key <API_KEY>
-```
-
-If you want to use a different keyword in the header, such as `Bearer`, simply subclass `KeyParser` set the `keyword` class variable. Next subclass `BaseHasAPIKey` set the `key_parser` class variable to use your new subclass.
-
-This is useful if are writing your API for an application the requires a certain keyword, like `Bearer`.
-
-Example:
-
-```python
-# settings.py
-from rest_framework_api_key.permissions import BaseHasAPIKey, KeyParser
-
-class BearerKeyParser(KeyParser):
-    keyword = "Bearer"
-
-
-class HasAPIKey(BaseHasAPIKey):
-    model = APIKey # or your custom model
-    key_parser = BearerKeyParser()
-```
-
-Clients must now make authorized requests using:
-
-```
-Authorization: Bearer <API_KEY>
-```
-
-where `<API_KEY>` refers to the full generated API key.
 
 ### Key generation
 
