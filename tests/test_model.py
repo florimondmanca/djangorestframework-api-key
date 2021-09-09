@@ -85,7 +85,8 @@ def test_api_key_manager_get_from_key_invalid_key():
     with pytest.raises(APIKey.DoesNotExist):
         APIKey.objects.get_from_key(invalid_key)
 
+
 def test_api_key_str():
     _, generated_key = APIKey.objects.create_key(name="test")
     retrieved_key = APIKey.objects.get_from_key(generated_key)
-    assert (str(retrieved_key) == "test")
+    assert str(retrieved_key) == "test"
