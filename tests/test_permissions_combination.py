@@ -2,6 +2,7 @@ import pytest
 from rest_framework.permissions import IsAuthenticated
 
 from rest_framework_api_key.permissions import HasAPIKey
+
 from .utils import create_view_with_permissions
 
 pytestmark = pytest.mark.django_db

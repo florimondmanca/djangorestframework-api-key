@@ -1,7 +1,7 @@
 import pytest
-
-from test_project.heroes.models import HeroAPIKey, Hero
+from test_project.heroes.models import Hero, HeroAPIKey
 from test_project.heroes.permissions import HasHeroAPIKey
+
 from .utils import create_view_with_permissions
 
 pytestmark = pytest.mark.django_db

@@ -5,8 +5,10 @@ from django.conf.global_settings import PASSWORD_HASHERS
 from django.test import override_settings
 from rest_framework import generics, permissions
 from rest_framework.response import Response
-from .utils import create_view_with_permissions
+
 from rest_framework_api_key.permissions import HasAPIKey
+
+from .utils import create_view_with_permissions
 
 pytestmark = pytest.mark.django_db
 
