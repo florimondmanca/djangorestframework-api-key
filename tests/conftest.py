@@ -103,8 +103,7 @@ def fixture_build_create_request(key_header_config: dict) -> typing.Callable:
         _MISSING = object()
 
         def create_request(
-            authenticated: bool = False,
-            **kwargs: typing.Any,
+            authenticated: bool = False, **kwargs: typing.Any,
         ) -> HttpRequest:
             headers = {}
 

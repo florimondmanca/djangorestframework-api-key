@@ -2,7 +2,7 @@
 
 . scripts/env
 
-export SOURCE_FILES="src/rest_framework_api_key test_project/ tests/conftest.py"
+export SOURCE_FILES="src/rest_framework_api_key test_project/ tests"
 
 set -x
 
