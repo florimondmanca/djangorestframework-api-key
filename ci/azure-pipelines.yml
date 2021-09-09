@@ -4,7 +4,7 @@ resources:
       type: github
       endpoint: github
       name: florimondmanca/azure-pipelines-templates
-      ref: refs/tags/3.0
+      ref: refs/tags/3.4
   containers:
     - container: pg11
       image: postgres:11
@@ -30,13 +30,9 @@ jobs:
     parameters:
       pythonVersion: "3.8"
 
-  - job: Docs
-    steps:
-      - template: step--python-install.yml@templates
-        parameters:
-          pythonVersion: "3.8"
-      - bash: scripts/docs build
-        displayName: "Build docs"
+  - template: job--python-docs-build.yml@templates
+    parameters:
+      pythonVersion: "3.8"
 
   - template: job--python-test.yml@templates
     parameters:
