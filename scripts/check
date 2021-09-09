@@ -3,11 +3,11 @@
 . scripts/env
 
 export SOURCE_FILES="src/rest_framework_api_key test_project/ tests"
-
+export MYPY_SOURCE_FILES="src/rest_framework_api_key test_project tests/conftest.py"
 set -x
 
 ${PREFIX}black --check --diff --target-version=py36 $SOURCE_FILES
 ${PREFIX}flake8 $SOURCE_FILES
-${PREFIX}mypy $SOURCE_FILES
+${PREFIX}mypy $MYPY_SOURCE_FILES
 ${PREFIX}isort --check --diff $SOURCE_FILES
 ${PREFIX}python scripts/makemigrations --check
