@@ -836,6 +836,7 @@
 
 <p>where <code>&lt;API_KEY&gt;</code> refers to the full generated API key (see <a href="#creating-and-managing-api-keys">Creating and managing API keys</a> below).</p>
 <p>To know under which conditions access is granted, please see <a href="../security/#grant-scheme">Grant scheme</a>.</p>
+<p>If wanting to also customize the keyword used for parsing the Api-Key, please see <a href="./#api-key-custom-keyword">API key Custom Keyword</a></p>
 <h4 id="custom-header">Custom header<a class="headerlink" href="#custom-header" title="Permanent link">&para;</a></h4>
 <p>You can set the <code>API_KEY_CUSTOM_HEADER</code> setting to a non-<code>None</code> value to require clients to pass their API key in a custom header instead of the <code>Authorization</code> header.</p>
 <p>This is useful if you plan to use API keys <em>AND</em> an authentication scheme which already uses the <code>Authorization</code> header (e.g. token-based authentication).</p>
@@ -908,7 +909,7 @@
 <p>If the built-in <code>APIKey</code> model doesn't fit your needs, you can create your own by subclassing <code>AbstractAPIKey</code>. This is particularly useful if you need to <strong>store extra information</strong> or <strong>link API keys to other models</strong> using a <code>ForeignKey</code> or a <code>ManyToManyField</code>.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Associating API keys to users, directly or indirectly, can present a security risk. See also: <a href="/djangorestframework-api-key/#should-i-use-api-keys">Should I use API keys?</a>.</p>
+<p>Associating API keys to users, directly or indirectly, can present a security risk. See also: <a href="https://florimondmanca.github.io/djangorestframework-api-key/#should-i-use-api-keys">Should I use API keys?</a>.</p>
 </div>
 <h4 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h4>
 <p>Here's how you could link API keys to an imaginary <code>Organization</code> model:</p>
@@ -1006,22 +1007,42 @@ python manage.py migrate
 </div>
 <h4 id="api-key-parsing">API key parsing<a class="headerlink" href="#api-key-parsing" title="Permanent link">&para;</a></h4>
 <p>By default, API key permission classes retrieve the API key from the <code>Authorization</code> header or a custom header, as described in <a href="#making-authorized-requests">Making authorized requests</a>.</p>
-<p>You can override this behavior by redefining the <code>.get_key()</code> method on your custom permission class. It accepts the <a href="https://docs.djangoproject.com/en/2.2/ref/request-response/#httprequest-objects">HttpRequest</a> object as unique argument and should return the API key as an <code>str</code> if one was found, or <code>None</code> otherwise.</p>
+<p>You can customize of override this behavior in several ways.</p>
+<p>If you are building an API for an application you do not control that requires a specific header keyword, e.g. a client that sends API keys using the <code>Bearer</code> keyword as follows:</p>
+<div class="codehilite"><pre><span></span><code>Authorization: Bearer &lt;API_KEY&gt;
+</code></pre></div>
+
+<p>Then you can subclass <code>KeyParser</code> with a custom <code>keyword</code>, and attach it to a custom permission class, like so:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># settings.py</span>
+<span class="kn">from</span> <span class="nn">rest_framework_api_key.models</span> <span class="kn">import</span> <span class="n">HasAPIKey</span>
+<span class="kn">from</span> <span class="nn">rest_framework_api_key.permissions</span> <span class="kn">import</span> <span class="n">BaseHasAPIKey</span><span class="p">,</span> <span class="n">KeyParser</span>
+
+<span class="k">class</span> <span class="nc">BearerKeyParser</span><span class="p">(</span><span class="n">KeyParser</span><span class="p">):</span>
+    <span class="n">keyword</span> <span class="o">=</span> <span class="s2">&quot;Bearer&quot;</span>
+
+<span class="k">class</span> <span class="nc">HasAPIKey</span><span class="p">(</span><span class="n">BaseHasAPIKey</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">APIKey</span>  <span class="c1"># Or a custom model</span>
+    <span class="n">key_parser</span> <span class="o">=</span> <span class="n">BearerKeyParser</span><span class="p">()</span>
+</code></pre></div>
+
+<p>You can also override the default header-based parsing completely.</p>
+<p>To do so, redefine the <code>.get_key()</code> method on your custom permission class. This method accepts the <a href="https://docs.djangoproject.com/en/2.2/ref/request-response/#httprequest-objects">HttpRequest</a> object as unique argument and should return the API key as an <code>str</code> if one was found, or <code>None</code> otherwise.</p>
 <p>For example, here's how you could retrieve the API key from a cookie:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">HasOrganizationAPIKey</span><span class="p">(</span><span class="n">BaseHasAPIKey</span><span class="p">):</span>
-    <span class="c1"># ...</span>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">HasAPIKey</span><span class="p">(</span><span class="n">BaseHasAPIKey</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">APIKey</span>  <span class="c1"># Or a custom model</span>
+
     <span class="k">def</span> <span class="nf">get_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">request</span><span class="o">.</span><span class="n">COOKIES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;api_key&quot;</span><span class="p">)</span>
 </code></pre></div>
 
-<p>If your custom key parsing algorithm is complex, you may want to define it as a separate component. To do so, build a class which implements the <code>.get()</code> method with the same signature as <code>.get_key()</code>, and set it as the <code>.key_parser</code>:</p>
+<p>If your custom key parsing algorithm is more complex, you may want to define it as a separate component. To do so, build a key parser class, which must implement the <code>.get()</code> method with the same signature as <code>.get_key()</code>, then set it as the <code>.key_parser</code>, as follows:</p>
 <div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">CookieKeyParser</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
         <span class="n">cookie_name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;API_KEY_COOKIE_NAME&quot;</span><span class="p">,</span> <span class="s2">&quot;api_key&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">request</span><span class="o">.</span><span class="n">COOKIES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cookie_name</span><span class="p">)</span>
 
-<span class="k">class</span> <span class="nc">HasOrganizationAPIKey</span><span class="p">(</span><span class="n">BaseHasAPIKey</span><span class="p">):</span>
-    <span class="c1"># ...</span>
+<span class="k">class</span> <span class="nc">HasAPIKey</span><span class="p">(</span><span class="n">BaseHasAPIKey</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">APIKey</span>  <span class="c1"># Or a custom model</span>
     <span class="n">key_parser</span> <span class="o">=</span> <span class="n">CookieKeyParser</span><span class="p">()</span>
 </code></pre></div>
 

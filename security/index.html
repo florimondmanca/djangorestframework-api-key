@@ -496,7 +496,7 @@
 <li>A prefix <code>P</code>, which is a generated string of 8 characters.</li>
 <li>A secret key <code>SK</code>, which is a generated string of 32 characters.</li>
 </ul>
-<p>The generated key that clients use to <a href="#making-authorized-requests">make authorized requests</a> is <code>GK = P.SK</code>. It is treated with the same level of care than passwords:</p>
+<p>The generated key that clients use to <a href="#making-authorized-requests">make authorized requests</a> is <code>GK = P.SK</code>. It is treated with the same level of care as passwords:</p>
 <ul>
 <li>Only a hashed version is stored in the database. The hash is computed using the default password hasher. <sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></li>
 <li>The generated key is shown only once to the client upon API key creation.</li>
@@ -510,7 +510,7 @@
 </ol>
 <h2 id="caveats">Caveats<a class="headerlink" href="#caveats" title="Permanent link">&para;</a></h2>
 <p><a href="https://nordicapis.com/why-api-keys-are-not-enough/">API keys ≠ Security</a>: depending on your situation, you should probably not use API keys only to authorize your clients.</p>
-<p>Besides, you do NOT recommend using this package for authentication, i.e. retrieving user information from API keys.</p>
+<p>Besides, it is NOT recommended to use this package for authentication, i.e. retrieving user information from API keys.</p>
 <p>Indeed, <strong>using API keys shifts the responsability of Information Security on your clients</strong>. This induces risks, especially if detaining an API key gives access to confidential information or write operations. For example, an attacker could impersonate clients if they let their API keys leak.</p>
 <p>As a best practice, you should apply the <em>Principle of Least Privilege</em>: allow only those who require resources to access those specific resources. In other words: <strong>if your client needs to access an endpoint, add API permissions on that endpoint only</strong> instead of the whole API.</p>
 <p>Besides, it is highly recommended to serve the API over <strong>HTTPS</strong> to ensure the confidentiality of API keys passed in requests.</p>
