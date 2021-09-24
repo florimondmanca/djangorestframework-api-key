@@ -61,7 +61,7 @@ scripts/serve
 Build the documentation using:
 
 ```bash
-scripts/docs
+scripts/docs build
 ```
 
 ## Notes to maintainers
@@ -76,3 +76,4 @@ scripts/docs
     - Release title, `Version 2.1.0`.
     - Description copied from the changelog.
 - Once created, this release will be automatically uploaded to PyPI via a publish job on Azure Pipelines.
+- Deploy the docs using: `scripts/docs gh-deploy`

@@ -5,4 +5,3 @@
 set -x
 
 ${PREFIX}twine upload dist/*
-scripts/docs gh-deploy --force
