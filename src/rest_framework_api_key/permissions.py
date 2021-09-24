@@ -8,6 +8,8 @@ from .models import AbstractAPIKey, APIKey
 
 
 class KeyParser:
+    keyword = "Api-Key"
+
     def get(self, request: HttpRequest) -> typing.Optional[str]:
         custom_header = getattr(settings, "API_KEY_CUSTOM_HEADER", None)
 
@@ -23,7 +25,7 @@ class KeyParser:
             return None
 
         try:
-            _, key = authorization.split("Api-Key ")
+            _, key = authorization.split("{} ".format(self.keyword))
         except ValueError:
             key = None
 

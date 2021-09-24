@@ -6,7 +6,8 @@ from django.test import override_settings
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 
-from rest_framework_api_key.permissions import HasAPIKey
+from rest_framework_api_key.models import APIKey
+from rest_framework_api_key.permissions import BaseHasAPIKey, HasAPIKey, KeyParser
 
 from .utils import create_view_with_permissions
 
@@ -101,3 +102,23 @@ def test_object_permission(create_request):
     request = create_request(authorization=None)
     response = view(request)
     assert response.status_code == 403
+
+
+def test_keyparser_keyword_override(create_request, key_header_config):
+    class BearerKeyParser(KeyParser):
+        keyword = "Bearer"
+
+    class BearerHasAPIKey(BaseHasAPIKey):
+        model = APIKey
+        key_parser = BearerKeyParser()
+
+    bearer_view = create_view_with_permissions(BearerHasAPIKey)
+
+    keyword = "Bearer"
+
+    def get_authorization(key):
+        return key_header_config["default"].format(key=key).replace("Api-Key", keyword)
+
+    request = create_request(authorization=get_authorization)
+    response = bearer_view(request)
+    assert response.status_code == 200
