@@ -2,29 +2,7 @@
 
 . scripts/env
 
-export PACKAGE="rest_framework_api_key"
-export VERSION=`cat src/${PACKAGE}/__version__.py | grep __version__ | sed "s/__version__ = //" | sed "s/'//g"`
+set -x
 
-if ! command -v "${PREFIX}twine" &>/dev/null ; then
-    echo "Unable to find the 'twine' command."
-    echo "Install from PyPI, using '${PREFIX}pip install twine'."
-    exit 1
-fi
-
-if ! ${PREFIX}pip show wheel &>/dev/null ; then
-    echo "Unable to find the 'wheel' command."
-    echo "Install from PyPI, using '${PREFIX}pip install wheel'."
-    exit 1
-fi
-
-scripts/clean
-
-${PREFIX}python setup.py sdist bdist_wheel
 ${PREFIX}twine upload dist/*
-${PREFIX}mkdocs gh-deploy
-
-echo "You probably want to also tag the version now:"
-echo "git tag -a ${VERSION} -m 'version ${VERSION}'"
-echo "git push --tags"
-
-scripts/clean
+scripts/docs gh-deploy --force

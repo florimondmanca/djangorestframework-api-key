@@ -9,6 +9,10 @@ django-dotenv
 # PostgreSQL testing.
 psycopg2-binary
 
+# Packaging.
+twine
+wheel
+
 # Tooling.
 autoflake
 black==20.8b1

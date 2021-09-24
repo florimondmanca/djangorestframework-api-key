@@ -68,9 +68,11 @@ scripts/docs
 
 ### Releasing
 
-- Create a PR with the following:
+- Create a release PR with the following:
   - Bump the package version by editing `__version__.py`.
   - Update the changelog with any relevant PRs merged since the last version: bug fixes, new features, changes, deprecations, removals.
-- Merge the PR.
-- Run `$ scripts/publish` on `master`.
-- Tag the commit and push the tag to the remote.
+- Once the release PR is merged, create a [new release](https://github.com/florimondmanca/djangorestframework-api-key/releases/new), including:
+    - Tag version, like `2.1.0`.
+    - Release title, `Version 2.1.0`.
+    - Description copied from the changelog.
+- Once created, this release will be automatically uploaded to PyPI via a publish job on Azure Pipelines.

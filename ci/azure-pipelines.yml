@@ -17,44 +17,57 @@ resources:
 
 trigger:
   - master
+  - refs/tags/*
 
 pr:
   - master
 
 variables:
-  CI: true
-  PIP_CACHE_DIR: $(Pipeline.Workspace)/.cache/pip
+  - name: CI
+    value: "true"
+  - name: PIP_CACHE_DIR
+    value: $(Pipeline.Workspace)/.cache/pip
+  - group: pypi-credentials
 
-jobs:
-  - template: job--python-check.yml@templates
-    parameters:
-      pythonVersion: "3.8"
+stages:
+  - stage: test
+    jobs:
+      - template: job--python-check.yml@templates
+        parameters:
+          pythonVersion: "3.8"
 
-  - template: job--python-docs-build.yml@templates
-    parameters:
-      pythonVersion: "3.8"
+      - template: job--python-docs-build.yml@templates
+        parameters:
+          pythonVersion: "3.8"
 
-  - template: job--python-test.yml@templates
-    parameters:
-      jobs:
-        py36_dj22:
-          variables:
-            DJANGO_VERSION: "2.2.*"
+      - template: job--python-test.yml@templates
+        parameters:
+          jobs:
+            py36_dj22:
+              variables:
+                DJANGO_VERSION: "2.2.*"
 
-        py37_dj30:
-          variables:
-            DJANGO_VERSION: "3.0.*"
+            py37_dj30:
+              variables:
+                DJANGO_VERSION: "3.0.*"
 
-        py38_dj30:
-          coverage: true
-          variables:
-            DJANGO_VERSION: "3.0.*"
+            py38_dj30:
+              coverage: true
+              variables:
+                DJANGO_VERSION: "3.0.*"
 
-        py38_windows:
-          os: windows
+            py38_windows:
+              os: windows
 
-        py38_postgres:
-          services:
-            postgres: pg11
-          variables:
-            DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/default"
+            py38_postgres:
+              services:
+                postgres: pg11
+              variables:
+                DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/default"
+
+  - stage: publish
+    condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/')
+    jobs:
+      - template: job--python-publish.yml@templates
+        parameters:
+          token: $(pypiToken)
