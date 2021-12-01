@@ -12,13 +12,17 @@ from rest_framework_api_key.admin import APIKeyModelAdmin
 from rest_framework_api_key.models import APIKey
 
 
+def dummy_get_response(request):  # pragma: no cover
+    return None
+
+
 def build_admin_request(rf: RequestFactory) -> HttpRequest:
     request = rf.post("/")
 
     # NOTE: all middleware must be instantiated before
     # any middleware can process the request.
-    sessions = SessionMiddleware()
-    messages = MessageMiddleware()
+    sessions = SessionMiddleware(dummy_get_response)
+    messages = MessageMiddleware(dummy_get_response)
 
     sessions.process_request(request)
     messages.process_request(request)

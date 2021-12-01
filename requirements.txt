@@ -1,8 +1,8 @@
 -e .
 
 # Django environment.
-django[argon2,bcrypt]==3.0.*
-djangorestframework==3.10.*
+django[argon2,bcrypt]>=3.2.9
+djangorestframework>=3.12.4
 dj-database-url
 django-dotenv
 
