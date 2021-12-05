@@ -82,3 +82,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 
 STATIC_URL = "/static/"
+
+
+# API keys
+
+API_KEY_MODEL = "heroes.HeroAPIKey"

@@ -4,7 +4,7 @@ from django.conf import settings
 from django.http import HttpRequest
 from rest_framework import permissions
 
-from .models import AbstractAPIKey, APIKey
+from .models import AbstractAPIKey, get_api_key_model
 
 
 class KeyParser:
@@ -59,4 +59,4 @@ class BaseHasAPIKey(permissions.BasePermission):
 
 
 class HasAPIKey(BaseHasAPIKey):
-    model = APIKey
+    model = get_api_key_model()
