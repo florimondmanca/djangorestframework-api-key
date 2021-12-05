@@ -71,3 +71,4 @@ stages:
       - template: job--python-publish.yml@templates
         parameters:
           token: $(pypiToken)
+          pythonVersion: "3.10"
