@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('rest_framework_api_key', '0004_prefix_hashed_key'),
+        ("rest_framework_api_key", "0004_prefix_hashed_key"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='apikey',
-            name='hashed_key',
+            model_name="apikey",
+            name="hashed_key",
             field=models.CharField(editable=False, max_length=150),
         ),
     ]
