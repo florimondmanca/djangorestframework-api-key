@@ -1,37 +1,46 @@
 import pytest
+from django.test import RequestFactory
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.request import Request
+from rest_framework.response import Response
 from test_project.heroes.models import Hero, HeroAPIKey
 from test_project.heroes.permissions import HasHeroAPIKey
 
-from .utils import create_view_with_permissions
+from rest_framework_api_key.models import APIKey
 
 pytestmark = pytest.mark.django_db
 
 
-@pytest.fixture(name="view")
-def fixture_view():
-    return create_view_with_permissions(HasHeroAPIKey)
+@api_view()
+@permission_classes([HasHeroAPIKey])
+def view(request: Request) -> Response:
+    return Response()
 
 
-@pytest.fixture(name="create_hero_request")
-def fixture_create_hero_request(build_create_request):
-    return build_create_request(HeroAPIKey)
+def test_non_hero_api_key_denied(rf: RequestFactory) -> None:
+    _, key = APIKey.objects.create_key(name="test")
+    authorization = f"Api-Key {key}"
+    request = rf.get("/test/", HTTP_AUTHORIZATION=authorization)
 
-
-def test_non_hero_api_key_denied(create_request, view):
-    request = create_request()
     response = view(request)
     assert response.status_code == 403
 
 
-def test_hero_api_key_granted(create_hero_request, view):
+def test_hero_api_key_granted(rf: RequestFactory) -> None:
     hero = Hero.objects.create()
-    hero_request = create_hero_request(hero=hero)
-    response = view(hero_request)
+    _, key = HeroAPIKey.objects.create_key(name="test", hero=hero)
+    authorization = f"Api-Key {key}"
+    request = rf.get("/test/", HTTP_AUTHORIZATION=authorization)
+
+    response = view(request)
     assert response.status_code == 200
 
 
-def test_retired_hero_denied(create_hero_request, view):
+def test_retired_hero_denied(rf: RequestFactory) -> None:
     hero = Hero.objects.create(retired=True)
-    hero_request = create_hero_request(hero=hero)
-    response = view(hero_request)
+    _, key = HeroAPIKey.objects.create_key(name="test", hero=hero)
+    authorization = f"Api-Key {key}"
+    request = rf.get("/test/", HTTP_AUTHORIZATION=authorization)
+
+    response = view(request)
     assert response.status_code == 403
