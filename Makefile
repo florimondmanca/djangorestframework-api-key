@@ -1,7 +1,6 @@
 venv = venv
 bin = ${venv}/bin/
 pysources = src/ test_project/ tests/
-pysources_mypy = src/ test_project/ tests/conftest.py
 
 build:
 	${python} setup.py sdist bdist_wheel
@@ -11,7 +10,7 @@ build:
 check:
 	${bin}black --check --diff --target-version=py36 ${pysources}
 	${bin}flake8 ${pysources}
-	${bin}mypy ${pysources_mypy}
+	${bin}mypy ${pysources}
 	${bin}isort --check --diff ${pysources}
 	make migrations-check
 

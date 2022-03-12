@@ -1,3 +1,4 @@
+import datetime as dt
 import string
 
 import pytest
@@ -12,7 +13,7 @@ from .dateutils import NOW, TOMORROW, YESTERDAY
 pytestmark = pytest.mark.django_db
 
 
-def test_key_generation():
+def test_key_generation() -> None:
     api_key, generated_key = APIKey.objects.create_key(name="test")
     prefix = api_key.prefix
     hashed_key = api_key.hashed_key
@@ -29,12 +30,12 @@ def test_key_generation():
     assert api_key.is_valid(hashed_key) is False
 
 
-def test_name_is_required():
+def test_name_is_required() -> None:
     with pytest.raises(IntegrityError):
         APIKey.objects.create()
 
 
-def test_cannot_unrevoke():
+def test_cannot_unrevoke() -> None:
     api_key, _ = APIKey.objects.create_key(name="test", revoked=True)
 
     # Try to unrevoke the API key programmatically.
@@ -51,12 +52,12 @@ def test_cannot_unrevoke():
     "expiry_date, has_expired",
     [(None, False), (NOW, True), (TOMORROW, False), (YESTERDAY, True)],
 )
-def test_has_expired(expiry_date, has_expired):
+def test_has_expired(expiry_date: dt.datetime, has_expired: bool) -> None:
     api_key, _ = APIKey.objects.create_key(name="test", expiry_date=expiry_date)
     assert api_key.has_expired is has_expired
 
 
-def test_custom_api_key_model():
+def test_custom_api_key_model() -> None:
     hero = Hero.objects.create()
     hero_api_key, generated_key = HeroAPIKey.objects.create_key(name="test", hero=hero)
     assert hero_api_key.is_valid(generated_key)
@@ -65,20 +66,20 @@ def test_custom_api_key_model():
 
 
 @pytest.mark.django_db
-def test_api_key_manager_get_from_key():
+def test_api_key_manager_get_from_key() -> None:
     api_key, generated_key = APIKey.objects.create_key(name="test")
     retrieved_key = APIKey.objects.get_from_key(generated_key)
     assert retrieved_key == api_key
 
 
 @pytest.mark.django_db
-def test_api_key_manager_get_from_key_missing_key():
+def test_api_key_manager_get_from_key_missing_key() -> None:
     with pytest.raises(APIKey.DoesNotExist):
         APIKey.objects.get_from_key("foobar")
 
 
 @pytest.mark.django_db
-def test_api_key_manager_get_from_key_invalid_key():
+def test_api_key_manager_get_from_key_invalid_key() -> None:
     api_key, generated_key = APIKey.objects.create_key(name="test")
     prefix, _, _ = generated_key.partition(".")
     invalid_key = f"{prefix}.foobar"
@@ -86,7 +87,7 @@ def test_api_key_manager_get_from_key_invalid_key():
         APIKey.objects.get_from_key(invalid_key)
 
 
-def test_api_key_str():
+def test_api_key_str() -> None:
     _, generated_key = APIKey.objects.create_key(name="test")
     retrieved_key = APIKey.objects.get_from_key(generated_key)
     assert str(retrieved_key) == "test"
