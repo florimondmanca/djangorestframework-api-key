@@ -56,9 +56,6 @@ stages:
               variables:
                 DJANGO_VERSION: "3.2.*"
 
-            py38_windows:
-              os: windows
-
             py38_postgres:
               services:
                 postgres: pg11

@@ -2,12 +2,6 @@ venv = venv
 bin = ${venv}/bin/
 pysources = src/ test_project/ tests/
 pysources_mypy = src/ test_project/ tests/conftest.py
-system_python = python3
-
-ifeq ($(OS),Windows_NT)
-	bin = ${venv}/Scripts/
-	system_python = python
-endif
 
 build:
 	${python} setup.py sdist bdist_wheel
@@ -31,7 +25,7 @@ docs-deploy:
 	${bin}mkdocs gh-deploy
 
 install:
-	${system_python} -m venv ${venv}
+	python3 -m venv ${venv}
 	${bin}pip install -U pip wheel
 	${bin}pip install -r requirements.txt
 
