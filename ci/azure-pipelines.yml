@@ -4,7 +4,7 @@ resources:
       type: github
       endpoint: github
       name: florimondmanca/azure-pipelines-templates
-      ref: refs/tags/4.0
+      ref: refs/tags/5.0
   containers:
     - container: pg11
       image: postgres:11
@@ -55,9 +55,6 @@ stages:
               coverage: true
               variables:
                 DJANGO_VERSION: "3.2.*"
-
-            py38_windows:
-              os: windows
 
             py38_postgres:
               services:

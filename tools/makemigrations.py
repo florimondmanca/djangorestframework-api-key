@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """A stand-alone equivalent of `python manage.py makemigrations`."""
 import pathlib
 import sys

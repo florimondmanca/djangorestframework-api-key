@@ -16,52 +16,52 @@ Here are a few ways in which you can help:
 1. Clone it on your machine.
 1. Install dependencies:
 
-```bash
-scripts/install
+```
+make install
 ```
 
 ### Tests
 
 Run the tests using:
 
-```bash
-scripts/test
+```
+make test
 ```
 
 ### Code style
 
 Run code auto-formatting with:
 
-```bash
-scripts/lint
+```
+make format
 ```
 
 Run code style checks using:
 
-```bash
-scripts/check
+```
+make check
 ```
 
 ### Generating migrations
 
 This package includes migrations. To update them in case of changes without setting up a Django project, run:
 
-```bash
-scripts/makemigrations
+```
+make migrations
 ```
 
 ### Documentation
 
-Serve the docs site locally (with hot-reload) using:
-
-```bash
-scripts/serve
-```
-
 Build the documentation using:
 
-```bash
-scripts/docs build
+```
+make docs
+```
+
+Serve the docs site locally (with hot-reload) using:
+
+```
+make docs-serve
 ```
 
 ## Notes to maintainers
@@ -76,4 +76,4 @@ scripts/docs build
     - Release title, `Version 2.1.0`.
     - Description copied from the changelog.
 - Once created, this release will be automatically uploaded to PyPI via a publish job on Azure Pipelines.
-- Deploy the docs using: `scripts/docs gh-deploy`
+- Deploy the docs using: `make docs-deploy`
