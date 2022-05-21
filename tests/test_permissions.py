@@ -1,3 +1,4 @@
+import base64
 import datetime as dt
 from typing import Any, Callable
 
@@ -163,3 +164,23 @@ def test_keyparser_keyword_override(rf: RequestFactory) -> None:
 
     response = bearer_view(request)
     assert response.status_code == 200
+
+
+@override_settings(API_KEY_BASE64_ENCODED=True)
+def test_correct_base64_encoded_api_key(rf: RequestFactory) -> None:
+    _, key = APIKey.objects.create_key(name="test")
+    authorization = f"Api-Key {base64.b64encode(key.encode('UTF-8')).decode('UTF-8')}"
+    request = rf.get("/test/", HTTP_AUTHORIZATION=authorization)
+
+    response = view(request)
+    assert response.status_code == 200
+
+
+@override_settings(API_KEY_BASE64_ENCODED=True)
+def test_wrong_base64_encoded_api_key(rf: RequestFactory) -> None:
+    _, key = APIKey.objects.create_key(name="test")
+    authorization = f"Api-Key {base64.b64encode(key.encode('UTF-16')).decode('UTF-8')}"
+    request = rf.get("/test/", HTTP_AUTHORIZATION=authorization)
+
+    response = view(request)
+    assert response.status_code == 403

@@ -347,6 +347,21 @@ class HasAPIKey(BaseHasAPIKey):
     key_parser = CookieKeyParser()
 ```
 
+By default, clients pass their API key as a plaintext, You can set the `API_KEY_BASE64_ENCODED` setting to `True` value
+, to accept the API key as Base64 Encoded string instead of plaintext.
+
+```python
+# settings.py
+API_KEY_BASE64_ENCODED = True
+```
+
+```python
+# Example of converting the key value to b64encoded value
+import base64
+key = "<API_KEY>"
+key_b64encoded = base64.b64encode(key.encode("UTF-8")).decode("UTF-8")
+```
+
 ### Key generation
 
 !!! warning

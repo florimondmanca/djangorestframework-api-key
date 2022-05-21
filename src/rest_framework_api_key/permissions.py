@@ -1,3 +1,5 @@
+import base64
+import binascii
 import typing
 
 from django.conf import settings
@@ -14,9 +16,17 @@ class KeyParser:
         custom_header = getattr(settings, "API_KEY_CUSTOM_HEADER", None)
 
         if custom_header is not None:
-            return self.get_from_header(request, custom_header)
+            api_key = self.get_from_header(request, custom_header)
+        else:
+            api_key = self.get_from_authorization(request)
 
-        return self.get_from_authorization(request)
+        base64_encoded = getattr(settings, "API_KEY_BASE64_ENCODED", False)
+        if base64_encoded:
+            try:
+                api_key = base64.b64decode(api_key, validate=True).decode("UTF-8")
+            except (binascii.Error, UnicodeDecodeError):  # API-Key not correctly base64 encoded.
+                api_key = None
+        return api_key
 
     def get_from_authorization(self, request: HttpRequest) -> typing.Optional[str]:
         authorization = request.META.get("HTTP_AUTHORIZATION")
