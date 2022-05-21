@@ -96,10 +96,16 @@ def test_admin_revoke_multiple_api_key(rf: RequestFactory) -> None:
 
 
 @pytest.mark.django_db
-def test_admin_verify_api_key(rf: RequestFactory, ) -> None:
+def test_admin_verify_api_key(
+    rf: RequestFactory,
+) -> None:
     admin = APIKeyModelAdmin(APIKey, site)
-    api_key_1_obj, api_key_1_key = APIKey.objects.create_key(name="test_admin_verify_api_key_1")
-    api_key_2_obj, api_key_2_key = APIKey.objects.create_key(name="test_admin_verify_api_key_2")
+    api_key_1_obj, api_key_1_key = APIKey.objects.create_key(
+        name="test_admin_verify_api_key_1"
+    )
+    api_key_2_obj, api_key_2_key = APIKey.objects.create_key(
+        name="test_admin_verify_api_key_2"
+    )
 
     assert api_key_1_obj.is_valid(api_key_1_key)
     assert api_key_2_obj.is_valid(api_key_2_key)
@@ -114,7 +120,9 @@ def test_admin_verify_api_key(rf: RequestFactory, ) -> None:
     # Test Submit Invalid Form
     with mock.patch("rest_framework_api_key.admin.render") as mock_render:
         queryset = APIKey.objects.filter(pk=api_key_1_obj.pk)
-        request = build_admin_request(rf, {"action": ["verify"], "apply": ["Verify"]})  # missing Key field
+        request = build_admin_request(
+            rf, {"action": ["verify"], "apply": ["Verify"]}
+        )  # missing Key field
         admin.verify(request, queryset=queryset)
         messages = list(get_messages(request))
         mock_render.assert_called_once()
@@ -123,7 +131,9 @@ def test_admin_verify_api_key(rf: RequestFactory, ) -> None:
     # Test Submit Form with Wrong Key
     with mock.patch("rest_framework_api_key.admin.render") as mock_render:
         queryset = APIKey.objects.filter(pk=api_key_1_obj.pk)
-        request = build_admin_request(rf, {"action": ["verify"], "apply": ["Verify"], "key": [api_key_2_key]})
+        request = build_admin_request(
+            rf, {"action": ["verify"], "apply": ["Verify"], "key": [api_key_2_key]}
+        )
         admin.verify(request, queryset=queryset)
         assert mock_render.call_count == 1
         messages = list(get_messages(request))
@@ -131,7 +141,9 @@ def test_admin_verify_api_key(rf: RequestFactory, ) -> None:
         assert messages[0].level == dj_messages.ERROR
 
         queryset = APIKey.objects.filter(pk=api_key_2_obj.pk)
-        request = build_admin_request(rf, {"action": ["verify"], "apply": ["Verify"], "key": [api_key_1_key]})
+        request = build_admin_request(
+            rf, {"action": ["verify"], "apply": ["Verify"], "key": [api_key_1_key]}
+        )
         admin.verify(request, queryset=queryset)
         assert mock_render.call_count == 2
         messages = list(get_messages(request))
@@ -139,7 +151,10 @@ def test_admin_verify_api_key(rf: RequestFactory, ) -> None:
         assert messages[0].level == dj_messages.ERROR
 
         queryset = APIKey.objects.filter(pk=api_key_2_obj.pk)
-        request = build_admin_request(rf, {"action": ["verify"], "apply": ["Verify"], "key": ["XXXXXXXXXXXXXXXXXX"]})
+        request = build_admin_request(
+            rf,
+            {"action": ["verify"], "apply": ["Verify"], "key": ["XXXXXXXXXXXXXXXXXX"]},
+        )
         admin.verify(request, queryset=queryset)
         assert mock_render.call_count == 3
         messages = list(get_messages(request))
@@ -149,7 +164,9 @@ def test_admin_verify_api_key(rf: RequestFactory, ) -> None:
     # Test Submit Form with Correct Key
     with mock.patch("rest_framework_api_key.admin.render") as mock_render:
         queryset = APIKey.objects.filter(pk=api_key_1_obj.pk)
-        request = build_admin_request(rf, {"action": ["verify"], "apply": ["Verify"], "key": [api_key_1_key]})
+        request = build_admin_request(
+            rf, {"action": ["verify"], "apply": ["Verify"], "key": [api_key_1_key]}
+        )
         admin.verify(request, queryset=queryset)
         assert mock_render.call_count == 1
         messages = list(get_messages(request))
@@ -157,7 +174,9 @@ def test_admin_verify_api_key(rf: RequestFactory, ) -> None:
         assert messages[0].level == dj_messages.SUCCESS
 
         queryset = APIKey.objects.filter(pk=api_key_2_obj.pk)
-        request = build_admin_request(rf, {"action": ["verify"], "apply": ["Verify"], "key": [api_key_2_key]})
+        request = build_admin_request(
+            rf, {"action": ["verify"], "apply": ["Verify"], "key": [api_key_2_key]}
+        )
         admin.verify(request, queryset=queryset)
         assert mock_render.call_count == 2
         messages = list(get_messages(request))

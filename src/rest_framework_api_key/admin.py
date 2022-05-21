@@ -3,6 +3,8 @@ import typing
 from django import forms
 from django.contrib import admin, messages
 from django.db import models
+from django.db.models import QuerySet
+from django.http import HttpResponse
 from django.http.request import HttpRequest
 from django.shortcuts import render
 
@@ -63,24 +65,34 @@ class APIKeyModelAdmin(admin.ModelAdmin):
         else:
             obj.save()
 
-    def revoke(self, request, queryset):
+    @admin.action(description="Revoke selected API-Key")
+    def revoke(
+        self,
+        request: HttpRequest,
+        queryset: typing.Union[QuerySet, typing.List[AbstractAPIKey]],
+    ) -> None:
         """
         Implementation of custom action to revoke given API-Key.
         Requires selecting only one API-Key.
         """
         if len(queryset) != 1:
-            return self.message_user(request, "Please select (only) one API-Key to revoke.", messages.ERROR)
+            return self.message_user(
+                request, "Please select (only) one API-Key to revoke.", messages.ERROR
+            )
 
         api_key = queryset[0]
         api_key.revoked = True
         api_key.save(update_fields=["revoked"])
         self.log_change(request, api_key, "Revoked the API-Key.")
 
-        return self.message_user(request, "API-Key revoked successfully.", messages.SUCCESS)
+        return self.message_user(request, queryset, messages.SUCCESS)
 
-    revoke.short_description = "Revoke selected API-Key"
-
-    def verify(self, request, queryset):
+    @admin.action(description="Verify Key of selected API-Key")
+    def verify(
+        self,
+        request: HttpRequest,
+        queryset: typing.Union[QuerySet, typing.List[AbstractAPIKey]],
+    ) -> typing.Optional[HttpResponse]:
         """
         Implementation of custom action to verify given API-Key.
         Requires selecting only one API-Key.
@@ -88,12 +100,16 @@ class APIKeyModelAdmin(admin.ModelAdmin):
 
         class VerificationForm(forms.Form):
             """
-            Instance of forms.Form to customize its behavior for the :model:"rest_framework_api_key.APIKey" Verify action.
+            Instance of forms.Form to customize its behavior
+            for the :model:"rest_framework_api_key.APIKey" Verify action.
             """
+
             key = forms.CharField(required=True, max_length=200, label="API-Key")
 
         if len(queryset) != 1:
-            return self.message_user(request, "Please select (only) one API-Key to verify.", messages.ERROR)
+            return self.message_user(
+                request, "Please select (only) one API-Key to verify.", messages.ERROR
+            )
 
         api_key = queryset[0]
 
@@ -103,18 +119,32 @@ class APIKeyModelAdmin(admin.ModelAdmin):
                 data = form.cleaned_data
                 key = data.get("key")
                 if api_key.is_valid(key):
-                    self.message_user(request, "Verification Succeed.", messages.SUCCESS)
-                    self.log_change(request, api_key, "Verified the API-Key. Verification Succeed")
+                    self.message_user(
+                        request, "Verification Succeed.", messages.SUCCESS
+                    )
+                    self.log_change(
+                        request, api_key, "Verified the API-Key. Verification Succeed"
+                    )
                 else:
                     self.message_user(request, "Verification Failed.", messages.ERROR)
-                    self.log_change(request, api_key, "Verified the API-Key. Verification Failed")
+                    self.log_change(
+                        request, api_key, "Verified the API-Key. Verification Failed"
+                    )
         else:
             form = VerificationForm()
-        return render(request, "admin/rest_framework_api_key/apikey/verify.html",
-                      context={**self.admin_site.each_context(request), "opts": self.opts, "instance": api_key,
-                               "form": form, "subtitle": "Verify", "title": api_key.name, "action": "verify"})
-
-    verify.short_description = "Verify Key of selected API-Key"
+        return render(
+            request,
+            "admin/rest_framework_api_key/apikey/verify.html",
+            context={
+                **self.admin_site.each_context(request),
+                "opts": self.opts,
+                "instance": api_key,
+                "form": form,
+                "subtitle": "Verify",
+                "title": api_key.name,
+                "action": "verify",
+            },
+        )
 
 
 admin.site.register(APIKey, APIKeyModelAdmin)
