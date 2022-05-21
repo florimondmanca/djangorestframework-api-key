@@ -21,10 +21,13 @@ class KeyParser:
             api_key = self.get_from_authorization(request)
 
         base64_encoded = getattr(settings, "API_KEY_BASE64_ENCODED", False)
-        if base64_encoded:
+        if base64_encoded and api_key:
             try:
                 api_key = base64.b64decode(api_key, validate=True).decode("UTF-8")
-            except (binascii.Error, UnicodeDecodeError):  # API-Key not correctly base64 encoded.
+            except (
+                binascii.Error,
+                UnicodeDecodeError,
+            ):  # API-Key not correctly base64 encoded.
                 api_key = None
         return api_key
 
