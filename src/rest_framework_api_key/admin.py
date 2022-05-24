@@ -65,7 +65,7 @@ class APIKeyModelAdmin(admin.ModelAdmin):
         else:
             obj.save()
 
-    @admin.action(description="Revoke selected API-Key")
+    @admin.action(description="Revoke selected API-Key", permissions=["change"])
     def revoke(
         self,
         request: HttpRequest,
