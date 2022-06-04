@@ -34,5 +34,15 @@ class KeyGenerator:
         hashed_key = self.hash(key)
         return key, prefix, hashed_key
 
-    def verify(self, key: str, hashed_key: str) -> bool:
-        return check_password(key, hashed_key)
+    def verify(
+        self,
+        key: str,
+        hashed_key: str,
+        hashed_key_setter: typing.Callable[[str], None] = None,
+    ) -> bool:
+        def setter(__key: str) -> None:
+            if hashed_key_setter is not None:
+                new_hashed_key = self.hash(__key)
+                hashed_key_setter(new_hashed_key)
+
+        return check_password(key, hashed_key, setter=setter)

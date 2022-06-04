@@ -123,7 +123,13 @@ class AbstractAPIKey(models.Model):
     has_expired = property(_has_expired)
 
     def is_valid(self, key: str) -> bool:
-        return type(self).objects.key_generator.verify(key, self.hashed_key)
+        return type(self).objects.key_generator.verify(
+            key, self.hashed_key, hashed_key_setter=self._update_hash
+        )
+
+    def _update_hash(self, hashed_key: str) -> None:
+        self.hashed_key = hashed_key
+        self.save()
 
     def clean(self) -> None:
         self._validate_revoked()
