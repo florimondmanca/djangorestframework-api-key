@@ -89,6 +89,23 @@ def test_if_invalid_api_key_then_permission_denied(
     assert response.status_code == 403
 
 
+@pytest.mark.parametrize(
+    "authorization_fmt",
+    [
+        pytest.param("X-Key {key}", id="wrong-scheme"),
+        pytest.param("Api-Key:{key}", id="not-space-separated"),
+    ],
+)
+def test_if_malformed_authorization_then_permission_denied(
+    rf: RequestFactory, authorization_fmt: str
+) -> None:
+    _, key = APIKey.objects.create_key(name="test")
+    authorization = authorization_fmt.format(key=key)
+    request = rf.get("/test/", HTTP_AUTHORIZATION=authorization)
+    response = view(request)
+    assert response.status_code == 403
+
+
 def test_if_invalid_api_key_custom_header_then_permission_denied(
     rf: RequestFactory,
 ) -> None:
@@ -134,7 +151,7 @@ def test_object_permission(rf: RequestFactory) -> None:
 
         def get(self, request: Request) -> Response:
             self.check_object_permissions(request, object())
-            return Response()
+            return Response()  # pragma: no cover  # Never reached.
 
     view = View.as_view()
 
