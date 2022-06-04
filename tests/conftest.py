@@ -45,7 +45,8 @@ def pytest_configure() -> None:
             ],
             "ROOT_URLCONF": "test_project.project.urls",
             "DATABASES": {
-                "default": dj_database_url.config(default="sqlite://:memory:")
+                "default": dj_database_url.config(default="sqlite://:memory:"),
+                "test": dj_database_url.config(default="sqlite://:memory:"),
             },
         }
     )
