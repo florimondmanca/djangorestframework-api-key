@@ -4,7 +4,7 @@ resources:
       type: github
       endpoint: github
       name: florimondmanca/azure-pipelines-templates
-      ref: refs/tags/3.4
+      ref: refs/tags/5.0
   containers:
     - container: pg11
       image: postgres:11
@@ -34,32 +34,29 @@ stages:
     jobs:
       - template: job--python-check.yml@templates
         parameters:
-          pythonVersion: "3.8"
+          pythonVersion: "3.10"
 
       - template: job--python-docs-build.yml@templates
         parameters:
-          pythonVersion: "3.8"
+          pythonVersion: "3.10"
 
       - template: job--python-test.yml@templates
         parameters:
           jobs:
-            py36_dj22:
+            py37_dj22:
               variables:
                 DJANGO_VERSION: "2.2.*"
 
-            py37_dj30:
+            py38_dj32:
               variables:
-                DJANGO_VERSION: "3.0.*"
+                DJANGO_VERSION: "3.2.*"
 
-            py38_dj30:
+            py310_dj32:
               coverage: true
               variables:
-                DJANGO_VERSION: "3.0.*"
+                DJANGO_VERSION: "3.2.*"
 
-            py38_windows:
-              os: windows
-
-            py38_postgres:
+            py310_postgres:
               services:
                 postgres: pg11
               variables:
@@ -71,3 +68,4 @@ stages:
       - template: job--python-publish.yml@templates
         parameters:
           token: $(pypiToken)
+          pythonVersion: "3.10"

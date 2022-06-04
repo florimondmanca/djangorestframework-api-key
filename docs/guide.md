@@ -10,7 +10,7 @@ Install from PyPI:
 pip install djangorestframework-api-key
 ```
 
-**Note**: this package requires Python 3.6+, Django 2.0+ and Django REST Framework 3.8+.
+**Note**: this package requires Python 3.7+, Django 2.0+ and Django REST Framework 3.8+.
 
 ### Project setup
 
@@ -297,7 +297,7 @@ You can then use `HasOrganizationAPIKey` as described in [Setting permissions](#
 
 By default, API key permission classes retrieve the API key from the `Authorization` header or a custom header, as described in [Making authorized requests](#making-authorized-requests).
 
-You can customize of override this behavior in several ways.
+You can customize or override this behavior in several ways.
 
 If you are building an API for an application you do not control that requires a specific header keyword, e.g. a client that sends API keys using the `Bearer` keyword as follows:
 
