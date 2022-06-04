@@ -4,6 +4,7 @@ from django.contrib.messages import get_messages
 from django.contrib.messages.middleware import MessageMiddleware
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.http.request import HttpRequest
+from django.http.response import HttpResponse
 from django.test import RequestFactory
 from test_project.heroes.admin import HeroAPIKeyModelAdmin
 from test_project.heroes.models import Hero, HeroAPIKey
@@ -15,10 +16,13 @@ from rest_framework_api_key.models import APIKey
 def build_admin_request(rf: RequestFactory) -> HttpRequest:
     request = rf.post("/")
 
+    def get_response(request: HttpRequest) -> HttpResponse:
+        raise NotImplementedError  # Unused in these tests.
+
     # NOTE: all middleware must be instantiated before
     # any middleware can process the request.
-    sessions = SessionMiddleware()
-    messages = MessageMiddleware()
+    sessions = SessionMiddleware(get_response)
+    messages = MessageMiddleware(sessions.get_response)
 
     sessions.process_request(request)
     messages.process_request(request)
