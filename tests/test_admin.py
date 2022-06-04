@@ -17,7 +17,7 @@ def build_admin_request(rf: RequestFactory) -> HttpRequest:
     request = rf.post("/")
 
     def get_response(request: HttpRequest) -> HttpResponse:
-        raise NotImplementedError  # Unused in these tests.
+        raise NotImplementedError  # pragma: no cover  # Unused in these tests.
 
     # NOTE: all middleware must be instantiated before
     # any middleware can process the request.
@@ -28,6 +28,26 @@ def build_admin_request(rf: RequestFactory) -> HttpRequest:
     messages.process_request(request)
 
     return request
+
+
+@pytest.mark.django_db
+def test_admin_readonly_fields(rf: RequestFactory) -> None:
+    request = build_admin_request(rf)
+
+    admin = APIKeyModelAdmin(APIKey, site)
+
+    assert admin.get_readonly_fields(request) == ("prefix",)
+
+    api_key = APIKey(name="test")
+    assert admin.get_readonly_fields(request, obj=api_key) == ("prefix",)
+
+    api_key = APIKey(name="test", revoked=True)
+    assert admin.get_readonly_fields(request, obj=api_key) == (
+        "prefix",
+        "name",
+        "revoked",
+        "expiry_date",
+    )
 
 
 @pytest.mark.django_db
@@ -58,3 +78,16 @@ def test_admin_create_custom_api_key(rf: RequestFactory) -> None:
 
     messages = get_messages(request)
     assert len(messages) == 1
+
+
+@pytest.mark.django_db
+def test_admin_update_api_key(rf: RequestFactory) -> None:
+    request = build_admin_request(rf)
+
+    admin = APIKeyModelAdmin(APIKey, site)
+    api_key, _ = APIKey.objects.create_key(name="test")
+
+    api_key.name = "another-test"
+    admin.save_model(request, obj=api_key)
+    refreshed = APIKey.objects.get(pk=api_key.pk)
+    assert refreshed.name == "another-test"
