@@ -43,11 +43,11 @@ stages:
       - template: job--python-test.yml@templates
         parameters:
           jobs:
-            py36_dj22:
+            py37_dj22:
               variables:
                 DJANGO_VERSION: "2.2.*"
 
-            py37_dj32:
+            py38_dj32:
               variables:
                 DJANGO_VERSION: "3.2.*"
 
@@ -56,7 +56,7 @@ stages:
               variables:
                 DJANGO_VERSION: "3.2.*"
 
-            py38_postgres:
+            py310_postgres:
               services:
                 postgres: pg11
               variables:
