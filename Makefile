@@ -27,6 +27,7 @@ install:
 	python3 -m venv ${venv}
 	${bin}pip install -U pip wheel
 	${bin}pip install -r requirements.txt
+	./tools/install_django.sh ${bin}pip
 
 format:
 	${bin}autoflake --in-place --recursive ${pysources}
