@@ -47,9 +47,9 @@ class APIKeyModelAdmin(admin.ModelAdmin):
             key = self.model.objects.assign_key(obj)
             obj.save()
             message = (
-                _("The API key for %(name)s is: %(key)s. ") % {"name": obj.name, "key": key}
+                _("The API key for {} is: {}. ").format(obj.name, key)
                 + _("Please store it somewhere safe: ")
-                + _("you will not be able to see it again.")
+                + _("you will not be able to see it again.aadasdas")
             )
             messages.add_message(request, messages.WARNING, message)
         else:

@@ -83,17 +83,21 @@ class AbstractAPIKey(models.Model):
         blank=False,
         default=None,
         help_text=(
-            _("A free-form name for the API key. "
-            "Need not be unique. "
-            "50 characters max.")
+            _(
+                "A free-form name for the API key. "
+                "Need not be unique. "
+                "50 characters max."
+            )
         ),
     )
     revoked = models.BooleanField(
         blank=True,
         default=False,
         help_text=(
-            _("If the API key is revoked, clients cannot use it anymore. "
-            "(This cannot be undone.)")
+            _(
+                "If the API key is revoked, clients cannot use it anymore. "
+                "(This cannot be undone.)"
+            )
         ),
     )
     expiry_date = models.DateTimeField(
