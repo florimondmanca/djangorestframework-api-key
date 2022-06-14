@@ -49,7 +49,7 @@ class APIKeyModelAdmin(admin.ModelAdmin):
             message = (
                 _("The API key for {} is: {}. ").format(obj.name, key)
                 + _("Please store it somewhere safe: ")
-                + _("you will not be able to see it again.aadasdas")
+                + _("you will not be able to see it again.")
             )
             messages.add_message(request, messages.WARNING, message)
         else:
