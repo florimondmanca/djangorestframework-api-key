@@ -3,6 +3,7 @@ import typing
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from .crypto import KeyGenerator, concatenate, split
 
@@ -82,24 +83,24 @@ class AbstractAPIKey(models.Model):
         blank=False,
         default=None,
         help_text=(
-            "A free-form name for the API key. "
+            _("A free-form name for the API key. "
             "Need not be unique. "
-            "50 characters max."
+            "50 characters max.")
         ),
     )
     revoked = models.BooleanField(
         blank=True,
         default=False,
         help_text=(
-            "If the API key is revoked, clients cannot use it anymore. "
-            "(This cannot be undone.)"
+            _("If the API key is revoked, clients cannot use it anymore. "
+            "(This cannot be undone.)")
         ),
     )
     expiry_date = models.DateTimeField(
         blank=True,
         null=True,
-        verbose_name="Expires",
-        help_text="Once API key expires, clients cannot use it anymore.",
+        verbose_name=_("Expires"),
+        help_text=_("Once API key expires, clients cannot use it anymore."),
     )
 
     class Meta:  # noqa
@@ -135,7 +136,7 @@ class AbstractAPIKey(models.Model):
     def _validate_revoked(self) -> None:
         if self._initial_revoked and not self.revoked:
             raise ValidationError(
-                "The API key has been revoked, which cannot be undone."
+                _("The API key has been revoked, which cannot be undone.")
             )
 
     def __str__(self) -> str:

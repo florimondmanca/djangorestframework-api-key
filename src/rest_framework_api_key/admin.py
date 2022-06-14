@@ -3,6 +3,7 @@ import typing
 from django.contrib import admin, messages
 from django.db import models
 from django.http.request import HttpRequest
+from django.utils.translation import gettext_lazy as _
 
 from .models import AbstractAPIKey, APIKey
 
@@ -46,9 +47,9 @@ class APIKeyModelAdmin(admin.ModelAdmin):
             key = self.model.objects.assign_key(obj)
             obj.save()
             message = (
-                "The API key for {} is: {}. ".format(obj.name, key)
-                + "Please store it somewhere safe: "
-                + "you will not be able to see it again."
+                _("The API key for %(name)s is: %(key)s. ") % {"name": obj.name, "key": key}
+                + _("Please store it somewhere safe: ")
+                + _("you will not be able to see it again.")
             )
             messages.add_message(request, messages.WARNING, message)
         else:
