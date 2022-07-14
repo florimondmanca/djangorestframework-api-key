@@ -26,7 +26,7 @@ API key permissions for the [Django REST Framework](https://www.django-rest-fram
 ### Features
 
 - ✌️ **Simple to use**: create, view and revoke API keys via the admin site, or use built-in helpers to create API keys programmatically.
-- 🔒 **As secure as possible**: API keys are treated with the same level of care than user passwords. They are hashed using the default password hasher before being stored in the database, and only visible at creation.
+- 🔒 **As secure as possible**: API keys are treated with the same level of care as user passwords. They are hashed using the default password hasher before being stored in the database, and only visible at creation.
 - 🎨 **Customizable**: satisfy specific business requirements by building your own customized API key models, permission classes and admin panels.
 
 ### Should I use API keys?
