@@ -3,7 +3,7 @@ bin = ${venv}/bin/
 pysources = src/ test_project/ tests/
 
 build:
-	${python} setup.py sdist bdist_wheel
+	${bin}python setup.py sdist bdist_wheel
 	${bin}twine check dist/*
 	rm -r build
 
