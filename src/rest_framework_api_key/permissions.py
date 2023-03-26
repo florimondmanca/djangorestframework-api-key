@@ -19,17 +19,16 @@ class KeyParser:
         return self.get_from_authorization(request)
 
     def get_from_authorization(self, request: HttpRequest) -> typing.Optional[str]:
-        authorization = request.META.get("HTTP_AUTHORIZATION")
+        authorization = request.META.get("HTTP_AUTHORIZATION", "").split(
+            " "
+        )  # Prevent extra sapces in keys
 
-        if not authorization:
+        if not authorization or authorization[0].lower() != self.keyword.lower():
+            return None
+        if len(authorization) != 2:
             return None
 
-        try:
-            _, key = authorization.split("{} ".format(self.keyword))
-        except ValueError:
-            key = None
-
-        return key
+        return authorization[1]
 
     def get_from_header(self, request: HttpRequest, name: str) -> typing.Optional[str]:
         return request.META.get(name) or None
