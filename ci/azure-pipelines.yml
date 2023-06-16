@@ -56,6 +56,11 @@ stages:
               variables:
                 DJANGO_VERSION: "3.2.*"
 
+            py310_dj42:
+              coverage: true
+              variables:
+                DJANGO_VERSION: "4.2.*"
+
             py310_postgres:
               services:
                 postgres: pg11
