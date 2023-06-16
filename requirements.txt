@@ -2,7 +2,7 @@
 
 # Django environment.
 # django[argon2,bcrypt]  # See tools/install_django.sh
-djangorestframework==3.13.1
+djangorestframework==3.14.*
 dj-database-url
 django-dotenv
 
