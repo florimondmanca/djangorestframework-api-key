@@ -180,3 +180,9 @@ def test_keyparser_keyword_override(rf: RequestFactory) -> None:
 
     response = bearer_view(request)
     assert response.status_code == 200
+
+
+def test_keyparser_lookup_exact_keyword(rf: RequestFactory) -> None:
+    wrong_key = "My-Special-Api-Key 12345"
+    request = rf.get("/test/", HTTP_AUTHORIZATION=wrong_key)
+    assert KeyParser().get(request) is None
