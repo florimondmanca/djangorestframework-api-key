@@ -1,10 +1,9 @@
 import datetime as dt
-from typing import Any, Callable
+from typing import Callable
 
 import pytest
 from django.conf.global_settings import PASSWORD_HASHERS
 from django.test import RequestFactory, override_settings
-from rest_framework import generics, permissions
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -139,26 +138,6 @@ def test_expiry_date(rf: RequestFactory, expiry_date: dt.datetime, ok: bool) -> 
     response = view(request)
     status_code = 200 if ok else 403
     assert response.status_code == status_code
-
-
-def test_object_permission(rf: RequestFactory) -> None:
-    class DenyObject(permissions.BasePermission):
-        def has_object_permission(self, *args: Any) -> bool:
-            return False
-
-    class View(generics.GenericAPIView):
-        permission_classes = [HasAPIKey | DenyObject]
-
-        def get(self, request: Request) -> Response:
-            self.check_object_permissions(request, object())
-            return Response()  # pragma: no cover  # Never reached.
-
-    view = View.as_view()
-
-    request = rf.get("/test/")
-
-    response = view(request)
-    assert response.status_code == 403
 
 
 def test_keyparser_keyword_override(rf: RequestFactory) -> None:

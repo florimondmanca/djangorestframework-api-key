@@ -1,10 +1,15 @@
 import typing
 
+import packaging.version
 from django.conf import settings
 from django.http import HttpRequest
+from rest_framework import __version__ as __drf_version__
 from rest_framework import permissions
 
 from .models import AbstractAPIKey, APIKey
+
+_drf_version = packaging.version.parse(__drf_version__)
+_3_14_0 = packaging.version.parse("3.14.0")
 
 
 class KeyParser:
@@ -58,7 +63,18 @@ class BaseHasAPIKey(permissions.BasePermission):
     def has_object_permission(
         self, request: HttpRequest, view: typing.Any, obj: AbstractAPIKey
     ) -> bool:
-        return self.has_permission(request, view)
+        if _drf_version < _3_14_0:  # pragma: no cover
+            # Before DRF 3.14.0 (released in Sept 2022), bitwise OR would skip
+            # .has_permision() and only call .has_object_permission(), resulting in
+            # API key permissions not being checked unless we implemented
+            # .has_object_permission().
+            # Since 3.14.0, DRF appropriately checks for both .has_permission() and
+            # .has_object_permission() when checking object permissions of a bitwise OR.
+            # We kept the old redundant behavior to avoid regressions for users who have
+            # not updated their DRF yet.
+            return self.has_permission(request, view)
+
+        return True
 
 
 class HasAPIKey(BaseHasAPIKey):
