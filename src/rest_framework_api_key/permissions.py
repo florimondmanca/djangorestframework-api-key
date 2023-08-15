@@ -74,7 +74,7 @@ class BaseHasAPIKey(permissions.BasePermission):
             # not updated their DRF yet.
             return self.has_permission(request, view)
 
-        return True
+        return super().has_object_permission(request, view, obj)
 
 
 class HasAPIKey(BaseHasAPIKey):
