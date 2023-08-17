@@ -6,6 +6,7 @@ from django.http import HttpRequest
 from rest_framework import __version__ as __drf_version__
 from rest_framework import permissions
 
+from .mixins import CacheMixin
 from .models import AbstractAPIKey, APIKey
 
 _drf_version = packaging.version.parse(__drf_version__)
@@ -43,22 +44,43 @@ class KeyParser:
         return request.META.get(name) or None
 
 
-class BaseHasAPIKey(permissions.BasePermission):
+class BaseHasAPIKey(permissions.BasePermission, CacheMixin):
     model: typing.Optional[typing.Type[AbstractAPIKey]] = None
     key_parser = KeyParser()
 
     def get_key(self, request: HttpRequest) -> typing.Optional[str]:
+        """
+        Extracts the API key from the request using the key parser.
+        """
         return self.key_parser.get(request)
 
-    def has_permission(self, request: HttpRequest, view: typing.Any) -> bool:
+    def is_valid_key(self, key: str) -> bool:
+        """
+        Determines if the given API key is valid.
+        """
         assert self.model is not None, (
             "%s must define `.model` with the API key model to use"
             % self.__class__.__name__
         )
+
+        # Attempt to get the validity of the key from the cache
+        is_valid = self.get_from_cache(key)
+
+        # If not in cache, determine validity from the database
+        if is_valid is None:
+            is_valid = self.model.objects.is_valid(key)
+            self.set_to_cache(key, is_valid)
+
+        return is_valid
+
+    def has_permission(self, request: HttpRequest, view: typing.Any) -> bool:
+        """
+        Determine if the request has permission by checking the validity of the API key.
+        """
         key = self.get_key(request)
         if not key:
             return False
-        return self.model.objects.is_valid(key)
+        return self.is_valid_key(key)
 
     def has_object_permission(
         self, request: HttpRequest, view: typing.Any, obj: AbstractAPIKey

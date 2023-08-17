@@ -165,6 +165,34 @@ class ProjectListView(APIView):
         api_key = APIKey.objects.get_from_key(key)
         project = Project.objects.get(api_key=api_key)
 ```
+Of course! Here's the updated documentation:
+
+---
+
+## Configuring API Key Caching in Django
+
+Enhance your application's responsiveness with our API key caching feature. Here's a guide on how to get the best out of it
+
+### Default Cache Timeout 
+  The `API_KEY_CACHE_TIMEOUT` is set to 1 hour by default. If you have specific requirements, you can adjust this value in your Django settings. 
+  ```python
+  API_KEY_CACHE_TIMEOUT = 3600  # 1 hour in seconds.
+  ```
+
+### Django's Default Cache
+  Even if you haven't explicitly set up a caching solution for your Django project, the API key caching will work out of the box using Django's default local-memory cache. This built-in cache leverages a Python dictionary.
+  It's perfect for quick setups and development purposes. However, there's a catch: this cache won't retain data between server restarts or when used with multiple server instances. For longer-term persistence and reliability, especially in production, you'll want to consider more robust caching solutions.
+
+### Production-Ready Caching Solutions
+  For a sturdy and persistent caching setup ideal for production, we recommend backends like Redis or Memcached. These systems ensure data stability, scalability, and better overall performance.
+  ```python
+  CACHES = {
+      'default': {
+          'BACKEND': 'django_redis.cache.RedisCache',
+          'LOCATION': 'redis://127.0.0.1:6379/1',
+      }
+  }
+  ```
 
 ## Customization
 
