@@ -1,5 +1,6 @@
 import typing
 
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
@@ -128,7 +129,17 @@ class AbstractAPIKey(models.Model):
     has_expired = property(_has_expired)
 
     def is_valid(self, key: str) -> bool:
-        return type(self).objects.key_generator.verify(key, self.hashed_key)
+        ok = type(self).objects.key_generator.verify(key, self.hashed_key, self.prefix)
+        if ok and getattr(settings, "DRF_API_KEY_HASH_AUTOUPDATE", False):
+            # by generating a new hash and comparing it with the stored one,
+            # we can detect not only if the hash algorithm has changed, but also
+            # if some internal parameters have changed (e.g. the number of iterations)
+            # at the cost of one more hash generation, which is negligible
+            new_hash = type(self).objects.key_generator.hash(key, self.prefix)
+            if new_hash != self.hashed_key:
+                self.hashed_key = new_hash
+                self.save()
+        return ok
 
     def clean(self) -> None:
         self._validate_revoked()
