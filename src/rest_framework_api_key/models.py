@@ -1,5 +1,6 @@
 import typing
 
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
@@ -128,7 +129,11 @@ class AbstractAPIKey(models.Model):
     has_expired = property(_has_expired)
 
     def is_valid(self, key: str) -> bool:
-        return type(self).objects.key_generator.verify(key, self.hashed_key)
+        ok = type(self).objects.key_generator.verify(key, self.hashed_key, self.prefix)
+        if ok and getattr(settings, "DRF_API_KEY_HASH_AUTOUPDATE", False):
+            self.hashed_key = type(self).objects.key_generator.hash(key, self.prefix)
+            self.save()
+        return ok
 
     def clean(self) -> None:
         self._validate_revoked()
