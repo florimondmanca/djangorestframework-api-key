@@ -1,3 +1,5 @@
+from typing import Callable
+
 import pytest
 from django.conf import LazySettings
 
@@ -23,7 +25,9 @@ def test_hash_verify(settings: LazySettings, algorithm: str) -> None:
 
 @pytest.mark.parametrize("update_algo", [True, False])
 @pytest.mark.django_db
-def test_hash_verify_with_update(settings: LazySettings, update_algo: bool) -> None:
+def test_hash_verify_with_update(
+    settings: LazySettings, update_algo: bool, django_assert_num_queries: Callable
+) -> None:
     api_key, generated_key = APIKey.objects.create_key(name="test")
     assert not api_key.hashed_key.startswith("plain_")
     assert api_key.is_valid(generated_key) is True
@@ -33,6 +37,8 @@ def test_hash_verify_with_update(settings: LazySettings, update_algo: bool) -> N
 
     assert api_key.is_valid(generated_key) is True
     assert api_key.hashed_key.startswith("plain_blake2b$$") is update_algo
-    assert (
-        api_key.is_valid(generated_key) is True
-    ), "check still works after potential update"
+    with django_assert_num_queries(0):
+        # no queries should be made to update the key if it is already updated
+        assert (
+            api_key.is_valid(generated_key) is True
+        ), "check still works after potential update"
