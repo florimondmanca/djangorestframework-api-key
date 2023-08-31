@@ -63,15 +63,20 @@ class BaseHasAPIKey(permissions.BasePermission, CacheMixin):
             % self.__class__.__name__
         )
 
-        # Attempt to get the validity of the key from the cache
-        is_valid = self.get_from_cache(key)
+        if self.API_KEY_IS_CACHE_ENABLED is False:
+            return self.model.objects.is_valid(key)
 
-        # If not in cache, determine validity from the database
-        if is_valid is None:
-            is_valid = self.model.objects.is_valid(key)
-            self.set_to_cache(key, is_valid)
+        else:
+            # Attempt to get the validity of the key from the cache
+            is_valid = self.get_from_cache(key)
 
-        return is_valid
+            # If not in cache, determine validity from the database
+            if is_valid is None:
+                is_valid = self.model.objects.is_valid(key)
+                self.set_to_cache(key, is_valid)
+                print("Cache is enabled")
+
+            return is_valid
 
     def has_permission(self, request: HttpRequest, view: typing.Any) -> bool:
         """

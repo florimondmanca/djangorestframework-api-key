@@ -171,11 +171,22 @@ Of course! Here's the updated documentation:
 
 ## Configuring API Key Caching in Django
 
-Enhance your application's responsiveness with our API key caching feature. Here's a guide on how to get the best out of it
+Enhance your application's responsiveness with our API key caching feature. Here's a guide on how to get the best out of it. 
+
+
+### How to Enable
+
+To activate API key caching, set the `API_KEY_IS_CACHE_ENABLED` configuration flag to `True` in your Django settings:
+
+```python
+# settings.py
+API_KEY_IS_CACHE_ENABLED = True
+```
 
 ### Default Cache Timeout 
   The `API_KEY_CACHE_TIMEOUT` is set to 1 hour by default. If you have specific requirements, you can adjust this value in your Django settings. 
   ```python
+# settings.py
   API_KEY_CACHE_TIMEOUT = 3600  # 1 hour in seconds.
   ```
 
