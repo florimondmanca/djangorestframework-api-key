@@ -17,6 +17,15 @@ def view(request: Request) -> Response:
     return Response()
 
 
+def test_cache_mixin_raises_exception_without_model() -> None:
+    cache_mixin = CacheMixin()
+    cache_mixin.model = None
+
+    with pytest.raises(Exception) as e_info:
+        cache_mixin.get_cache_key_prefix()
+    assert str(e_info.value) == "Model is not defined"
+
+
 def test_api_key_cache_without_caching(rf: RequestFactory) -> None:
     api_key, generated_key = APIKey.objects.create_key(name="test")
     authorization = f"Api-Key {generated_key}"
@@ -70,4 +79,19 @@ def test_api_key_cache_invalidated_on_delete() -> None:
         api_key.delete()
 
         # The cache should now be invalidated
+        assert cache_mixin.get_from_cache(generated_key) is None
+
+
+def test_cache_mixin_invalidate_cache() -> None:
+    with override_settings(API_KEY_IS_CACHE_ENABLED=True):
+        api_key, generated_key = APIKey.objects.create_key(name="test_for_invalidation")
+
+        cache_mixin = CacheMixin()
+        cache_mixin.model = APIKey
+
+        cache_mixin.set_to_cache(generated_key, True)
+        assert cache_mixin.get_from_cache(generated_key) is True
+
+        cache_mixin.invalidate_cache(generated_key)
+
         assert cache_mixin.get_from_cache(generated_key) is None
