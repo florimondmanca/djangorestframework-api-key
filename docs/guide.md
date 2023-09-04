@@ -165,9 +165,6 @@ class ProjectListView(APIView):
         api_key = APIKey.objects.get_from_key(key)
         project = Project.objects.get(api_key=api_key)
 ```
-Of course! Here's the updated documentation:
-
----
 
 ## Configuring API Key Caching in Django
 
