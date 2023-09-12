@@ -128,7 +128,19 @@ class AbstractAPIKey(models.Model):
     has_expired = property(_has_expired)
 
     def is_valid(self, key: str) -> bool:
-        return type(self).objects.key_generator.verify(key, self.hashed_key)
+        key_generator = type(self).objects.key_generator
+        valid = key_generator.verify(key, self.hashed_key)
+
+        # Transparently update the key to use the preferred hasher
+        # if it is using an outdated hasher.
+        if valid and not key_generator.using_preferred_hasher(self.hashed_key):
+            new_hashed_key = key_generator.hash(key)
+            type(self).objects.filter(prefix=self.prefix).update(
+                id=concatenate(self.prefix, new_hashed_key),
+                hashed_key=new_hashed_key,
+            )
+
+        return valid
 
     def clean(self) -> None:
         self._validate_revoked()

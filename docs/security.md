@@ -11,10 +11,10 @@ An API key is composed of two items:
 
 The generated key that clients use to [make authorized requests](#making-authorized-requests) is `GK = P.SK`. It is treated with the same level of care as passwords:
 
-- Only a hashed version is stored in the database. The hash is computed using the default password hasher. [^1]
+- Only a hashed version is stored in the database. The hashing algorithm is sha512. [^1]
 - The generated key is shown only once to the client upon API key creation.
 
-[^1]: All hashers provided by Django should be supported. This package is tested against the [default list of `PASSWORD_HASHERS`](https://docs.djangoproject.com/en/2.2/ref/settings/#std:setting-PASSWORD_HASHERS). See also [How Django stores passwords](https://docs.djangoproject.com/en/2.2/topics/auth/passwords/#how-django-stores-passwords) for more information.
+[^1]: Older versions of this module used the same hashers as Django's [`PASSWORD_HASHERS`](https://docs.djangoproject.com/en/2.2/ref/settings/#std:setting-PASSWORD_HASHERS). These hashers come with a large performance penalty and while critical for passwords, they aren't needed for high-entropy, randomly generated keys like the ones created by this module. Keys stored using these slower hashers will be upgraded when used.
 
 ### Grant scheme
 
