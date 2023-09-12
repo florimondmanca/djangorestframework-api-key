@@ -1,7 +1,17 @@
 from typing import Any, Tuple
 
 import pytest
-from django_test_migrations.migrator import Migrator
+
+try:
+    from django_test_migrations.migrator import Migrator
+except ImportError:  # pragma: no cover
+    # Most likely Django < 3.2
+    Migrator = None  # type: ignore
+
+pytestmark = pytest.mark.skipif(
+    Migrator is None,
+    reason="django-test-migrations is not available",
+)
 
 
 @pytest.mark.django_db

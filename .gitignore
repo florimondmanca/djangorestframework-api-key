@@ -107,3 +107,4 @@ venv.bak/
 *.sqlite3
 
 .idea/
+.ruff_cache/

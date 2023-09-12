@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "djangorestframework-api-key"
+description = "API key permissions for the Django REST Framework"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [
+  { name = "Florimond Manca", email = "florimond.manca@protonmail.com" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Operating System :: OS Independent",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Environment :: Web Environment",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Framework :: Django",
+  "Framework :: Django :: 2.2",
+  "Framework :: Django :: 3.2",
+  "Framework :: Django :: 4.2",
+]
+dependencies = [
+  "packaging",
+]
+dynamic = ["version", "readme"]
+
+[project.urls]
+"Homepage" = "https://github.com/florimondmanca/djangorestframework-api-key"
+"Documentation" = "https://florimondmanca.github.io/djangorestframework-api-key/"
+
+[tool.setuptools.dynamic]
+version = { attr = "rest_framework_api_key.__version__" }
+readme = { file = ["README.md", "CHANGELOG.md"], content-type = "text/markdown" }
+
+[tool.ruff]
+select = ["E", "F", "I"]
+line-length = 88
+src = ["src", "test_project", "tests"]

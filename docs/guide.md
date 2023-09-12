@@ -4,13 +4,13 @@
 
 ### Installation
 
-Install from PyPI:
+Install with `pip`:
 
 ```bash
-pip install djangorestframework-api-key
+pip install "djangorestframework-api-key==2.*"
 ```
 
-**Note**: this package requires Python 3.7+, Django 2.0+ and Django REST Framework 3.8+.
+_**Note**: It is highly recommended to **pin your dependency** to the latest major version (as depicted above), as breaking changes may and will happen between major releases._
 
 ### Project setup
 

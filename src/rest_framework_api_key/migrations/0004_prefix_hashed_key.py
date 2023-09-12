@@ -10,7 +10,9 @@ DEPENDENCIES = [(APP_NAME, "0003_auto_20190623_1952")]
 def populate_prefix_hashed_key(apps, schema_editor) -> None:  # type: ignore
     model = apps.get_model(APP_NAME, MODEL_NAME)
 
-    for api_key in model.objects.using(schema_editor.connection.alias).all():
+    for api_key in model.objects.using(
+        schema_editor.connection.alias
+    ).all():  # pragma: nodj22
         prefix, _, hashed_key = api_key.id.partition(".")
         api_key.prefix = prefix
         api_key.hashed_key = hashed_key
@@ -18,7 +20,6 @@ def populate_prefix_hashed_key(apps, schema_editor) -> None:  # type: ignore
 
 
 class Migration(migrations.Migration):
-
     dependencies = DEPENDENCIES
 
     operations = [

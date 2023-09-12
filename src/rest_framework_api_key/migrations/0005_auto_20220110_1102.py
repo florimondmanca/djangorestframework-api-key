@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("rest_framework_api_key", "0004_prefix_hashed_key"),
     ]
