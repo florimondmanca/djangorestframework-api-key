@@ -18,7 +18,6 @@ def populate_prefix_hashed_key(apps, schema_editor):  # type: ignore
 
 
 class Migration(migrations.Migration):
-
     dependencies = DEPENDENCIES
 
     operations = [

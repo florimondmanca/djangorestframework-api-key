@@ -1,17 +1,16 @@
+.PHONY: docs
+
 venv = venv
 bin = ${venv}/bin/
 pysources = src/ test_project/ tests/
 
 build:
-	${bin}python setup.py sdist bdist_wheel
-	${bin}twine check dist/*
-	rm -r build
+	${bin}python -m build
 
 check:
-	${bin}black --check --diff --target-version=py36 ${pysources}
-	${bin}flake8 ${pysources}
+	${bin}ruff check ${pysources}
+	${bin}black --check --diff ${pysources}
 	${bin}mypy ${pysources}
-	${bin}isort --check --diff ${pysources}
 	make migrations-check
 
 docs:
@@ -23,16 +22,20 @@ docs-serve:
 docs-deploy:
 	${bin}mkdocs gh-deploy
 
-install:
+install: install-python
+
+venv:
 	python3 -m venv ${venv}
+
+install-python: venv
 	${bin}pip install -U pip wheel
+	${bin}pip install -U build
 	${bin}pip install -r requirements.txt
 	./tools/install_django.sh ${bin}pip
 
 format:
-	${bin}autoflake --in-place --recursive ${pysources}
-	${bin}isort ${pysources}
-	${bin}black --target-version=py36 ${pysources}
+	${bin}ruff check --fix ${pysources}
+	${bin}black ${pysources}
 
 migrations:
 	${bin}python -m tools.makemigrations

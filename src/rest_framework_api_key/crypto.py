@@ -45,7 +45,6 @@ class Sha512ApiKeyHasher(BasePasswordHasher):
 
 
 class KeyGenerator:
-
     preferred_hasher = Sha512ApiKeyHasher()
 
     def __init__(self, prefix_length: int = 8, secret_key_length: int = 32):

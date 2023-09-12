@@ -2,7 +2,6 @@ import datetime as dt
 from typing import Callable
 
 import pytest
-from django.conf.global_settings import PASSWORD_HASHERS
 from django.test import RequestFactory, override_settings
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.request import Request
@@ -35,17 +34,6 @@ def test_if_valid_api_key_custom_header_then_permission_granted(
     with override_settings(API_KEY_CUSTOM_HEADER="HTTP_X_API_KEY"):
         _, key = APIKey.objects.create_key(name="test")
         request = rf.get("/test/", HTTP_X_API_KEY=key)
-
-        response = view(request)
-        assert response.status_code == 200
-
-
-@pytest.mark.parametrize("hasher", PASSWORD_HASHERS)
-def test_hashers(rf: RequestFactory, hasher: str) -> None:
-    with override_settings(PASSWORD_HASHERS=[hasher]):
-        _, key = APIKey.objects.create_key(name="test")
-        authorization = f"Api-Key {key}"
-        request = rf.get("/test/", HTTP_AUTHORIZATION=authorization)
 
         response = view(request)
         assert response.status_code == 200

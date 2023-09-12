@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("rest_framework_api_key", "0001_initial")]
 
     operations = [

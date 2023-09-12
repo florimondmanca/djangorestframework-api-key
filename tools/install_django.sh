@@ -2,6 +2,6 @@
 
 PIP="$1"
 
-DJANGO_VERSION=${DJANGO_VERSION:-4.0.5}
+DJANGO_VERSION=${DJANGO_VERSION:-4.2.5}
 
-exec ${PIP} install django[argon2,bcrypt]==$DJANGO_VERSION
+exec ${PIP} install django==$DJANGO_VERSION
