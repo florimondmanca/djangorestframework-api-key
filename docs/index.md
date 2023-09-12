@@ -58,7 +58,7 @@ They can also present enough security for authorizing internal services, such as
 Install with `pip`:
 
 ```bash
-pip install "djangorestframework-api-key==2.*"
+pip install "djangorestframework-api-key==3.*"
 ```
 
 !!! important

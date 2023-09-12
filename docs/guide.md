@@ -7,7 +7,7 @@
 Install with `pip`:
 
 ```bash
-pip install "djangorestframework-api-key==2.*"
+pip install "djangorestframework-api-key==3.*"
 ```
 
 _**Note**: It is highly recommended to **pin your dependency** to the latest major version (as depicted above), as breaking changes may and will happen between major releases._
