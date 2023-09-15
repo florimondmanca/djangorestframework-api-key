@@ -134,11 +134,11 @@ class AbstractAPIKey(models.Model):
         # Transparently update the key to use the preferred hasher
         # if it is using an outdated hasher.
         if valid and not key_generator.using_preferred_hasher(self.hashed_key):
-            new_hashed_key = key_generator.hash(key)
-            type(self).objects.filter(prefix=self.prefix).update(
-                id=concatenate(self.prefix, new_hashed_key),
-                hashed_key=new_hashed_key,
-            )
+            # Note that since the PK includes the hashed key,
+            # they will be internally inconsistent following this upgrade.
+            # See: https://github.com/florimondmanca/djangorestframework-api-key/issues/128
+            self.hashed_key = key_generator.hash(key)
+            self.save()
 
         return valid
 
