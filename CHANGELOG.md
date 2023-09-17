@@ -16,7 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Fixed
 
-- Use faster SHA512-based key hasher instead of password hashers. Reduces server load by making API key validation orders of magnitude faster (10x to 30x according to estimations, network latency aside). (Pull #244)
+- Use faster SHA512-based key hasher instead of password hashers. Reduces server load by making API key validation orders of magnitude faster (10x to 30x according to estimations, network latency aside). Hashed key will be transparently upgraded the first time `.is_valid()` is called. (Pull #244, Pull #251)
 - Drop redundant `.has_object_permission()` implementation on `BaseHasAPIKey` when using DRF 3.14.0 or above. (Pull #240)
 
 ## 2.3.0 - 2023-01-19
