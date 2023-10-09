@@ -74,7 +74,7 @@ See also [Setting the permission policy](http://www.django-rest-framework.org/ap
     ```
 
 ### Manually validating API keys
-You can also manually validate an API key with the `APIKey` objects manager. This is useful for validating API keys outside of a normal Django view, such as inside a websocket consumer from Django Channels, etc. Just use the `is_valid()` method on the manager like below.
+You can also manually validate an API key with the `APIKey` objects manager using the `is_valid()` method on the manager lke below. This is useful for validating API keys outside of a normal Django view, such as inside a websocket consumer from Django Channels.
 
 ```python
 from rest_framework_api_key.permissions import APIKey
