@@ -136,10 +136,11 @@ When it is installed, `djangorestframework-api-key` adds an "API Key Permissions
 
 API keys can be created, viewed, revoked, and validated programmatically by manipulating the `APIKey` model.
 
+- You can validate API keys manually, see the "Manually validating API keys" section above.
+- You can view and query `APIKey` like any other model. For example, to know the total number of API keys:
+  
 !!! note
     The examples below use the [Django shell](https://docs.djangoproject.com/en/2.2/ref/django-admin/#django-admin-shell).
-
-- You can view and query `APIKey` like any other model. For example, to know the total number of API keys:
 
 ```python
 >>> from rest_framework_api_key.models import APIKey
