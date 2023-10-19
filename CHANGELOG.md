@@ -4,11 +4,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## 3.0.0 - 2023-09-30
 
-### Fixed
+### Changed
 
+- Use faster SHA512-based key hasher instead of password hashers. Reduces server load by making API key validation orders of magnitude faster (10x to 30x according to estimations, network latency aside). Hashed key will be transparently upgraded the first time `.is_valid()` is called. (Pull #244, Pull #251)
+
+### Removed
+
+- Dropped support for Python 3.7, which has reached EOL. (Pull #247)
 - Drop redundant `.has_object_permission()` implementation on `BaseHasAPIKey` when using DRF 3.14.0 or above. (Pull #240)
+
+### Added
+
+- Add official support for Python 3.11. (Pull #247)
 
 ## 2.3.0 - 2023-01-19
 

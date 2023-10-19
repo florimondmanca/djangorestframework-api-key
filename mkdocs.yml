@@ -15,6 +15,7 @@ nav:
   - User Guide: guide.md
   - Security: security.md
   - Upgrade Guides:
+      - "3.0": upgrade/3.0.md
       - "2.0": upgrade/2.0.md
       - "1.4": upgrade/1.4.md
       - "1.0": upgrade/1.0.md
