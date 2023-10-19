@@ -73,6 +73,17 @@ See also [Setting the permission policy](http://www.django-rest-framework.org/ap
     permission_classes = [HasAPIKey | IsAuthenticated]
     ```
 
+### Manually validating API keys
+You can also manually validate an API key with the `APIKey` objects manager using the `is_valid()` method on the manager lke below. This is useful for validating API keys outside of a normal Django view, such as inside a websocket consumer from Django Channels.
+
+```python
+from rest_framework_api_key.permissions import APIKey
+
+# this should be a string containing only the API key - remove any additional text like "Api-Key" if present
+raw_key = "XXXXXXXX.XXXXXXXXXX"
+is_valid_key = APIKey.objects.is_valid(raw_key)
+```
+
 ### Making authorized requests
 
 #### Authorization header
@@ -123,8 +134,10 @@ When it is installed, `djangorestframework-api-key` adds an "API Key Permissions
 
 #### Programmatic usage
 
-API keys can be created, viewed and revoked programmatically by manipulating the `APIKey` model.
+API keys can be created, viewed, revoked, and validated programmatically by manipulating the `APIKey` model.
 
+- You can validate API keys manually, see the "Manually validating API keys" section above.
+  
 !!! note
     The examples below use the [Django shell](https://docs.djangoproject.com/en/2.2/ref/django-admin/#django-admin-shell).
 
