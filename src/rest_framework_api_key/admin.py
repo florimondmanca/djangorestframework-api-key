@@ -5,7 +5,7 @@ from django.db import models
 from django.http.request import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
-from .models import AbstractAPIKey, APIKey
+from .models import AbstractAPIKey
 
 
 class APIKeyModelAdmin(admin.ModelAdmin):
@@ -55,7 +55,5 @@ class APIKeyModelAdmin(admin.ModelAdmin):
         else:
             obj.save()
 
-
-admin.site.register(APIKey, APIKeyModelAdmin)
 
 APIKeyAdmin = APIKeyModelAdmin  # Compatibility with <1.3

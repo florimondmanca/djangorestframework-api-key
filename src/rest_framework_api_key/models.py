@@ -1,6 +1,8 @@
 import typing
 
-from django.core.exceptions import ValidationError
+from django.apps import apps as django_apps
+from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -159,5 +161,31 @@ class AbstractAPIKey(models.Model):
         return str(self.name)
 
 
+def get_swappable_setting() -> str:
+    if not hasattr(settings, "API_KEY_MODEL"):
+        # Ensure a default value is set.
+        settings.API_KEY_MODEL = "rest_framework_api_key.APIKey"
+
+    return "API_KEY_MODEL"
+
+
 class APIKey(AbstractAPIKey):
-    pass
+    class Meta(AbstractAPIKey.Meta):
+        swappable = get_swappable_setting()
+
+
+def get_api_key_model() -> typing.Type[AbstractAPIKey]:
+    """
+    Return the API key model that is active in this project.
+    """
+    try:
+        return django_apps.get_model(settings.API_KEY_MODEL, require_ready=False)
+    except ValueError:
+        raise ImproperlyConfigured(
+            "API_KEY_MODEL must be of the form 'app_label.model_name'"
+        )
+    except LookupError:
+        raise ImproperlyConfigured(
+            "API_KEY_MODEL refers to model '%s' that has not been installed"
+            % settings.API_KEY_MODEL
+        )
