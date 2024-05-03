@@ -48,5 +48,6 @@ def pytest_configure() -> None:
                 "default": dj_database_url.config(default="sqlite://:memory:"),
                 "test": dj_database_url.config(default="sqlite://:memory:"),
             },
+            "USE_TZ": True,
         }
     )

@@ -19,12 +19,14 @@ classifiers = [
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
   "Environment :: Web Environment",
   "Topic :: Software Development :: Libraries :: Python Modules",
   "Framework :: Django",
   "Framework :: Django :: 2.2",
   "Framework :: Django :: 3.2",
   "Framework :: Django :: 4.2",
+  "Framework :: Django :: 5.0",
 ]
 dependencies = [
   "packaging",
