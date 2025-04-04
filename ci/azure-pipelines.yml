@@ -43,23 +43,23 @@ stages:
       - template: job--python-test.yml@templates
         parameters:
           jobs:
-            py313_dj22:
+            py38_dj22:
               variables:
                 DJANGO_VERSION: "2.2.*"
                 PYTEST_ADDOPTS: "--cov-config=.coveragerc_dj22"
 
-            py313_dj32:
+            py38_dj32:
               coverage: true
               variables:
                 DJANGO_VERSION: "3.2.*"
 
-            py313_dj42:
+            py311_dj42:
               coverage: true
               variables:
                 DJANGO_VERSION: "4.2.*"
                 PYTEST_ADDOPTS: "--cov=tests"
 
-            py313_dj50:
+            py313_dj52:
               coverage: true
               variables:
                 DJANGO_VERSION: "5.2.*"
