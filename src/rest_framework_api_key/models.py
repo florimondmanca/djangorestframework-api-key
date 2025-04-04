@@ -75,9 +75,9 @@ class AbstractAPIKey(models.Model):
     objects = APIKeyManager()
 
     id = models.CharField(max_length=150, unique=True, primary_key=True, editable=False)
-    prefix = models.CharField(max_length=8, unique=True, editable=False)
+    prefix = models.CharField(max_length=8, unique=True, editable=False, verbose_name=_("Prefix"))
     hashed_key = models.CharField(max_length=150, editable=False)
-    created = models.DateTimeField(auto_now_add=True, db_index=True)
+    created = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name=_("Created"))
     name = models.CharField(
         max_length=50,
         blank=False,
@@ -93,6 +93,7 @@ class AbstractAPIKey(models.Model):
     revoked = models.BooleanField(
         blank=True,
         default=False,
+        verbose_name=_("Revoked"),
         help_text=(
             _(
                 "If the API key is revoked, clients cannot use it anymore. "
@@ -110,8 +111,8 @@ class AbstractAPIKey(models.Model):
     class Meta:  # noqa
         abstract = True
         ordering = ("-created",)
-        verbose_name = "API key"
-        verbose_name_plural = "API keys"
+        verbose_name = _("API key")
+        verbose_name_plural = _("API keys")
 
     def __init__(self, *args: typing.Any, **kwargs: typing.Any):
         super().__init__(*args, **kwargs)
@@ -123,7 +124,7 @@ class AbstractAPIKey(models.Model):
             return False
         return self.expiry_date < timezone.now()
 
-    _has_expired.short_description = "Has expired"  # type: ignore
+    _has_expired.short_description = _("Has expired")  # type: ignore
     _has_expired.boolean = True  # type: ignore
     has_expired = property(_has_expired)
 
