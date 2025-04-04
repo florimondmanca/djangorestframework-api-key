@@ -4,7 +4,7 @@ resources:
       type: github
       endpoint: github
       name: florimondmanca/azure-pipelines-templates
-      ref: refs/tags/6.0
+      ref: refs/tags/6.3
   containers:
     - container: pg15
       image: postgres:15-alpine
@@ -34,11 +34,11 @@ stages:
     jobs:
       - template: job--python-check.yml@templates
         parameters:
-          pythonVersion: "3.11"
+          pythonVersion: "3.13"
 
       - template: job--python-docs-build.yml@templates
         parameters:
-          pythonVersion: "3.11"
+          pythonVersion: "3.13"
 
       - template: job--python-test.yml@templates
         parameters:
@@ -59,7 +59,13 @@ stages:
                 DJANGO_VERSION: "4.2.*"
                 PYTEST_ADDOPTS: "--cov=tests"
 
-            py311_postgres:
+            py313_dj52:
+              coverage: true
+              variables:
+                DJANGO_VERSION: "5.2.*"
+                PYTEST_ADDOPTS: "--cov=tests"
+
+            py313_postgres:
               services:
                 postgres: pg15
               variables:
@@ -71,4 +77,4 @@ stages:
       - template: job--python-publish.yml@templates
         parameters:
           token: $(pypiToken)
-          pythonVersion: "3.10"
+          pythonVersion: "3.13"
