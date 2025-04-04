@@ -34,11 +34,11 @@ stages:
     jobs:
       - template: job--python-check.yml@templates
         parameters:
-          pythonVersion: "3.12"
+          pythonVersion: "3.13"
 
       - template: job--python-docs-build.yml@templates
         parameters:
-          pythonVersion: "3.12"
+          pythonVersion: "3.13"
 
       - template: job--python-test.yml@templates
         parameters:
@@ -62,7 +62,7 @@ stages:
             py312_dj50:
               coverage: true
               variables:
-                DJANGO_VERSION: "5.0.*"
+                DJANGO_VERSION: "5.2.*"
                 PYTEST_ADDOPTS: "--cov=tests"
 
             py312_postgres:
@@ -77,4 +77,4 @@ stages:
       - template: job--python-publish.yml@templates
         parameters:
           token: $(pypiToken)
-          pythonVersion: "3.12"
+          pythonVersion: "3.13"
