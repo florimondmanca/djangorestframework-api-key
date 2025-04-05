@@ -6,7 +6,7 @@ from django.http import HttpRequest
 from rest_framework import __version__ as __drf_version__
 from rest_framework import permissions
 
-from .models import AbstractAPIKey, APIKey
+from .models import AbstractAPIKey, get_api_key_model
 
 _drf_version = packaging.version.parse(__drf_version__)
 _3_14_0 = packaging.version.parse("3.14.0")
@@ -78,4 +78,4 @@ class BaseHasAPIKey(permissions.BasePermission):
 
 
 class HasAPIKey(BaseHasAPIKey):
-    model = APIKey
+    model = get_api_key_model()
