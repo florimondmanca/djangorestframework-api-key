@@ -74,11 +74,31 @@ class APIKeyManager(BaseAPIKeyManager):
 class AbstractAPIKey(models.Model):
     objects = APIKeyManager()
 
-    id = models.CharField(max_length=150, unique=True, primary_key=True, editable=False)
-    prefix = models.CharField(max_length=8, unique=True, editable=False)
-    hashed_key = models.CharField(max_length=150, editable=False)
-    created = models.DateTimeField(auto_now_add=True, db_index=True)
+    id = models.CharField(
+        verbose_name=_("ID"),
+        max_length=150,
+        unique=True,
+        primary_key=True,
+        editable=False,
+    )
+    prefix = models.CharField(
+        verbose_name=_("Prefix"),
+        max_length=8,
+        unique=True,
+        editable=False,
+    )
+    hashed_key = models.CharField(
+        verbose_name=_("Hashed key"),
+        max_length=150,
+        editable=False,
+    )
+    created = models.DateTimeField(
+        verbose_name=_("Created at"),
+        auto_now_add=True,
+        db_index=True,
+    )
     name = models.CharField(
+        verbose_name=_("Name"),
         max_length=50,
         blank=False,
         default=None,
@@ -91,6 +111,7 @@ class AbstractAPIKey(models.Model):
         ),
     )
     revoked = models.BooleanField(
+        verbose_name=_("Revoked"),
         blank=True,
         default=False,
         help_text=(
