@@ -153,3 +153,36 @@ def test_keyparser_lookup_exact_keyword(rf: RequestFactory) -> None:
     wrong_key = "My-Special-Api-Key 12345"
     request = rf.get("/test/", HTTP_AUTHORIZATION=wrong_key)
     assert KeyParser().get(request) is None
+
+
+def test_permission_queries_cached_per_request(rf: RequestFactory) -> None:
+    from django.db import connection
+    from django.test.utils import CaptureQueriesContext
+
+    _, key = APIKey.objects.create_key(name="test")
+    authorization = f"Api-Key {key}"
+    request = rf.get("/test/", HTTP_AUTHORIZATION=authorization)
+
+    permission = HasAPIKey()
+
+    with CaptureQueriesContext(connection) as queries:
+        assert permission.has_permission(request, view) is True
+        for _ in range(5):
+            assert permission.has_permission(request, view) is True
+        assert len(queries) == 1
+
+
+def test_invalid_key_queries_cached_per_request(rf: RequestFactory) -> None:
+    from django.db import connection
+    from django.test.utils import CaptureQueriesContext
+
+    authorization = "Api-Key invalid.secretkey"
+    request = rf.get("/test/", HTTP_AUTHORIZATION=authorization)
+
+    permission = HasAPIKey()
+
+    with CaptureQueriesContext(connection) as queries:
+        assert permission.has_permission(request, view) is False
+        for _ in range(5):
+            assert permission.has_permission(request, view) is False
+        assert len(queries) == 1

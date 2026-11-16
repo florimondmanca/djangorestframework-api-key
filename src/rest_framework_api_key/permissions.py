@@ -50,6 +50,21 @@ class BaseHasAPIKey(permissions.BasePermission):
     def get_key(self, request: HttpRequest) -> typing.Optional[str]:
         return self.key_parser.get(request)
 
+    def _is_key_valid(self, request: HttpRequest, key: str) -> bool:
+        assert self.model is not None
+        raw_request = getattr(request, "_request", request)
+
+        cache = getattr(raw_request, "_api_key_validation_cache", None)
+        if cache is None:
+            cache = {}
+            raw_request._api_key_validation_cache = cache
+
+        cache_key = (self.model, key)
+        if cache_key not in cache:
+            cache[cache_key] = self.model.objects.is_valid(key)
+
+        return cache[cache_key]
+
     def has_permission(self, request: HttpRequest, view: typing.Any) -> bool:
         assert self.model is not None, (
             "%s must define `.model` with the API key model to use"
@@ -58,7 +73,7 @@ class BaseHasAPIKey(permissions.BasePermission):
         key = self.get_key(request)
         if not key:
             return False
-        return self.model.objects.is_valid(key)
+        return self._is_key_valid(request, key)
 
     def has_object_permission(
         self, request: HttpRequest, view: typing.Any, obj: AbstractAPIKey

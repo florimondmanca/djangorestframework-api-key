@@ -6,7 +6,8 @@ from django.conf import settings
 
 
 def pytest_configure() -> None:
-    dotenv.read_dotenv(str(Path(__file__).parent.parent / ".env"))
+    load = getattr(dotenv, "load_dotenv", getattr(dotenv, "read_dotenv", lambda *a, **kw: None))
+    load(str(Path(__file__).parent.parent / ".env"))
 
     settings.configure(
         **{
