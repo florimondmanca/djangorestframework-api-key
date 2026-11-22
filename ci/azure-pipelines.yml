@@ -65,7 +65,13 @@ stages:
                 DJANGO_VERSION: "5.2.*"
                 PYTEST_ADDOPTS: "--cov=tests"
 
-            py313_postgres:
+            py314_dj60:
+              coverage: true
+              variables:
+                DJANGO_VERSION: "6.0.*"
+                PYTEST_ADDOPTS: "--cov=tests"
+
+            py314_postgres:
               services:
                 postgres: pg15
               variables:
