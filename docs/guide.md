@@ -98,7 +98,7 @@ where `<API_KEY>` refers to the full generated API key (see [Creating and managi
 
 To know under which conditions access is granted, please see [Grant scheme](security.md#grant-scheme).
 
-If wanting to also customize the keyword used for parsing the Api-Key, please see [API key Custom Keyword](guide.md#api-key-custom-keyword)
+If wanting to also customize the keyword used for parsing the Api-Key, please see [API key parsing](#api-key-parsing).
 
 #### Custom header
 
@@ -318,11 +318,11 @@ If you are building an API for an application you do not control that requires a
 Authorization: Bearer <API_KEY>
 ```
 
-Then you can subclass `KeyParser` with a custom `keyword`, and attach it to a custom permission class, like so:
+Then you can subclass `KeyParser` with a custom `keyword`, and attach it to a custom permission class in a module of your project (not in `settings.py`, which cannot import models), like so:
 
 ```python
-# settings.py
-from rest_framework_api_key.models import HasAPIKey
+# myapp/permissions.py
+from rest_framework_api_key.models import APIKey
 from rest_framework_api_key.permissions import BaseHasAPIKey, KeyParser
 
 class BearerKeyParser(KeyParser):
@@ -332,6 +332,20 @@ class HasAPIKey(BaseHasAPIKey):
     model = APIKey  # Or a custom model
     key_parser = BearerKeyParser()
 ```
+
+You can then reference this permission class by its dotted path, for example in your settings:
+
+```python
+# settings.py
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": [
+        "myapp.permissions.HasAPIKey",
+    ]
+}
+```
+
+!!! note
+    Keyword matching is case-insensitive, so `keyword = "API-KEY"` also accepts `Api-Key` and `api-key`.
 
 You can also override the default header-based parsing completely.
 
