@@ -1,0 +1,89 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Lint and type check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+      - run: pip install -r requirements.txt "django==5.2.*"
+      - run: ruff check src/ test_project/ tests/
+      - run: black --check --diff src/ test_project/ tests/
+      - run: mypy src/ test_project/ tests/
+      - run: python -m tools.makemigrations --check
+
+  docs:
+    name: Build docs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+      - run: pip install -r requirements.txt "django==5.2.*"
+      - run: mkdocs build --strict
+
+  test:
+    name: Python ${{ matrix.python }}, Django ${{ matrix.django }}${{ matrix.database && ', PostgreSQL' || '' }}
+    # Python 3.8 is not available on ubuntu-24.04 runners.
+    runs-on: ${{ matrix.python == '3.8' && 'ubuntu-22.04' || 'ubuntu-latest' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - python: "3.8"
+            django: "2.2"
+            pytest-addopts: "--cov-config=.coveragerc_dj22"
+          - python: "3.8"
+            django: "3.2"
+          - python: "3.11"
+            django: "4.2"
+          - python: "3.13"
+            django: "5.2"
+          - python: "3.13"
+            django: "5.2"
+            database: postgres
+    services:
+      postgres:
+        image: ${{ matrix.database == 'postgres' && 'postgres:15-alpine' || '' }}
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: default
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: ${{ matrix.database == 'postgres' && 'postgresql://postgres:postgres@localhost:5432/default' || 'sqlite://:memory:' }}
+      PYTEST_ADDOPTS: ${{ matrix.pytest-addopts }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+      - run: pip install -r requirements.txt
+      # Installed separately like tools/install_django.sh, as DRF 3.14 declares Django>=3.0.
+      - run: pip install "django==${{ matrix.django }}.*"
+      - run: pytest

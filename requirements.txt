@@ -4,6 +4,8 @@
 # django[argon2,bcrypt]  # See tools/install_django.sh
 djangorestframework==3.14.*
 dj-database-url
+# dj-database-url 3.x uses Python 3.9+ syntax and requires Django 4.2+.
+dj-database-url<3; python_version < "3.9"
 django-dotenv
 
 # PostgreSQL testing.
