@@ -10,6 +10,8 @@ from rest_framework.response import Response
 from rest_framework_api_key.models import APIKey
 from rest_framework_api_key.permissions import BaseHasAPIKey, HasAPIKey, KeyParser
 
+from .dateutils import NOW, TOMORROW
+
 pytestmark = pytest.mark.django_db
 
 
@@ -112,8 +114,6 @@ def test_if_revoked_then_permission_denied(rf: RequestFactory) -> None:
     assert response.status_code == 403
 
 
-NOW = dt.datetime.now()
-TOMORROW = NOW + dt.timedelta(days=1)
 TWO_DAYS_AGO = NOW - dt.timedelta(days=2)
 
 
